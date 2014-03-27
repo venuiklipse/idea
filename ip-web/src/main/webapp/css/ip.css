@@ -1,0 +1,11 @@
+.menu {
+	position: absolute;
+	top: 100px;
+	width: 250px;
+}
+
+.content {
+	position: absolute;
+	top: 100px;
+	left: 255px;
+}

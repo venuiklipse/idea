@@ -1,0 +1,146 @@
+package za.co.idea.ip.orm.dao;
+
+import java.util.List;
+
+import org.hibernate.LockMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import za.co.idea.ip.orm.bean.IpChallenge;
+
+/**
+ * A data access object (DAO) providing persistence and search support for
+ * IpChallenge entities. Transaction control of the save(), update() and
+ * delete() operations can directly support Spring container-managed
+ * transactions or they can be augmented to handle user-managed Spring
+ * transactions. Each of these methods provides additional information for how
+ * to configure it for the desired type of transaction control.
+ * 
+ * @see za.co.idea.ip.orm.bean.IpChallenge
+ * @author MyEclipse Persistence Tools
+ */
+@SuppressWarnings("unchecked")
+public class IpChallengeDAO extends HibernateDaoSupport {
+	private static final Logger log = LoggerFactory
+			.getLogger(IpChallengeDAO.class);
+
+	// property constants
+
+	protected void initDao() {
+		// do nothing
+	}
+
+	public void save(IpChallenge transientInstance) {
+		log.debug("saving IpChallenge instance");
+		try {
+			getHibernateTemplate().save(transientInstance);
+			log.debug("save successful");
+		} catch (RuntimeException re) {
+			log.error("save failed", re);
+			throw re;
+		}
+	}
+
+	public void delete(IpChallenge persistentInstance) {
+		log.debug("deleting IpChallenge instance");
+		try {
+			getHibernateTemplate().delete(persistentInstance);
+			log.debug("delete successful");
+		} catch (RuntimeException re) {
+			log.error("delete failed", re);
+			throw re;
+		}
+	}
+
+	public IpChallenge findById(java.lang.Long id) {
+		log.debug("getting IpChallenge instance with id: " + id);
+		try {
+			IpChallenge instance = (IpChallenge) getHibernateTemplate().get(
+					"za.co.idea.ip.orm.bean.IpChallenge", id);
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
+
+	public List<IpChallenge> findByExample(IpChallenge instance) {
+		log.debug("finding IpChallenge instance by example");
+		try {
+			List<IpChallenge> results = getHibernateTemplate().findByExample(
+					instance);
+			log.debug("find by example successful, result size: "
+					+ results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by example failed", re);
+			throw re;
+		}
+	}
+
+	public List<IpChallenge> findByProperty(String propertyName, Object value) {
+		log.debug("finding IpChallenge instance with property: " + propertyName
+				+ ", value: " + value);
+		try {
+			String queryString = "from IpChallenge as model where model."
+					+ propertyName + "= ?";
+			return getHibernateTemplate().find(queryString, value);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
+
+	public List<IpChallenge> findAll() {
+		log.debug("finding all IpChallenge instances");
+		try {
+			String queryString = "from IpChallenge";
+			return getHibernateTemplate().find(queryString);
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
+	public IpChallenge merge(IpChallenge detachedInstance) {
+		log.debug("merging IpChallenge instance");
+		try {
+			IpChallenge result = (IpChallenge) getHibernateTemplate().merge(
+					detachedInstance);
+			log.debug("merge successful");
+			return result;
+		} catch (RuntimeException re) {
+			log.error("merge failed", re);
+			throw re;
+		}
+	}
+
+	public void attachDirty(IpChallenge instance) {
+		log.debug("attaching dirty IpChallenge instance");
+		try {
+			getHibernateTemplate().saveOrUpdate(instance);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public void attachClean(IpChallenge instance) {
+		log.debug("attaching clean IpChallenge instance");
+		try {
+			getHibernateTemplate().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public static IpChallengeDAO getFromApplicationContext(
+			ApplicationContext ctx) {
+		return (IpChallengeDAO) ctx.getBean("IpChallengeDAO");
+	}
+}

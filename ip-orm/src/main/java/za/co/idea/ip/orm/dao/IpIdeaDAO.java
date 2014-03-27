@@ -1,0 +1,168 @@
+package za.co.idea.ip.orm.dao;
+
+import java.util.List;
+
+import org.hibernate.LockMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import za.co.idea.ip.orm.bean.IpIdea;
+
+/**
+ * A data access object (DAO) providing persistence and search support for
+ * IpIdea entities. Transaction control of the save(), update() and delete()
+ * operations can directly support Spring container-managed transactions or they
+ * can be augmented to handle user-managed Spring transactions. Each of these
+ * methods provides additional information for how to configure it for the
+ * desired type of transaction control.
+ * 
+ * @see za.co.idea.ip.orm.bean.IpIdea
+ * @author MyEclipse Persistence Tools
+ */
+@SuppressWarnings("unchecked")
+public class IpIdeaDAO extends HibernateDaoSupport {
+	private static final Logger log = LoggerFactory.getLogger(IpIdeaDAO.class);
+	// property constants
+	public static final String IDEA_TITLE = "ideaTitle";
+	public static final String IDEA_DESC = "ideaDesc";
+	public static final String IDEA_BA = "ideaBa";
+	public static final String IDEA_TAG = "ideaTag";
+	public static final String IDEA_BLOB = "ideaBlob";
+
+	protected void initDao() {
+		// do nothing
+	}
+
+	public void save(IpIdea transientInstance) {
+		log.debug("saving IpIdea instance");
+		try {
+			getHibernateTemplate().save(transientInstance);
+			log.debug("save successful");
+		} catch (RuntimeException re) {
+			log.error("save failed", re);
+			throw re;
+		}
+	}
+
+	public void delete(IpIdea persistentInstance) {
+		log.debug("deleting IpIdea instance");
+		try {
+			getHibernateTemplate().delete(persistentInstance);
+			log.debug("delete successful");
+		} catch (RuntimeException re) {
+			log.error("delete failed", re);
+			throw re;
+		}
+	}
+
+	public IpIdea findById(java.lang.Long id) {
+		log.debug("getting IpIdea instance with id: " + id);
+		try {
+			IpIdea instance = (IpIdea) getHibernateTemplate().get(
+					"za.co.idea.ip.orm.bean.IpIdea", id);
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
+
+	public List<IpIdea> findByExample(IpIdea instance) {
+		log.debug("finding IpIdea instance by example");
+		try {
+			List<IpIdea> results = getHibernateTemplate().findByExample(
+					instance);
+			log.debug("find by example successful, result size: "
+					+ results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by example failed", re);
+			throw re;
+		}
+	}
+
+	public List<IpIdea> findByProperty(String propertyName, Object value) {
+		log.debug("finding IpIdea instance with property: " + propertyName
+				+ ", value: " + value);
+		try {
+			String queryString = "from IpIdea as model where model."
+					+ propertyName + "= ?";
+			return getHibernateTemplate().find(queryString, value);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
+
+	public List<IpIdea> findByIdeaTitle(Object ideaTitle) {
+		return findByProperty(IDEA_TITLE, ideaTitle);
+	}
+
+	public List<IpIdea> findByIdeaDesc(Object ideaDesc) {
+		return findByProperty(IDEA_DESC, ideaDesc);
+	}
+
+	public List<IpIdea> findByIdeaBa(Object ideaBa) {
+		return findByProperty(IDEA_BA, ideaBa);
+	}
+
+	public List<IpIdea> findByIdeaTag(Object ideaTag) {
+		return findByProperty(IDEA_TAG, ideaTag);
+	}
+
+	public List<IpIdea> findByIdeaBlob(Object ideaBlob) {
+		return findByProperty(IDEA_BLOB, ideaBlob);
+	}
+
+	public List<IpIdea> findAll() {
+		log.debug("finding all IpIdea instances");
+		try {
+			String queryString = "from IpIdea";
+			return getHibernateTemplate().find(queryString);
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
+	public IpIdea merge(IpIdea detachedInstance) {
+		log.debug("merging IpIdea instance");
+		try {
+			IpIdea result = (IpIdea) getHibernateTemplate().merge(
+					detachedInstance);
+			log.debug("merge successful");
+			return result;
+		} catch (RuntimeException re) {
+			log.error("merge failed", re);
+			throw re;
+		}
+	}
+
+	public void attachDirty(IpIdea instance) {
+		log.debug("attaching dirty IpIdea instance");
+		try {
+			getHibernateTemplate().saveOrUpdate(instance);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public void attachClean(IpIdea instance) {
+		log.debug("attaching clean IpIdea instance");
+		try {
+			getHibernateTemplate().lock(instance, LockMode.NONE);
+			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public static IpIdeaDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpIdeaDAO) ctx.getBean("IpIdeaDAO");
+	}
+}
