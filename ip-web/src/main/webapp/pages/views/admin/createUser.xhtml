@@ -1,0 +1,112 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+	<ui:composition template="/templates/layout.xhtml">
+		<ui:define name="title">Create User</ui:define>
+		<ui:define name="body">
+			<p:panelGrid id="pnlCrtUser">
+				<p:row>
+					<p:column>
+						<p:outputLabel id="lblFName" value="First Name : " />
+					</p:column>
+					<p:column>
+						<p:inputText id="txtFName" value="#{adminBean.userBean.fName}" />
+					</p:column>
+					<p:column>
+						<p:outputLabel id="lblMName" value="Middle Name : " />
+					</p:column>
+					<p:column>
+						<p:inputText id="txtMName" value="#{adminBean.userBean.mName}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel id="lblLName" value="Last Name : " />
+					</p:column>
+					<p:column>
+						<p:inputText id="txtLName" value="#{adminBean.userBean.lName}" />
+					</p:column>
+					<p:column>
+						<p:outputLabel id="lblIdNum" value="Id Number : " />
+					</p:column>
+					<p:column>
+						<p:inputText id="txtIdNum" value="#{adminBean.userBean.idNum}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel id="lblEMail" value="EMail : " />
+					</p:column>
+					<p:column>
+						<p:inputText id="txtEMail" value="#{adminBean.userBean.eMail}" />
+					</p:column>
+					<p:column>
+						<p:outputLabel id="lblContact" value="Contact : " />
+					</p:column>
+					<p:column>
+						<p:inputText id="txtContact" value="#{adminBean.userBean.contact}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel id="lblSkills" value="Skills : " />
+					</p:column>
+					<p:column colspan="3">
+						<p:editor id="txtSkills" value="#{adminBean.userBean.skills}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel id="lblBio" value="Bio : " />
+					</p:column>
+					<p:column colspan="3">
+						<p:editor id="txtBio" value="#{adminBean.userBean.bio}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel id="lblFBHandle" value="Facebook Handle : " />
+					</p:column>
+					<p:column>
+						<p:inputText id="txtFBHandle" value="#{adminBean.userBean.fbHandle}" />
+					</p:column>
+					<p:column>
+						<p:outputLabel id="lblTWHandle" value="Twitter Handle : " />
+					</p:column>
+					<p:column>
+						<p:inputText id="txtTWHandle" value="#{adminBean.userBean.twHandle}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column />
+					<p:column>
+						<p:outputLabel id="lblSCName" value="Screen Name : " />
+					</p:column>
+					<p:column>
+						<p:inputText id="txtSCName" value="#{adminBean.userBean.scName}" />
+					</p:column>
+					<p:column />
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel id="lblPw" value="Password : " />
+					</p:column>
+					<p:column>
+						<p:password id="txtPw" value="#{adminBean.userBean.pwd}" feedback="true" />
+					</p:column>
+					<p:column>
+						<p:outputLabel id="lblCPw" value="Confirm Password : " />
+					</p:column>
+					<p:column>
+						<p:password id="txtCPw" value="#{adminBean.userBean.cPw}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="4" style="align: center;">
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.saveUser}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

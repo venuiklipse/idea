@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+	<ui:composition template="/templates/layout.xhtml">
+		<ui:define name="title">View Users</ui:define>
+		<ui:define name="body">
+			<p:dataTable id="dtViewUsers" value="#{adminBean.viewUsers}" var="user" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Users Found">
+				<p:column filterBy="#{user.uId}" filterMatchMode="contains">
+					<f:facet name="header">User Id</f:facet>
+					<p:outputLabel id="txtUserId" value="#{user.uId}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">First Name</f:facet>
+					<p:outputLabel id="txtFName" value="#{user.fName}" />
+				</p:column>
+				<p:column filterBy="#{user.lName}" filterMatchMode="contains">
+					<f:facet name="header">Last Name</f:facet>
+					<p:outputLabel id="txtLName" value="#{user.lName}" />
+				</p:column>
+				<p:column filterBy="#{user.idNum}" filterMatchMode="contains">
+					<f:facet name="header">Id Num</f:facet>
+					<p:outputLabel id="txtIdNum" value="#{user.idNum}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">EMail</f:facet>
+					<p:outputLabel id="txtEMail" value="#{user.eMail}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Social</f:facet>
+					<p:graphicImage id="giFBHandle" url="#{user.fbHandle}" name="fb.jpg" library="images" />
+					<p:graphicImage id="giTWHandle" url="#{user.twHandle}" name="twitter.jpg" library="images" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Active</f:facet>
+						<p:selectBooleanButton id="sbbActive" value="#{user.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+				</p:column>
+			</p:dataTable>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

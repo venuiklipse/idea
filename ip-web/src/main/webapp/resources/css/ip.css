@@ -1,11 +1,15 @@
 .menu {
 	position: absolute;
-	top: 100px;
-	width: 250px;
+	top: 50px;
+	width: 100%;
 }
 
 .content {
 	position: absolute;
 	top: 100px;
 	left: 255px;
+}
+
+.ui-selectonemenu-label {
+	width: 100% !important;
 }

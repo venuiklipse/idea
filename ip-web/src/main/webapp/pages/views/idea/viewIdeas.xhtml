@@ -1,0 +1,37 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+	<ui:composition template="/templates/layout.xhtml">
+		<ui:define name="title">View Ideas</ui:define>
+		<ui:define name="body">
+			<p:dataTable id="dtViewIdeas" value="#{ideaBean.viewIdeas}" var="idea" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Ideas Found">
+				<p:column filterBy="#{idea.ideaId}" filterMatchMode="contains">
+					<f:facet name="header">Idea Id</f:facet>
+					<p:outputLabel id="txtIdeaId" value="#{idea.ideaId}" />
+				</p:column>
+				<p:column filterBy="#{idea.ideaTitle}" filterMatchMode="contains">
+					<f:facet name="header">Title</f:facet>
+					<p:outputLabel id="txtIdeaTitle" value="#{idea.ideaTitle}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">Category</f:facet>
+					<p:selectOneMenu id="somICat" value="#{idea.ideaCat}" var="#{cic}">
+						<f:selectItems value="#{ideaBean.ideaCats}" var="ic" itemLabel="#{ic.desc}" itemValue="#{ic.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Status</f:facet>
+					<p:selectOneMenu id="somIStatus" value="#{idea.ideaStatus}" var="#{cis}">
+						<f:selectItems value="#{ideaBean.ideaStatuses}" var="is" itemLabel="#{is.desc}" itemValue="#{is.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Created By</f:facet>
+					<p:selectOneMenu id="somACrtdBy" value="#{idea.crtdBy}" var="#{ca}">
+						<f:selectItems value="#{ideaBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.scName}" />
+					</p:selectOneMenu>
+				</p:column>
+			</p:dataTable>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

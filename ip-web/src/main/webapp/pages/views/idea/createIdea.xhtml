@@ -1,0 +1,64 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+	<ui:composition template="/templates/layout.xhtml">
+		<ui:define name="title">Create Idea</ui:define>
+		<ui:define name="body">
+			<p:panelGrid columns="2" id="pnlCrtIdea">
+				<p:column>
+					<p:outputLabel id="lblITitle" value="Title : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblICat" value="Category : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somICat" value="#{ideaBean.ideaBean.ideaCat}" var="#{cic}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{ideaBean.ideaCats}" var="ic" itemLabel="#{ic.desc}" itemValue="#{ic.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblIDesc" value="Description : " />
+				</p:column>
+				<p:column>
+					<p:editor id="txtIDesc" value="#{ideaBean.ideaBean.ideaDesc}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblIBa" value="Business Areas : " />
+				</p:column>
+				<p:column>
+					<p:editor id="txtIBa" value="#{ideaBean.ideaBean.ideaBa}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblITag" value="Tags : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblIUpload" value="Upload File : " />
+				</p:column>
+				<p:column>
+					<p:fileUpload id="fuIUpload" fileUploadListener="#{ideaBean.ideaBean.fileUploadHandle}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblCrtdBy" value="Created By : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somACrtdBy" value="#{ideaBean.ideaBean.crtdBy}" var="#{ca}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{ideaBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.scName}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{ideaBean.updateIdea}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
