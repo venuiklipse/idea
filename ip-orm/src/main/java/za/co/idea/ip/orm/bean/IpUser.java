@@ -7,6 +7,7 @@ import java.util.Set;
  * IpUser entity. @author MyEclipse Persistence Tools
  */
 
+@SuppressWarnings("rawtypes")
 public class IpUser implements java.io.Serializable {
 
 	// Fields
@@ -14,12 +15,12 @@ public class IpUser implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6242867654257472506L;
+	private static final long serialVersionUID = 1L;
 	private Long userId;
 	private String userFName;
 	private String userLName;
 	private String userMName;
-	private String userIdNum;
+	private Long userIdNum;
 	private String userScreenName;
 	private String userEmail;
 	private String userContact;
@@ -29,9 +30,14 @@ public class IpUser implements java.io.Serializable {
 	private String userTwHandle;
 	private String userAvatar;
 	private String userStatus;
-	private Set<IpIdea> ipIdeas = new HashSet<IpIdea>(0);
-	private Set<IpTag> ipTags = new HashSet<IpTag>(0);
-	private Set<IpGroup> ipGroups = new HashSet<IpGroup>(0);
+	private Set ipSolutions = new HashSet(0);
+	private Set ipIdeas = new HashSet(0);
+	private Set ipTags = new HashSet(0);
+	private Set ipPointses = new HashSet(0);
+	private Set ipFunctions = new HashSet(0);
+	private Set ipClaims = new HashSet(0);
+	private Set ipGroups = new HashSet(0);
+	private Set ipChallenges = new HashSet(0);
 
 	// Constructors
 
@@ -40,10 +46,7 @@ public class IpUser implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpUser(Long userId, String userFName, String userLName,
-			String userIdNum, String userScreenName, String userEmail,
-			String userSkills, String userBio, String userFbHandle,
-			String userTwHandle, String userAvatar, String userStatus) {
+	public IpUser(Long userId, String userFName, String userLName, Long userIdNum, String userScreenName, String userEmail, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userAvatar, String userStatus) {
 		this.userId = userId;
 		this.userFName = userFName;
 		this.userLName = userLName;
@@ -59,12 +62,7 @@ public class IpUser implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpUser(Long userId, String userFName, String userLName,
-			String userMName, String userIdNum, String userScreenName,
-			String userEmail, String userContact, String userSkills,
-			String userBio, String userFbHandle, String userTwHandle,
-			String userAvatar, String userStatus, Set<IpIdea> ipIdeas,
-			Set<IpTag> ipTags, Set<IpGroup> ipGroups) {
+	public IpUser(Long userId, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userAvatar, String userStatus, Set ipSolutions, Set ipIdeas, Set ipTags, Set ipPointses, Set ipFunctions, Set ipClaims, Set ipGroups, Set ipChallenges) {
 		this.userId = userId;
 		this.userFName = userFName;
 		this.userLName = userLName;
@@ -79,9 +77,14 @@ public class IpUser implements java.io.Serializable {
 		this.userTwHandle = userTwHandle;
 		this.userAvatar = userAvatar;
 		this.userStatus = userStatus;
+		this.ipSolutions = ipSolutions;
 		this.ipIdeas = ipIdeas;
 		this.ipTags = ipTags;
+		this.ipPointses = ipPointses;
+		this.ipFunctions = ipFunctions;
+		this.ipClaims = ipClaims;
 		this.ipGroups = ipGroups;
+		this.ipChallenges = ipChallenges;
 	}
 
 	// Property accessors
@@ -118,11 +121,11 @@ public class IpUser implements java.io.Serializable {
 		this.userMName = userMName;
 	}
 
-	public String getUserIdNum() {
+	public Long getUserIdNum() {
 		return this.userIdNum;
 	}
 
-	public void setUserIdNum(String userIdNum) {
+	public void setUserIdNum(Long userIdNum) {
 		this.userIdNum = userIdNum;
 	}
 
@@ -198,28 +201,68 @@ public class IpUser implements java.io.Serializable {
 		this.userStatus = userStatus;
 	}
 
-	public Set<IpIdea> getIpIdeas() {
+	public Set getIpSolutions() {
+		return this.ipSolutions;
+	}
+
+	public void setIpSolutions(Set ipSolutions) {
+		this.ipSolutions = ipSolutions;
+	}
+
+	public Set getIpIdeas() {
 		return this.ipIdeas;
 	}
 
-	public void setIpIdeas(Set<IpIdea> ipIdeas) {
+	public void setIpIdeas(Set ipIdeas) {
 		this.ipIdeas = ipIdeas;
 	}
 
-	public Set<IpTag> getIpTags() {
+	public Set getIpTags() {
 		return this.ipTags;
 	}
 
-	public void setIpTags(Set<IpTag> ipTags) {
+	public void setIpTags(Set ipTags) {
 		this.ipTags = ipTags;
 	}
 
-	public Set<IpGroup> getIpGroups() {
+	public Set getIpPointses() {
+		return this.ipPointses;
+	}
+
+	public void setIpPointses(Set ipPointses) {
+		this.ipPointses = ipPointses;
+	}
+
+	public Set getIpFunctions() {
+		return this.ipFunctions;
+	}
+
+	public void setIpFunctions(Set ipFunctions) {
+		this.ipFunctions = ipFunctions;
+	}
+
+	public Set getIpClaims() {
+		return this.ipClaims;
+	}
+
+	public void setIpClaims(Set ipClaims) {
+		this.ipClaims = ipClaims;
+	}
+
+	public Set getIpGroups() {
 		return this.ipGroups;
 	}
 
-	public void setIpGroups(Set<IpGroup> ipGroups) {
+	public void setIpGroups(Set ipGroups) {
 		this.ipGroups = ipGroups;
+	}
+
+	public Set getIpChallenges() {
+		return this.ipChallenges;
+	}
+
+	public void setIpChallenges(Set ipChallenges) {
+		this.ipChallenges = ipChallenges;
 	}
 
 }

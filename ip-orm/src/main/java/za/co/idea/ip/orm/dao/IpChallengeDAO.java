@@ -21,10 +21,9 @@ import za.co.idea.ip.orm.bean.IpChallenge;
  * @see za.co.idea.ip.orm.bean.IpChallenge
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class IpChallengeDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory
-			.getLogger(IpChallengeDAO.class);
+	private static final Logger log = LoggerFactory.getLogger(IpChallengeDAO.class);
 
 	// property constants
 
@@ -57,8 +56,7 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 	public IpChallenge findById(java.lang.Long id) {
 		log.debug("getting IpChallenge instance with id: " + id);
 		try {
-			IpChallenge instance = (IpChallenge) getHibernateTemplate().get(
-					"za.co.idea.ip.orm.bean.IpChallenge", id);
+			IpChallenge instance = (IpChallenge) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpChallenge", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -66,13 +64,11 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpChallenge> findByExample(IpChallenge instance) {
+	public List findByExample(IpChallenge instance) {
 		log.debug("finding IpChallenge instance by example");
 		try {
-			List<IpChallenge> results = getHibernateTemplate().findByExample(
-					instance);
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List results = getHibernateTemplate().findByExample(instance);
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -80,12 +76,10 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpChallenge> findByProperty(String propertyName, Object value) {
-		log.debug("finding IpChallenge instance with property: " + propertyName
-				+ ", value: " + value);
+	public List findByProperty(String propertyName, Object value) {
+		log.debug("finding IpChallenge instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from IpChallenge as model where model."
-					+ propertyName + "= ?";
+			String queryString = "from IpChallenge as model where model." + propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -93,7 +87,7 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpChallenge> findAll() {
+	public List findAll() {
 		log.debug("finding all IpChallenge instances");
 		try {
 			String queryString = "from IpChallenge";
@@ -107,8 +101,7 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 	public IpChallenge merge(IpChallenge detachedInstance) {
 		log.debug("merging IpChallenge instance");
 		try {
-			IpChallenge result = (IpChallenge) getHibernateTemplate().merge(
-					detachedInstance);
+			IpChallenge result = (IpChallenge) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -139,8 +132,7 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static IpChallengeDAO getFromApplicationContext(
-			ApplicationContext ctx) {
+	public static IpChallengeDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpChallengeDAO) ctx.getBean("IpChallengeDAO");
 	}
 }

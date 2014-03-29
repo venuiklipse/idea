@@ -7,6 +7,7 @@ import java.util.Set;
  * IpIdeaStatus entity. @author MyEclipse Persistence Tools
  */
 
+@SuppressWarnings("rawtypes")
 public class IpIdeaStatus implements java.io.Serializable {
 
 	// Fields
@@ -14,10 +15,10 @@ public class IpIdeaStatus implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2183703925197685802L;
+	private static final long serialVersionUID = 1L;
 	private Integer isId;
 	private String isDesc;
-	private Set<IpIdea> ipIdeas = new HashSet<IpIdea>(0);
+	private Set ipIdeas = new HashSet(0);
 
 	// Constructors
 
@@ -31,7 +32,7 @@ public class IpIdeaStatus implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpIdeaStatus(Integer isId, String isDesc, Set<IpIdea> ipIdeas) {
+	public IpIdeaStatus(Integer isId, String isDesc, Set ipIdeas) {
 		this.isId = isId;
 		this.isDesc = isDesc;
 		this.ipIdeas = ipIdeas;
@@ -55,11 +56,11 @@ public class IpIdeaStatus implements java.io.Serializable {
 		this.isDesc = isDesc;
 	}
 
-	public Set<IpIdea> getIpIdeas() {
+	public Set getIpIdeas() {
 		return this.ipIdeas;
 	}
 
-	public void setIpIdeas(Set<IpIdea> ipIdeas) {
+	public void setIpIdeas(Set ipIdeas) {
 		this.ipIdeas = ipIdeas;
 	}
 

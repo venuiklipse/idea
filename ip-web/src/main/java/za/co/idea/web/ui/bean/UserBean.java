@@ -19,6 +19,7 @@ public class UserBean implements Serializable {
 	private String scName;
 	private String pwd;
 	private String cPw;
+	private String avatar;
 	private Boolean isActive;
 
 	public Long getuId() {
@@ -131,6 +132,14 @@ public class UserBean implements Serializable {
 
 	public void setcPw(String cPw) {
 		this.cPw = cPw;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 	public Boolean getIsActive() {

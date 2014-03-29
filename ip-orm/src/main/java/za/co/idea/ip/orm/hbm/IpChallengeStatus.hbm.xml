@@ -13,5 +13,11 @@
         <property name="csDesc" type="java.lang.String">
             <column name="cs_desc" length="45" not-null="true" />
         </property>
+        <set name="ipChallenges" inverse="true">
+            <key>
+                <column name="chal_status" />
+            </key>
+            <one-to-many class="za.co.idea.ip.orm.bean.IpChallenge" />
+        </set>
     </class>
 </hibernate-mapping>

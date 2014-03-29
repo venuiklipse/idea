@@ -21,7 +21,7 @@ import za.co.idea.ip.orm.bean.IpGroup;
  * @see za.co.idea.ip.orm.bean.IpGroup
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class IpGroupDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpGroupDAO.class);
 	// property constants
@@ -58,8 +58,7 @@ public class IpGroupDAO extends HibernateDaoSupport {
 	public IpGroup findById(java.lang.Long id) {
 		log.debug("getting IpGroup instance with id: " + id);
 		try {
-			IpGroup instance = (IpGroup) getHibernateTemplate().get(
-					"za.co.idea.ip.orm.bean.IpGroup", id);
+			IpGroup instance = (IpGroup) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpGroup", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -67,13 +66,11 @@ public class IpGroupDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpGroup> findByExample(IpGroup instance) {
+	public List findByExample(IpGroup instance) {
 		log.debug("finding IpGroup instance by example");
 		try {
-			List<IpGroup> results = getHibernateTemplate().findByExample(
-					instance);
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List results = getHibernateTemplate().findByExample(instance);
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -81,12 +78,10 @@ public class IpGroupDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpGroup> findByProperty(String propertyName, Object value) {
-		log.debug("finding IpGroup instance with property: " + propertyName
-				+ ", value: " + value);
+	public List findByProperty(String propertyName, Object value) {
+		log.debug("finding IpGroup instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from IpGroup as model where model."
-					+ propertyName + "= ?";
+			String queryString = "from IpGroup as model where model." + propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -94,19 +89,19 @@ public class IpGroupDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpGroup> findByGroupName(Object groupName) {
+	public List findByGroupName(Object groupName) {
 		return findByProperty(GROUP_NAME, groupName);
 	}
 
-	public List<IpGroup> findByGroupStatus(Object groupStatus) {
+	public List findByGroupStatus(Object groupStatus) {
 		return findByProperty(GROUP_STATUS, groupStatus);
 	}
 
-	public List<IpGroup> findByGroupEmail(Object groupEmail) {
+	public List findByGroupEmail(Object groupEmail) {
 		return findByProperty(GROUP_EMAIL, groupEmail);
 	}
 
-	public List<IpGroup> findAll() {
+	public List findAll() {
 		log.debug("finding all IpGroup instances");
 		try {
 			String queryString = "from IpGroup";
@@ -120,8 +115,7 @@ public class IpGroupDAO extends HibernateDaoSupport {
 	public IpGroup merge(IpGroup detachedInstance) {
 		log.debug("merging IpGroup instance");
 		try {
-			IpGroup result = (IpGroup) getHibernateTemplate().merge(
-					detachedInstance);
+			IpGroup result = (IpGroup) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {

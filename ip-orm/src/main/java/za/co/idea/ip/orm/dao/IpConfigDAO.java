@@ -21,10 +21,9 @@ import za.co.idea.ip.orm.bean.IpConfig;
  * @see za.co.idea.ip.orm.bean.IpConfig
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class IpConfigDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory
-			.getLogger(IpConfigDAO.class);
+	private static final Logger log = LoggerFactory.getLogger(IpConfigDAO.class);
 	// property constants
 	public static final String CONFIG_KEY = "configKey";
 	public static final String CONFIG_VALUE = "configValue";
@@ -60,8 +59,7 @@ public class IpConfigDAO extends HibernateDaoSupport {
 	public IpConfig findById(java.lang.Integer id) {
 		log.debug("getting IpConfig instance with id: " + id);
 		try {
-			IpConfig instance = (IpConfig) getHibernateTemplate().get(
-					"za.co.idea.ip.orm.bean.IpConfig", id);
+			IpConfig instance = (IpConfig) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpConfig", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -69,13 +67,11 @@ public class IpConfigDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpConfig> findByExample(IpConfig instance) {
+	public List findByExample(IpConfig instance) {
 		log.debug("finding IpConfig instance by example");
 		try {
-			List<IpConfig> results = getHibernateTemplate().findByExample(
-					instance);
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List results = getHibernateTemplate().findByExample(instance);
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -83,12 +79,10 @@ public class IpConfigDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpConfig> findByProperty(String propertyName, Object value) {
-		log.debug("finding IpConfig instance with property: " + propertyName
-				+ ", value: " + value);
+	public List findByProperty(String propertyName, Object value) {
+		log.debug("finding IpConfig instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from IpConfig as model where model."
-					+ propertyName + "= ?";
+			String queryString = "from IpConfig as model where model." + propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -96,23 +90,23 @@ public class IpConfigDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpConfig> findByConfigKey(Object configKey) {
+	public List findByConfigKey(Object configKey) {
 		return findByProperty(CONFIG_KEY, configKey);
 	}
 
-	public List<IpConfig> findByConfigValue(Object configValue) {
+	public List findByConfigValue(Object configValue) {
 		return findByProperty(CONFIG_VALUE, configValue);
 	}
 
-	public List<IpConfig> findByConfigEnv(Object configEnv) {
+	public List findByConfigEnv(Object configEnv) {
 		return findByProperty(CONFIG_ENV, configEnv);
 	}
 
-	public List<IpConfig> findByCreatedBy(Object createdBy) {
+	public List findByCreatedBy(Object createdBy) {
 		return findByProperty(CREATED_BY, createdBy);
 	}
 
-	public List<IpConfig> findAll() {
+	public List findAll() {
 		log.debug("finding all IpConfig instances");
 		try {
 			String queryString = "from IpConfig";
@@ -126,8 +120,7 @@ public class IpConfigDAO extends HibernateDaoSupport {
 	public IpConfig merge(IpConfig detachedInstance) {
 		log.debug("merging IpConfig instance");
 		try {
-			IpConfig result = (IpConfig) getHibernateTemplate().merge(
-					detachedInstance);
+			IpConfig result = (IpConfig) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {

@@ -13,7 +13,7 @@ public class IpConfig implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 845519725292513945L;
+	private static final long serialVersionUID = 1L;
 	private Integer configId;
 	private String configKey;
 	private String configValue;
@@ -28,8 +28,7 @@ public class IpConfig implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpConfig(String configKey, String configValue, String configEnv,
-			Timestamp createdDate, String createdBy) {
+	public IpConfig(String configKey, String configValue, String configEnv, Timestamp createdDate, String createdBy) {
 		this.configKey = configKey;
 		this.configValue = configValue;
 		this.configEnv = configEnv;

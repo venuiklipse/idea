@@ -10,5 +10,17 @@
             <column name="chal_id" />
             <generator class="assigned" />
         </id>
+        <many-to-one name="ipChallengeStatus" class="za.co.idea.ip.orm.bean.IpChallengeStatus" fetch="select">
+            <column name="chal_status" />
+        </many-to-one>
+        <many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select">
+            <column name="chal_crtd_by" />
+        </many-to-one>
+        <set name="ipSolutions" inverse="true">
+            <key>
+                <column name="chal_id" />
+            </key>
+            <one-to-many class="za.co.idea.ip.orm.bean.IpSolution" />
+        </set>
     </class>
 </hibernate-mapping>

@@ -11,7 +11,7 @@ public class IpTag implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7062420850700464640L;
+	private static final long serialVersionUID = 1L;
 	private Long tagId;
 	private IpUser ipUser;
 	private IpTagEntityType ipTagEntityType;
@@ -26,8 +26,7 @@ public class IpTag implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpTag(Long tagId, IpTagEntityType ipTagEntityType,
-			IpTagType ipTagType, Long tagEntityId) {
+	public IpTag(Long tagId, IpTagEntityType ipTagEntityType, IpTagType ipTagType, Long tagEntityId) {
 		this.tagId = tagId;
 		this.ipTagEntityType = ipTagEntityType;
 		this.ipTagType = ipTagType;
@@ -35,8 +34,7 @@ public class IpTag implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpTag(Long tagId, IpUser ipUser, IpTagEntityType ipTagEntityType,
-			IpTagType ipTagType, Long tagEntityId, String tagText) {
+	public IpTag(Long tagId, IpUser ipUser, IpTagEntityType ipTagEntityType, IpTagType ipTagType, Long tagEntityId, String tagText) {
 		this.tagId = tagId;
 		this.ipUser = ipUser;
 		this.ipTagEntityType = ipTagEntityType;

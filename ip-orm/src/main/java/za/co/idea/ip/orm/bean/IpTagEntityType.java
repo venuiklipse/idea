@@ -7,6 +7,7 @@ import java.util.Set;
  * IpTagEntityType entity. @author MyEclipse Persistence Tools
  */
 
+@SuppressWarnings("rawtypes")
 public class IpTagEntityType implements java.io.Serializable {
 
 	// Fields
@@ -14,10 +15,10 @@ public class IpTagEntityType implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4250843679878888337L;
+	private static final long serialVersionUID = 1L;
 	private Integer teId;
 	private String teDesc;
-	private Set<IpTag> ipTags = new HashSet<IpTag>(0);
+	private Set ipTags = new HashSet(0);
 
 	// Constructors
 
@@ -31,7 +32,7 @@ public class IpTagEntityType implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpTagEntityType(Integer teId, String teDesc, Set<IpTag> ipTags) {
+	public IpTagEntityType(Integer teId, String teDesc, Set ipTags) {
 		this.teId = teId;
 		this.teDesc = teDesc;
 		this.ipTags = ipTags;
@@ -55,11 +56,11 @@ public class IpTagEntityType implements java.io.Serializable {
 		this.teDesc = teDesc;
 	}
 
-	public Set<IpTag> getIpTags() {
+	public Set getIpTags() {
 		return this.ipTags;
 	}
 
-	public void setIpTags(Set<IpTag> ipTags) {
+	public void setIpTags(Set ipTags) {
 		this.ipTags = ipTags;
 	}
 

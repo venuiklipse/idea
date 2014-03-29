@@ -2,7 +2,7 @@
 
 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="url" value="jdbc:mysql://localhost:3306/ipdb"></property>
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/ipdb"></property>
 		<property name="username" value="root"></property>
 		<property name="password" value="password"></property>
 	</bean>
@@ -20,25 +20,26 @@
 		</property>
 		<property name="mappingResources">
 			<list>
-				<value>za/co/idea/ip/orm/hbm/IpTag.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpAllocation.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpChallengeStatus.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpClaimStatus.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpFunction.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpIdeaCat.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpIdeaStatus.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpRewards.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpSolution.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpTagEntityType.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpTagType.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpChallenge.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpClaim.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpConfig.hbm.xml</value>
-				<value>
-					za/co/idea/ip/orm/hbm/IpChallengeStatus.hbm.xml
-				</value>
 				<value>za/co/idea/ip/orm/hbm/IpGroup.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpIdea.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpPoints.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpRewardsStatus.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpSolutionStatus.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpTag.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpUser.hbm.xml</value>
-				<value>
-					za/co/idea/ip/orm/hbm/IpTagEntityType.hbm.xml
-				</value>
-				<value>
-					za/co/idea/ip/orm/hbm/IpIdeaStatus.hbm.xml
-				</value>
-				<value>za/co/idea/ip/orm/hbm/IpIdeaCat.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpTagType.hbm.xml</value>
-				<value>
-					za/co/idea/ip/orm/hbm/IpChallenge.hbm.xml
-				</value>
 			</list>
 		</property>
 	</bean>

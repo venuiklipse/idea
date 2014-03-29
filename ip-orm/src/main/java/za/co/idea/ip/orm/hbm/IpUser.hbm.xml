@@ -19,8 +19,8 @@
         <property name="userMName" type="java.lang.String">
             <column name="user_m_name" length="45" />
         </property>
-        <property name="userIdNum" type="java.lang.String">
-            <column name="user_id_num" length="45" not-null="true" />
+        <property name="userIdNum" type="java.lang.Long">
+            <column name="user_id_num" not-null="true" />
         </property>
         <property name="userScreenName" type="java.lang.String">
             <column name="user_screen_name" length="50" not-null="true" unique="true" />
@@ -49,6 +49,12 @@
         <property name="userStatus" type="java.lang.String">
             <column name="user_status" length="1" not-null="true" />
         </property>
+        <set name="ipSolutions" inverse="true">
+            <key>
+                <column name="sub_user_id" />
+            </key>
+            <one-to-many class="za.co.idea.ip.orm.bean.IpSolution" />
+        </set>
         <set name="ipIdeas" inverse="true">
             <key>
                 <column name="idea_user_id" not-null="true" />
@@ -61,11 +67,35 @@
             </key>
             <one-to-many class="za.co.idea.ip.orm.bean.IpTag" />
         </set>
+        <set name="ipPointses" inverse="true">
+            <key>
+                <column name="user_id" />
+            </key>
+            <one-to-many class="za.co.idea.ip.orm.bean.IpPoints" />
+        </set>
+        <set name="ipFunctions" inverse="true">
+            <key>
+                <column name="user_id" />
+            </key>
+            <one-to-many class="za.co.idea.ip.orm.bean.IpFunction" />
+        </set>
+        <set name="ipClaims" inverse="true">
+            <key>
+                <column name="user_id" />
+            </key>
+            <one-to-many class="za.co.idea.ip.orm.bean.IpClaim" />
+        </set>
         <set name="ipGroups" inverse="true">
             <key>
                 <column name="group_admin_id" />
             </key>
             <one-to-many class="za.co.idea.ip.orm.bean.IpGroup" />
+        </set>
+        <set name="ipChallenges" inverse="true">
+            <key>
+                <column name="chal_crtd_by" />
+            </key>
+            <one-to-many class="za.co.idea.ip.orm.bean.IpChallenge" />
         </set>
     </class>
 </hibernate-mapping>

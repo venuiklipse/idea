@@ -1,9 +1,13 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * IpChallengeStatus entity. @author MyEclipse Persistence Tools
  */
 
+@SuppressWarnings("rawtypes")
 public class IpChallengeStatus implements java.io.Serializable {
 
 	// Fields
@@ -11,9 +15,10 @@ public class IpChallengeStatus implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1143589684334274074L;
+	private static final long serialVersionUID = 1L;
 	private Integer csId;
 	private String csDesc;
+	private Set ipChallenges = new HashSet(0);
 
 	// Constructors
 
@@ -21,10 +26,17 @@ public class IpChallengeStatus implements java.io.Serializable {
 	public IpChallengeStatus() {
 	}
 
-	/** full constructor */
+	/** minimal constructor */
 	public IpChallengeStatus(Integer csId, String csDesc) {
 		this.csId = csId;
 		this.csDesc = csDesc;
+	}
+
+	/** full constructor */
+	public IpChallengeStatus(Integer csId, String csDesc, Set ipChallenges) {
+		this.csId = csId;
+		this.csDesc = csDesc;
+		this.ipChallenges = ipChallenges;
 	}
 
 	// Property accessors
@@ -43,6 +55,14 @@ public class IpChallengeStatus implements java.io.Serializable {
 
 	public void setCsDesc(String csDesc) {
 		this.csDesc = csDesc;
+	}
+
+	public Set getIpChallenges() {
+		return this.ipChallenges;
+	}
+
+	public void setIpChallenges(Set ipChallenges) {
+		this.ipChallenges = ipChallenges;
 	}
 
 }

@@ -25,6 +25,12 @@
         <property name="groupEmail" type="java.lang.String">
             <column name="group_email" length="450" />
         </property>
+        <set name="ipFunctions" inverse="true">
+            <key>
+                <column name="group_id" />
+            </key>
+            <one-to-many class="za.co.idea.ip.orm.bean.IpFunction" />
+        </set>
         <set name="ipGroups" inverse="true">
             <key>
                 <column name="group_parent_id" />

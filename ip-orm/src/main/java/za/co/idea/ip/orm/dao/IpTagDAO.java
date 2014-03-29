@@ -21,7 +21,7 @@ import za.co.idea.ip.orm.bean.IpTag;
  * @see za.co.idea.ip.orm.bean.IpTag
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class IpTagDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpTagDAO.class);
 	// property constants
@@ -57,8 +57,7 @@ public class IpTagDAO extends HibernateDaoSupport {
 	public IpTag findById(java.lang.Long id) {
 		log.debug("getting IpTag instance with id: " + id);
 		try {
-			IpTag instance = (IpTag) getHibernateTemplate().get(
-					"za.co.idea.ip.orm.bean.IpTag", id);
+			IpTag instance = (IpTag) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpTag", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -66,13 +65,11 @@ public class IpTagDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpTag> findByExample(IpTag instance) {
+	public List findByExample(IpTag instance) {
 		log.debug("finding IpTag instance by example");
 		try {
-			List<IpTag> results = getHibernateTemplate()
-					.findByExample(instance);
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List results = getHibernateTemplate().findByExample(instance);
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -80,12 +77,10 @@ public class IpTagDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpTag> findByProperty(String propertyName, Object value) {
-		log.debug("finding IpTag instance with property: " + propertyName
-				+ ", value: " + value);
+	public List findByProperty(String propertyName, Object value) {
+		log.debug("finding IpTag instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from IpTag as model where model."
-					+ propertyName + "= ?";
+			String queryString = "from IpTag as model where model." + propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -93,15 +88,15 @@ public class IpTagDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpTag> findByTagEntityId(Object tagEntityId) {
+	public List findByTagEntityId(Object tagEntityId) {
 		return findByProperty(TAG_ENTITY_ID, tagEntityId);
 	}
 
-	public List<IpTag> findByTagText(Object tagText) {
+	public List findByTagText(Object tagText) {
 		return findByProperty(TAG_TEXT, tagText);
 	}
 
-	public List<IpTag> findAll() {
+	public List findAll() {
 		log.debug("finding all IpTag instances");
 		try {
 			String queryString = "from IpTag";
@@ -115,8 +110,7 @@ public class IpTagDAO extends HibernateDaoSupport {
 	public IpTag merge(IpTag detachedInstance) {
 		log.debug("merging IpTag instance");
 		try {
-			IpTag result = (IpTag) getHibernateTemplate().merge(
-					detachedInstance);
+			IpTag result = (IpTag) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {

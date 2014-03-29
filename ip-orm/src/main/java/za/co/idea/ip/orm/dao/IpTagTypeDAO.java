@@ -21,10 +21,9 @@ import za.co.idea.ip.orm.bean.IpTagType;
  * @see za.co.idea.ip.orm.bean.IpTagType
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class IpTagTypeDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory
-			.getLogger(IpTagTypeDAO.class);
+	private static final Logger log = LoggerFactory.getLogger(IpTagTypeDAO.class);
 	// property constants
 	public static final String TT_DESC = "ttDesc";
 
@@ -57,8 +56,7 @@ public class IpTagTypeDAO extends HibernateDaoSupport {
 	public IpTagType findById(java.lang.Integer id) {
 		log.debug("getting IpTagType instance with id: " + id);
 		try {
-			IpTagType instance = (IpTagType) getHibernateTemplate().get(
-					"za.co.idea.ip.orm.bean.IpTagType", id);
+			IpTagType instance = (IpTagType) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpTagType", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -66,13 +64,11 @@ public class IpTagTypeDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpTagType> findByExample(IpTagType instance) {
+	public List findByExample(IpTagType instance) {
 		log.debug("finding IpTagType instance by example");
 		try {
-			List<IpTagType> results = getHibernateTemplate().findByExample(
-					instance);
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List results = getHibernateTemplate().findByExample(instance);
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -80,12 +76,10 @@ public class IpTagTypeDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpTagType> findByProperty(String propertyName, Object value) {
-		log.debug("finding IpTagType instance with property: " + propertyName
-				+ ", value: " + value);
+	public List findByProperty(String propertyName, Object value) {
+		log.debug("finding IpTagType instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from IpTagType as model where model."
-					+ propertyName + "= ?";
+			String queryString = "from IpTagType as model where model." + propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -93,11 +87,11 @@ public class IpTagTypeDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpTagType> findByTtDesc(Object ttDesc) {
+	public List findByTtDesc(Object ttDesc) {
 		return findByProperty(TT_DESC, ttDesc);
 	}
 
-	public List<IpTagType> findAll() {
+	public List findAll() {
 		log.debug("finding all IpTagType instances");
 		try {
 			String queryString = "from IpTagType";
@@ -111,8 +105,7 @@ public class IpTagTypeDAO extends HibernateDaoSupport {
 	public IpTagType merge(IpTagType detachedInstance) {
 		log.debug("merging IpTagType instance");
 		try {
-			IpTagType result = (IpTagType) getHibernateTemplate().merge(
-					detachedInstance);
+			IpTagType result = (IpTagType) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {

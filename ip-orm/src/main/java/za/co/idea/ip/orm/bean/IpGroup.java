@@ -7,6 +7,7 @@ import java.util.Set;
  * IpGroup entity. @author MyEclipse Persistence Tools
  */
 
+@SuppressWarnings("rawtypes")
 public class IpGroup implements java.io.Serializable {
 
 	// Fields
@@ -14,14 +15,15 @@ public class IpGroup implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1226956195083283696L;
+	private static final long serialVersionUID = 1L;
 	private Long groupId;
 	private IpUser ipUser;
 	private IpGroup ipGroup;
 	private String groupName;
 	private String groupStatus;
 	private String groupEmail;
-	private Set<IpGroup> ipGroups = new HashSet<IpGroup>(0);
+	private Set ipFunctions = new HashSet(0);
+	private Set ipGroups = new HashSet(0);
 
 	// Constructors
 
@@ -36,15 +38,14 @@ public class IpGroup implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpGroup(Long groupId, IpUser ipUser, IpGroup ipGroup,
-			String groupName, String groupStatus, String groupEmail,
-			Set<IpGroup> ipGroups) {
+	public IpGroup(Long groupId, IpUser ipUser, IpGroup ipGroup, String groupName, String groupStatus, String groupEmail, Set ipFunctions, Set ipGroups) {
 		this.groupId = groupId;
 		this.ipUser = ipUser;
 		this.ipGroup = ipGroup;
 		this.groupName = groupName;
 		this.groupStatus = groupStatus;
 		this.groupEmail = groupEmail;
+		this.ipFunctions = ipFunctions;
 		this.ipGroups = ipGroups;
 	}
 
@@ -98,11 +99,19 @@ public class IpGroup implements java.io.Serializable {
 		this.groupEmail = groupEmail;
 	}
 
-	public Set<IpGroup> getIpGroups() {
+	public Set getIpFunctions() {
+		return this.ipFunctions;
+	}
+
+	public void setIpFunctions(Set ipFunctions) {
+		this.ipFunctions = ipFunctions;
+	}
+
+	public Set getIpGroups() {
 		return this.ipGroups;
 	}
 
-	public void setIpGroups(Set<IpGroup> ipGroups) {
+	public void setIpGroups(Set ipGroups) {
 		this.ipGroups = ipGroups;
 	}
 

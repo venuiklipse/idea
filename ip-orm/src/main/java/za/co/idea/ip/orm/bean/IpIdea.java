@@ -13,7 +13,7 @@ public class IpIdea implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4089874045646815742L;
+	private static final long serialVersionUID = 1L;
 	private Long ideaId;
 	private IpIdeaStatus ipIdeaStatus;
 	private IpUser ipUser;
@@ -32,9 +32,7 @@ public class IpIdea implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser,
-			IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc,
-			String ideaBa, Timestamp ideaDate, String ideaTag) {
+	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Timestamp ideaDate, String ideaTag) {
 		this.ideaId = ideaId;
 		this.ipIdeaStatus = ipIdeaStatus;
 		this.ipUser = ipUser;
@@ -47,9 +45,7 @@ public class IpIdea implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser,
-			IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc,
-			String ideaBa, Timestamp ideaDate, String ideaTag, String ideaBlob) {
+	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Timestamp ideaDate, String ideaTag, String ideaBlob) {
 		this.ideaId = ideaId;
 		this.ipIdeaStatus = ipIdeaStatus;
 		this.ipUser = ipUser;

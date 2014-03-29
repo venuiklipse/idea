@@ -21,7 +21,7 @@ import za.co.idea.ip.orm.bean.IpUser;
  * @see za.co.idea.ip.orm.bean.IpUser
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class IpUserDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpUserDAO.class);
 	// property constants
@@ -68,8 +68,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 	public IpUser findById(java.lang.Long id) {
 		log.debug("getting IpUser instance with id: " + id);
 		try {
-			IpUser instance = (IpUser) getHibernateTemplate().get(
-					"za.co.idea.ip.orm.bean.IpUser", id);
+			IpUser instance = (IpUser) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpUser", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -77,13 +76,11 @@ public class IpUserDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpUser> findByExample(IpUser instance) {
+	public List findByExample(IpUser instance) {
 		log.debug("finding IpUser instance by example");
 		try {
-			List<IpUser> results = getHibernateTemplate().findByExample(
-					instance);
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List results = getHibernateTemplate().findByExample(instance);
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -91,12 +88,10 @@ public class IpUserDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpUser> findByProperty(String propertyName, Object value) {
-		log.debug("finding IpUser instance with property: " + propertyName
-				+ ", value: " + value);
+	public List findByProperty(String propertyName, Object value) {
+		log.debug("finding IpUser instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from IpUser as model where model."
-					+ propertyName + "= ?";
+			String queryString = "from IpUser as model where model." + propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -104,59 +99,59 @@ public class IpUserDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpUser> findByUserFName(Object userFName) {
+	public List findByUserFName(Object userFName) {
 		return findByProperty(USER_FNAME, userFName);
 	}
 
-	public List<IpUser> findByUserLName(Object userLName) {
+	public List findByUserLName(Object userLName) {
 		return findByProperty(USER_LNAME, userLName);
 	}
 
-	public List<IpUser> findByUserMName(Object userMName) {
+	public List findByUserMName(Object userMName) {
 		return findByProperty(USER_MNAME, userMName);
 	}
 
-	public List<IpUser> findByUserIdNum(Object userIdNum) {
+	public List findByUserIdNum(Object userIdNum) {
 		return findByProperty(USER_ID_NUM, userIdNum);
 	}
 
-	public List<IpUser> findByUserScreenName(Object userScreenName) {
+	public List findByUserScreenName(Object userScreenName) {
 		return findByProperty(USER_SCREEN_NAME, userScreenName);
 	}
 
-	public List<IpUser> findByUserEmail(Object userEmail) {
+	public List findByUserEmail(Object userEmail) {
 		return findByProperty(USER_EMAIL, userEmail);
 	}
 
-	public List<IpUser> findByUserContact(Object userContact) {
+	public List findByUserContact(Object userContact) {
 		return findByProperty(USER_CONTACT, userContact);
 	}
 
-	public List<IpUser> findByUserSkills(Object userSkills) {
+	public List findByUserSkills(Object userSkills) {
 		return findByProperty(USER_SKILLS, userSkills);
 	}
 
-	public List<IpUser> findByUserBio(Object userBio) {
+	public List findByUserBio(Object userBio) {
 		return findByProperty(USER_BIO, userBio);
 	}
 
-	public List<IpUser> findByUserFbHandle(Object userFbHandle) {
+	public List findByUserFbHandle(Object userFbHandle) {
 		return findByProperty(USER_FB_HANDLE, userFbHandle);
 	}
 
-	public List<IpUser> findByUserTwHandle(Object userTwHandle) {
+	public List findByUserTwHandle(Object userTwHandle) {
 		return findByProperty(USER_TW_HANDLE, userTwHandle);
 	}
 
-	public List<IpUser> findByUserAvatar(Object userAvatar) {
+	public List findByUserAvatar(Object userAvatar) {
 		return findByProperty(USER_AVATAR, userAvatar);
 	}
 
-	public List<IpUser> findByUserStatus(Object userStatus) {
+	public List findByUserStatus(Object userStatus) {
 		return findByProperty(USER_STATUS, userStatus);
 	}
 
-	public List<IpUser> findAll() {
+	public List findAll() {
 		log.debug("finding all IpUser instances");
 		try {
 			String queryString = "from IpUser";
@@ -170,8 +165,7 @@ public class IpUserDAO extends HibernateDaoSupport {
 	public IpUser merge(IpUser detachedInstance) {
 		log.debug("merging IpUser instance");
 		try {
-			IpUser result = (IpUser) getHibernateTemplate().merge(
-					detachedInstance);
+			IpUser result = (IpUser) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {

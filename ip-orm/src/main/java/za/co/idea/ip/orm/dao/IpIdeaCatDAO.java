@@ -21,10 +21,9 @@ import za.co.idea.ip.orm.bean.IpIdeaCat;
  * @see za.co.idea.ip.orm.bean.IpIdeaCat
  * @author MyEclipse Persistence Tools
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings("rawtypes")
 public class IpIdeaCatDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory
-			.getLogger(IpIdeaCatDAO.class);
+	private static final Logger log = LoggerFactory.getLogger(IpIdeaCatDAO.class);
 	// property constants
 	public static final String IC_DESC = "icDesc";
 
@@ -57,8 +56,7 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 	public IpIdeaCat findById(java.lang.Integer id) {
 		log.debug("getting IpIdeaCat instance with id: " + id);
 		try {
-			IpIdeaCat instance = (IpIdeaCat) getHibernateTemplate().get(
-					"za.co.idea.ip.orm.bean.IpIdeaCat", id);
+			IpIdeaCat instance = (IpIdeaCat) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpIdeaCat", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -66,13 +64,11 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpIdeaCat> findByExample(IpIdeaCat instance) {
+	public List findByExample(IpIdeaCat instance) {
 		log.debug("finding IpIdeaCat instance by example");
 		try {
-			List<IpIdeaCat> results = getHibernateTemplate().findByExample(
-					instance);
-			log.debug("find by example successful, result size: "
-					+ results.size());
+			List results = getHibernateTemplate().findByExample(instance);
+			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -80,12 +76,10 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpIdeaCat> findByProperty(String propertyName, Object value) {
-		log.debug("finding IpIdeaCat instance with property: " + propertyName
-				+ ", value: " + value);
+	public List findByProperty(String propertyName, Object value) {
+		log.debug("finding IpIdeaCat instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from IpIdeaCat as model where model."
-					+ propertyName + "= ?";
+			String queryString = "from IpIdeaCat as model where model." + propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -93,11 +87,11 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List<IpIdeaCat> findByIcDesc(Object icDesc) {
+	public List findByIcDesc(Object icDesc) {
 		return findByProperty(IC_DESC, icDesc);
 	}
 
-	public List<IpIdeaCat> findAll() {
+	public List findAll() {
 		log.debug("finding all IpIdeaCat instances");
 		try {
 			String queryString = "from IpIdeaCat";
@@ -111,8 +105,7 @@ public class IpIdeaCatDAO extends HibernateDaoSupport {
 	public IpIdeaCat merge(IpIdeaCat detachedInstance) {
 		log.debug("merging IpIdeaCat instance");
 		try {
-			IpIdeaCat result = (IpIdeaCat) getHibernateTemplate().merge(
-					detachedInstance);
+			IpIdeaCat result = (IpIdeaCat) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
