@@ -37,13 +37,15 @@
 						<p:outputLabel id="lblEMail" value="EMail : " />
 					</p:column>
 					<p:column>
-						<p:inputText id="txtEMail" value="#{adminBean.userBean.eMail}" />
+						<p:inputText id="txtEMail" value="#{adminBean.userBean.eMail}" required="true" requiredMessage="EMail is Mandatory">
+							<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+						</p:inputText>
 					</p:column>
 					<p:column>
 						<p:outputLabel id="lblContact" value="Contact : " />
 					</p:column>
 					<p:column>
-						<p:inputText id="txtContact" value="#{adminBean.userBean.contact}" />
+						<p:inputMask id="txtContact" value="#{adminBean.userBean.contact}" required="true" requiredMessage="Contact Number is Mandatory" mask="(999) 999 - 9999" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -51,7 +53,7 @@
 						<p:outputLabel id="lblSkills" value="Skills : " />
 					</p:column>
 					<p:column colspan="3">
-						<p:editor id="txtSkills" value="#{adminBean.userBean.skills}" />
+						<p:editor id="txtSkills" value="#{adminBean.userBean.skills}" required="true" requiredMessage="Skills are Mandatory" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -59,7 +61,7 @@
 						<p:outputLabel id="lblBio" value="Bio : " />
 					</p:column>
 					<p:column colspan="3">
-						<p:editor id="txtBio" value="#{adminBean.userBean.bio}" />
+						<p:editor id="txtBio" value="#{adminBean.userBean.bio}" required="true" requiredMessage="Bio is Mandatory" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -67,13 +69,13 @@
 						<p:outputLabel id="lblFBHandle" value="Facebook Handle : " />
 					</p:column>
 					<p:column>
-						<p:inputText id="txtFBHandle" value="#{adminBean.userBean.fbHandle}" />
+						<p:inputText id="txtFBHandle" value="#{adminBean.userBean.fbHandle}" required="true" requiredMessage="Facebook Handle is Mandatory" />
 					</p:column>
 					<p:column>
 						<p:outputLabel id="lblTWHandle" value="Twitter Handle : " />
 					</p:column>
 					<p:column>
-						<p:inputText id="txtTWHandle" value="#{adminBean.userBean.twHandle}" />
+						<p:inputText id="txtTWHandle" value="#{adminBean.userBean.twHandle}" required="true" requiredMessage="Twitter Handle is Mandatory" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -95,7 +97,7 @@
 						<p:outputLabel id="lblPw" value="Password : " />
 					</p:column>
 					<p:column>
-						<p:password id="txtPw" value="#{adminBean.userBean.pwd}" feedback="true" />
+						<p:password id="txtPw" value="#{adminBean.userBean.pwd}" match="txtCPw" feedback="true" />
 					</p:column>
 					<p:column>
 						<p:outputLabel id="lblCPw" value="Confirm Password : " />

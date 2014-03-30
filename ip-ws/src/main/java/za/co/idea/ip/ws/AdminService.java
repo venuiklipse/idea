@@ -31,7 +31,7 @@ public class AdminService {
 	@Produces("application/json")
 	public Response createGroup(GroupMessage group) {
 		IpGroup ipGroup = new IpGroup();
-		ipGroup.setGroupId(group.getpGrpId());
+		ipGroup.setGroupId(group.getgId());
 		ipGroup.setGroupEmail(group.getGeMail());
 		ipGroup.setGroupName(group.getgName());
 		ipGroup.setGroupStatus(((group.getIsActive() != null && group.getIsActive()) ? "y" : "n"));
@@ -54,7 +54,7 @@ public class AdminService {
 	@Produces("application/json")
 	public Response updateGroup(GroupMessage group) {
 		IpGroup ipGroup = new IpGroup();
-		ipGroup.setGroupId(group.getpGrpId());
+		ipGroup.setGroupId(group.getgId());
 		ipGroup.setGroupEmail(group.getGeMail());
 		ipGroup.setGroupName(group.getgName());
 		ipGroup.setGroupStatus(((group.getIsActive() != null && group.getIsActive()) ? "y" : "n"));

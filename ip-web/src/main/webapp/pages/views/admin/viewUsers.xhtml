@@ -26,15 +26,19 @@
 				</p:column>
 				<p:column>
 					<f:facet name="header">Social</f:facet>
-					<p:graphicImage id="giFBHandle" url="#{user.fbHandle}" name="fb.jpg" library="images" height="25px" width="25px" />
-					<p:graphicImage id="giTWHandle" url="#{user.twHandle}" name="twitter.jpg" library="images" height="25px" width="25px" />
+					<h:outputLink id="lnkFBHanlde" target="new" value="#{user.fbHandle}">
+						<p:graphicImage id="giFBHandle" name="fb.jpg" library="images" height="25px" width="25px" />
+					</h:outputLink>
+					<h:outputLink id="lnkTWHanlde" target="new" value="#{user.twHandle}">
+						<p:graphicImage id="giTWHandle" name="twitter.jpg" library="images" height="25px" width="25px" />
+					</h:outputLink>
 				</p:column>
 				<p:column>
 					<f:facet name="header">Active</f:facet>
 					<p:selectBooleanButton id="sbbActive" value="#{user.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 				</p:column>
 				<p:column>
-					<p:commandButton id="viewButton" value="View" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showUser}">
+					<p:commandButton id="viewButton" value="View" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showEditUser}">
 						<f:setPropertyActionListener value="#{user}" target="#{adminBean.userBean}" />
 					</p:commandButton>
 				</p:column>

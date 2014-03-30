@@ -14,32 +14,34 @@
 					<p:outputLabel id="lblEMail" value="EMail : " />
 				</p:column>
 				<p:column>
-					<p:inputText id="txtEMail" value="#{adminBean.groupBean.geMail}" />
+					<p:inputText id="txtEMail" value="#{adminBean.groupBean.geMail}" required="true" requiredMessage="Group EMail is Required">
+						<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+					</p:inputText>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblParentGId" value="Parent : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somPGrpId" value="#{adminBean.groupBean.selPGrp}" var="#{cp}">
+					<p:selectOneMenu id="somPGrpId" value="#{adminBean.groupBean.selPGrp}">
 						<f:selectItem itemLabel="Select One" itemValue="" />
-						<f:selectItems value="#{adminBean.pGrps}" var="p" itemLabel="#{p}" itemValue="#{p}" />
+						<f:selectItems value="#{adminBean.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblAdmUser" value="Admin User : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somAdmUser" value="#{adminBean.groupBean.selAdmUser}" var="#{ca}">
+					<p:selectOneMenu id="somAdmUser" value="#{adminBean.groupBean.selAdmUser}" required="true" requiredMessage="Admin User is Required">
 						<f:selectItem itemLabel="Select One" itemValue="" />
-						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a}" itemValue="#{a}" />
+						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>
-					<p:column>
-						<p:outputLabel id="lblActive" value="De-Activate : " />
-					</p:column>
-					<p:column>
-						<p:selectBooleanButton id="sbbActive" value="#{adminBean.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
-					</p:column>
+				<p:column>
+					<p:outputLabel id="lblActive" value="De-Activate : " />
+				</p:column>
+				<p:column>
+					<p:selectBooleanButton id="sbbActive" value="#{adminBean.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
+				</p:column>
 				<p:row>
 					<p:column colspan="2">
 						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.updateGroup}" />

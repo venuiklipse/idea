@@ -6,10 +6,10 @@
 	<ui:composition>
 		<p:menubar>
 			<p:submenu label="Admin">
-				<p:menuitem value="Create User" url="/pages/views/admin/createUser.faces" />
+				<p:menuitem value="Create User" action="#{adminBean.showCreateUser}" />
 				<p:menuitem value="View Users" action="#{adminBean.showViewUsers}" />
-				<p:menuitem value="Create Group" url="/pages/views/admin/createGroup.faces" />
-				<p:menuitem value="View Groups" url="/pages/views/admin/viewGroups.faces" />
+				<p:menuitem value="Create Group" action="#{adminBean.showCreateGroup}" />
+				<p:menuitem value="View Groups" action="#{adminBean.showViewGroups}" />
 			</p:submenu>
 			<p:submenu label="Idea">
 				<p:menuitem value="Create Random Idea" url="/pages/views/idea/createIdea.faces" />

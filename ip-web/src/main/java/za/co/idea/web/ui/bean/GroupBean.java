@@ -8,8 +8,8 @@ public class GroupBean implements Serializable {
 	private Long gId;
 	private String gName;
 	private String geMail;
-	private GroupBean selPGrp;
-	private UserBean selAdmUser;
+	private Long selPGrp;
+	private Long selAdmUser;
 	private Boolean isActive;
 
 	public Long getgId() {
@@ -36,19 +36,19 @@ public class GroupBean implements Serializable {
 		this.geMail = geMail;
 	}
 
-	public GroupBean getSelPGrp() {
+	public Long getSelPGrp() {
 		return selPGrp;
 	}
 
-	public void setSelPGrp(GroupBean selPGrp) {
+	public void setSelPGrp(Long selPGrp) {
 		this.selPGrp = selPGrp;
 	}
 
-	public UserBean getSelAdmUser() {
+	public Long getSelAdmUser() {
 		return selAdmUser;
 	}
 
-	public void setSelAdmUser(UserBean selAdmUser) {
+	public void setSelAdmUser(Long selAdmUser) {
 		this.selAdmUser = selAdmUser;
 	}
 
