@@ -1,6 +1,6 @@
 package za.co.idea.ip.ws.bean;
 
-public class GroupBean {
+public class GroupMessage {
 	private Long gId;
 	private String gName;
 	private String geMail;

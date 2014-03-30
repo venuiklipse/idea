@@ -58,4 +58,7 @@
 			<to-view-id>/pages/views/idea/viewIdeas.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	<application>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+	</application>
 </faces-config>

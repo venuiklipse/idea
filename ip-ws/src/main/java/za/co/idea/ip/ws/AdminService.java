@@ -17,11 +17,10 @@ import za.co.idea.ip.orm.bean.IpGroup;
 import za.co.idea.ip.orm.bean.IpUser;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
-import za.co.idea.ip.ws.bean.GroupBean;
-import za.co.idea.ip.ws.bean.UserBean;
+import za.co.idea.ip.ws.bean.GroupMessage;
+import za.co.idea.ip.ws.bean.UserMessage;
 
 @Path(value = "/as")
-@Produces("application/json")
 public class AdminService {
 	private IpGroupDAO ipGroupDAO;
 	private IpUserDAO ipUserDAO;
@@ -29,15 +28,16 @@ public class AdminService {
 	@POST
 	@Path("/group/add")
 	@Consumes("application/json")
-	public Response createGroup(GroupBean group) {
+	@Produces("application/json")
+	public Response createGroup(GroupMessage group) {
 		IpGroup ipGroup = new IpGroup();
 		ipGroup.setGroupId(group.getpGrpId());
 		ipGroup.setGroupEmail(group.getGeMail());
 		ipGroup.setGroupName(group.getgName());
-		ipGroup.setGroupStatus((group.getIsActive() ? "y" : "n"));
-		if (group.getpGrpId() != null || group.getpGrpId().longValue() != 0)
+		ipGroup.setGroupStatus(((group.getIsActive() != null && group.getIsActive()) ? "y" : "n"));
+		if (group.getpGrpId() != null && group.getpGrpId().longValue() != 0)
 			ipGroup.setIpGroup(ipGroupDAO.findById(group.getpGrpId()));
-		if (group.getAdmUserId() != null || group.getAdmUserId().longValue() != 0)
+		if (group.getAdmUserId() != null && group.getAdmUserId().longValue() != 0)
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.save(ipGroup);
@@ -51,15 +51,16 @@ public class AdminService {
 	@PUT
 	@Path("/group/modify")
 	@Consumes("application/json")
-	public Response updateGroup(GroupBean group) {
+	@Produces("application/json")
+	public Response updateGroup(GroupMessage group) {
 		IpGroup ipGroup = new IpGroup();
 		ipGroup.setGroupId(group.getpGrpId());
 		ipGroup.setGroupEmail(group.getGeMail());
 		ipGroup.setGroupName(group.getgName());
-		ipGroup.setGroupStatus((group.getIsActive() ? "y" : "n"));
-		if (group.getpGrpId() != null || group.getpGrpId().longValue() != 0)
+		ipGroup.setGroupStatus(((group.getIsActive() != null && group.getIsActive()) ? "y" : "n"));
+		if (group.getpGrpId() != null && group.getpGrpId().longValue() != 0)
 			ipGroup.setIpGroup(ipGroupDAO.findById(group.getpGrpId()));
-		if (group.getAdmUserId() != null || group.getAdmUserId().longValue() != 0)
+		if (group.getAdmUserId() != null && group.getAdmUserId().longValue() != 0)
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.merge(ipGroup);
@@ -73,13 +74,14 @@ public class AdminService {
 	@SuppressWarnings("rawtypes")
 	@GET
 	@Path("/group/list")
-	public List<GroupBean> listGroup() {
-		List<GroupBean> ret = new ArrayList<GroupBean>();
+	@Produces("application/json")
+	public List<GroupMessage> listGroup() {
+		List<GroupMessage> ret = new ArrayList<GroupMessage>();
 		try {
 			List groups = ipGroupDAO.findAll();
 			for (Object object : groups) {
 				IpGroup ipGroup = (IpGroup) object;
-				GroupBean group = new GroupBean();
+				GroupMessage group = new GroupMessage();
 				group.setGeMail(ipGroup.getGroupEmail());
 				group.setgId(ipGroup.getGroupId());
 				group.setgName(ipGroup.getGroupName());
@@ -98,8 +100,9 @@ public class AdminService {
 
 	@GET
 	@Path("/group/get/{id}")
-	public GroupBean getGroup(@PathParam("id") Long id) {
-		GroupBean group = new GroupBean();
+	@Produces("application/json")
+	public GroupMessage getGroup(@PathParam("id") Long id) {
+		GroupMessage group = new GroupMessage();
 		try {
 			IpGroup ipGroup = ipGroupDAO.findById(id);
 			group.setGeMail(ipGroup.getGroupEmail());
@@ -119,7 +122,8 @@ public class AdminService {
 	@POST
 	@Path("/user/add")
 	@Consumes("application/json")
-	public Response createUser(UserBean user) {
+	@Produces("application/json")
+	public Response createUser(UserMessage user) {
 		try {
 			IpUser ipUser = new IpUser();
 			ipUser.setUserId(user.getuId());
@@ -130,14 +134,14 @@ public class AdminService {
 			ipUser.setUserLName(user.getlName());
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
-			ipUser.setUserStatus((user.getIsActive() ? "y" : "n"));
+			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
 				ipUser.setUserFbHandle(user.getFbHandle());
 			if (user.getAvatar() != null && user.getAvatar().length() > 0)
 				ipUser.setUserAvatar(user.getAvatar());
 			if (user.getBio() != null && user.getBio().length() > 0)
 				ipUser.setUserBio(user.getBio());
-			if (user.getmName() != null && user.getAvatar().length() > 0)
+			if (user.getmName() != null && user.getmName().length() > 0)
 				ipUser.setUserMName(user.getmName());
 			if (user.getTwHandle() != null && user.getTwHandle().length() > 0)
 				ipUser.setUserTwHandle(user.getTwHandle());
@@ -152,7 +156,8 @@ public class AdminService {
 	@PUT
 	@Path("/user/modify")
 	@Consumes("application/json")
-	public Response updateUser(UserBean user) {
+	@Produces("application/json")
+	public Response updateUser(UserMessage user) {
 		try {
 			IpUser ipUser = new IpUser();
 			ipUser.setUserId(user.getuId());
@@ -163,14 +168,14 @@ public class AdminService {
 			ipUser.setUserLName(user.getlName());
 			ipUser.setUserScreenName(user.getScName());
 			ipUser.setUserSkills(user.getSkills());
-			ipUser.setUserStatus((user.getIsActive() ? "y" : "n"));
+			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
 				ipUser.setUserFbHandle(user.getFbHandle());
 			if (user.getAvatar() != null && user.getAvatar().length() > 0)
 				ipUser.setUserAvatar(user.getAvatar());
 			if (user.getBio() != null && user.getBio().length() > 0)
 				ipUser.setUserBio(user.getBio());
-			if (user.getmName() != null && user.getAvatar().length() > 0)
+			if (user.getmName() != null && user.getmName().length() > 0)
 				ipUser.setUserMName(user.getmName());
 			if (user.getTwHandle() != null && user.getTwHandle().length() > 0)
 				ipUser.setUserTwHandle(user.getTwHandle());
@@ -185,13 +190,14 @@ public class AdminService {
 	@SuppressWarnings("rawtypes")
 	@GET
 	@Path("/user/list")
-	public List<UserBean> listUser() {
-		List<UserBean> ret = new ArrayList<UserBean>();
+	@Produces("application/json")
+	public List<UserMessage> listUser() {
+		List<UserMessage> ret = new ArrayList<UserMessage>();
 		try {
 			List users = ipUserDAO.findAll();
 			for (Object object : users) {
 				IpUser ipUser = (IpUser) object;
-				UserBean user = new UserBean();
+				UserMessage user = new UserMessage();
 				user.setuId(ipUser.getUserId());
 				user.setContact(ipUser.getUserContact());
 				user.seteMail(ipUser.getUserEmail());
@@ -221,8 +227,9 @@ public class AdminService {
 
 	@GET
 	@Path("/user/get/{id}")
-	public UserBean getUser(@PathParam("id") Long id) {
-		UserBean user = new UserBean();
+	@Produces("application/json")
+	public UserMessage getUser(@PathParam("id") Long id) {
+		UserMessage user = new UserMessage();
 		try {
 			IpUser ipUser = ipUserDAO.findById(id);
 			user.setuId(ipUser.getUserId());

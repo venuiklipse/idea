@@ -7,15 +7,12 @@
 		<p:menubar>
 			<p:submenu label="Admin">
 				<p:menuitem value="Create User" url="/pages/views/admin/createUser.faces" />
-				<p:menuitem value="Edit User" url="/pages/views/admin/editUser.faces" />
-				<p:menuitem value="View Users" url="/pages/views/admin/viewUsers.faces" />
+				<p:menuitem value="View Users" action="#{adminBean.showViewUsers}" />
 				<p:menuitem value="Create Group" url="/pages/views/admin/createGroup.faces" />
-				<p:menuitem value="Edit Group" url="/pages/views/admin/editGroup.faces" />
 				<p:menuitem value="View Groups" url="/pages/views/admin/viewGroups.faces" />
 			</p:submenu>
 			<p:submenu label="Idea">
 				<p:menuitem value="Create Random Idea" url="/pages/views/idea/createIdea.faces" />
-				<p:menuitem value="Edit Random Idea" url="/pages/views/idea/editIdea.faces" />
 				<p:menuitem value="View Random Idea" url="/pages/views/idea/viewIdeas.faces" />
 			</p:submenu>
 		</p:menubar>

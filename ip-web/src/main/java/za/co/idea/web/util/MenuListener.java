@@ -9,10 +9,6 @@ public class MenuListener implements Serializable {
 		return "admcu";
 	}
 
-	public String showViewUsers() {
-		return "admvu";
-	}
-
 	public String showCreateGroup() {
 		return "admcg";
 	}
@@ -28,4 +24,5 @@ public class MenuListener implements Serializable {
 	public String showViewIdeas() {
 		return "ideavw";
 	}
+
 }

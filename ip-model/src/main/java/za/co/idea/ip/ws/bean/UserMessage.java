@@ -1,6 +1,6 @@
 package za.co.idea.ip.ws.bean;
 
-public class UserBean {
+public class UserMessage {
 	private Long uId;
 	private String fName;
 	private String mName;

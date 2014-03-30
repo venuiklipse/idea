@@ -1,5 +1,5 @@
 package za.co.idea.ip.ws.bean;
 
-public class IdeaBean {
+public class IdeaMessage {
 
 }

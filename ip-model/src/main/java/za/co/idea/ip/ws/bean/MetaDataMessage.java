@@ -1,6 +1,6 @@
 package za.co.idea.ip.ws.bean;
 
-public class MetaDataBean {
+public class MetaDataMessage {
 
 	private Integer id;
 	private String desc;
