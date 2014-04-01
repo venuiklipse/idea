@@ -12,8 +12,8 @@
 				<p:menuitem value="View Groups" action="#{adminBean.showViewGroups}" />
 			</p:submenu>
 			<p:submenu label="Idea">
-				<p:menuitem value="Create Random Idea" url="/pages/views/idea/createIdea.faces" />
-				<p:menuitem value="View Random Idea" url="/pages/views/idea/viewIdeas.faces" />
+				<p:menuitem value="Create Random Idea" action="#{ideaBean.showCreateIdea}" />
+				<p:menuitem value="View Random Idea" action="#{ideaBean.showViewIdeas}" />
 			</p:submenu>
 		</p:menubar>
 	</ui:composition>

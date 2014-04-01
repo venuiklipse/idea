@@ -1,6 +1,6 @@
 package za.co.idea.ip.orm.bean;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * IpIdea entity. @author MyEclipse Persistence Tools
@@ -21,7 +21,7 @@ public class IpIdea implements java.io.Serializable {
 	private String ideaTitle;
 	private String ideaDesc;
 	private String ideaBa;
-	private Timestamp ideaDate;
+	private Date ideaDate;
 	private String ideaTag;
 	private String ideaBlob;
 
@@ -32,7 +32,7 @@ public class IpIdea implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Timestamp ideaDate, String ideaTag) {
+	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag) {
 		this.ideaId = ideaId;
 		this.ipIdeaStatus = ipIdeaStatus;
 		this.ipUser = ipUser;
@@ -45,7 +45,7 @@ public class IpIdea implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Timestamp ideaDate, String ideaTag, String ideaBlob) {
+	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag, String ideaBlob) {
 		this.ideaId = ideaId;
 		this.ipIdeaStatus = ipIdeaStatus;
 		this.ipUser = ipUser;
@@ -116,11 +116,11 @@ public class IpIdea implements java.io.Serializable {
 		this.ideaBa = ideaBa;
 	}
 
-	public Timestamp getIdeaDate() {
+	public Date getIdeaDate() {
 		return this.ideaDate;
 	}
 
-	public void setIdeaDate(Timestamp ideaDate) {
+	public void setIdeaDate(Date ideaDate) {
 		this.ideaDate = ideaDate;
 	}
 

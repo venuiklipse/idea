@@ -1,6 +1,6 @@
 package za.co.idea.ip.orm.bean;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * IpConfig entity. @author MyEclipse Persistence Tools
@@ -18,7 +18,7 @@ public class IpConfig implements java.io.Serializable {
 	private String configKey;
 	private String configValue;
 	private String configEnv;
-	private Timestamp createdDate;
+	private Date createdDate;
 	private String createdBy;
 
 	// Constructors
@@ -28,7 +28,7 @@ public class IpConfig implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpConfig(String configKey, String configValue, String configEnv, Timestamp createdDate, String createdBy) {
+	public IpConfig(String configKey, String configValue, String configEnv, Date createdDate, String createdBy) {
 		this.configKey = configKey;
 		this.configValue = configValue;
 		this.configEnv = configEnv;
@@ -70,11 +70,11 @@ public class IpConfig implements java.io.Serializable {
 		this.configEnv = configEnv;
 	}
 
-	public Timestamp getCreatedDate() {
+	public Date getCreatedDate() {
 		return this.createdDate;
 	}
 
-	public void setCreatedDate(Timestamp createdDate) {
+	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 

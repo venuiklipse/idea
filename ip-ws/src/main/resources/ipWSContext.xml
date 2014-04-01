@@ -5,7 +5,12 @@
 		<property name="ipGroupDAO" ref="IpGroupDAO" />
 		<property name="ipUserDAO" ref="IpUserDAO" />
 	</bean>
-	<bean id="ideaService" class="za.co.idea.ip.ws.IdeaService"></bean>
+	<bean id="ideaService" class="za.co.idea.ip.ws.IdeaService">
+		<property name="ipIdeaCatDAO" ref="IpIdeaCatDAO" />
+		<property name="ipIdeaDAO" ref="IpIdeaDAO" />
+		<property name="ipIdeaStatusDAO" ref="IpIdeaStatusDAO" />
+		<property name="ipUserDAO" ref="IpUserDAO" />
+	</bean>
 	<bean id="challengeService" class="za.co.idea.ip.ws.ChallengeService"></bean>
 	<bean id="metaDataService" class="za.co.idea.ip.ws.MetaDataService"></bean>
 </beans>

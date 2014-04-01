@@ -8,6 +8,7 @@
 	<jaxrs:server id="ipService" address="/ip">
 		<jaxrs:serviceBeans>
 			<ref bean="adminService" />
+			<ref bean="ideaService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:extensionMappings>
 			<entry key="json" value="application/json" />

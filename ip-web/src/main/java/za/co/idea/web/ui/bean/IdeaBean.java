@@ -1,13 +1,7 @@
 package za.co.idea.web.ui.bean;
 
-import java.io.InputStream;
 import java.io.Serializable;
-
-import org.apache.commons.io.IOUtils;
-import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
+import java.util.Date;
 
 public class IdeaBean implements Serializable {
 
@@ -16,20 +10,14 @@ public class IdeaBean implements Serializable {
 	private Long ideaId;
 	private String ideaTitle;
 	private String ideaDesc;
-	private ListSelectorBean ideaCat;
-	private ListSelectorBean ideaStatus;
+	private Long selCatId;
+	private Long setStatusId;
 	private String ideaBa;
 	private String ideaTag;
 	private String fileUpload;
 	private String contentType;
-	private FileDownloadController fileDownloadController;
-	private UserBean crtdBy;
-
-	public void fileUploadHandle(FileUploadEvent e) {
-		UploadedFile file = e.getFile();
-		fileUpload = new String(file.getContents());
-		contentType = file.getContentType();
-	}
+	private Long crtdById;
+	private Date crtdDate;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -55,20 +43,20 @@ public class IdeaBean implements Serializable {
 		this.ideaDesc = ideaDesc;
 	}
 
-	public ListSelectorBean getIdeaCat() {
-		return ideaCat;
+	public Long getSelCatId() {
+		return selCatId;
 	}
 
-	public void setIdeaCat(ListSelectorBean ideaCat) {
-		this.ideaCat = ideaCat;
+	public void setSelCatId(Long selCatId) {
+		this.selCatId = selCatId;
 	}
 
-	public ListSelectorBean getIdeaStatus() {
-		return ideaStatus;
+	public Long getSetStatusId() {
+		return setStatusId;
 	}
 
-	public void setIdeaStatus(ListSelectorBean ideaStatus) {
-		this.ideaStatus = ideaStatus;
+	public void setSetStatusId(Long setStatusId) {
+		this.setStatusId = setStatusId;
 	}
 
 	public String getIdeaBa() {
@@ -103,32 +91,19 @@ public class IdeaBean implements Serializable {
 		this.contentType = contentType;
 	}
 
-	public UserBean getCrtdBy() {
-		return crtdBy;
+	public Long getCrtdById() {
+		return crtdById;
 	}
 
-	public void setCrtdBy(UserBean crtdBy) {
-		this.crtdBy = crtdBy;
+	public void setCrtdById(Long crtdById) {
+		this.crtdById = crtdById;
 	}
 
-	public FileDownloadController getFileDownloadController() {
-		return fileDownloadController;
+	public Date getCrtdDate() {
+		return crtdDate;
 	}
 
-	public void setFileDownloadController(FileDownloadController fileDownloadController) {
-		this.fileDownloadController = fileDownloadController;
-	}
-
-	protected class FileDownloadController {
-		private StreamedContent file;
-
-		public FileDownloadController() {
-			InputStream stream = IOUtils.toInputStream(fileUpload);
-			file = new DefaultStreamedContent(stream, contentType, "downloaded_optimus.jpg");
-		}
-
-		public StreamedContent getFile() {
-			return file;
-		}
+	public void setCrtdDate(Date crtdDate) {
+		this.crtdDate = crtdDate;
 	}
 }

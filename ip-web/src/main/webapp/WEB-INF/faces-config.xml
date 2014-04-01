@@ -54,11 +54,16 @@
 			<to-view-id>/pages/views/idea/editIdea.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>ideavw</from-outcome>
+			<from-outcome>ideavi</from-outcome>
 			<to-view-id>/pages/views/idea/viewIdeas.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<application>
 		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
 	</application>
+	<validator>
+		<display-name>SocialConnectorValidator</display-name>
+		<validator-id>za.co.idea.web.util.SocialConnectorValidator</validator-id>
+		<validator-class>za.co.idea.web.util.SocialConnectorValidator</validator-class>
+	</validator>
 </faces-config>

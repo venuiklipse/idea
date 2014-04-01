@@ -20,14 +20,14 @@
 					<f:facet name="header">Parent Group</f:facet>
 					<p:selectOneMenu id="somPGrpId" value="#{grp.selPGrp}" disabled="true">
 						<f:selectItem itemLabel="Select One" itemValue="" />
-						<f:selectItems value="#{adminBean.pGrps}" var="p" itemLabel="#{p.gId}" itemValue="#{p.gName}" />
+						<f:selectItems value="#{adminBean.pGrps}" var="p" itemLabel="#{p.gName}" itemValue="#{p.gId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
 					<f:facet name="header">Admin User</f:facet>
 					<p:selectOneMenu id="somAdmUser" value="#{grp.selAdmUser}" disabled="true">
 						<f:selectItem itemLabel="Select One" itemValue="" />
-						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.uId}" itemValue="#{a.scName}" />
+						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>

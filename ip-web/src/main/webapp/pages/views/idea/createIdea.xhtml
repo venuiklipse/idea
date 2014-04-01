@@ -14,7 +14,7 @@
 					<p:outputLabel id="lblICat" value="Category : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somICat" value="#{ideaBean.ideaBean.ideaCat}" var="#{cic}">
+					<p:selectOneMenu id="somICat" value="#{ideaBean.ideaBean.selCatId}">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{ideaBean.ideaCats}" var="ic" itemLabel="#{ic.desc}" itemValue="#{ic.id}" />
 					</p:selectOneMenu>
@@ -41,20 +41,20 @@
 					<p:outputLabel id="lblIUpload" value="Upload File : " />
 				</p:column>
 				<p:column>
-					<p:fileUpload id="fuIUpload" fileUploadListener="#{ideaBean.ideaBean.fileUploadHandle}" />
+					<p:fileUpload id="fuIUpload" fileUploadListener="#{ideaBean.fileUploadHandle}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblCrtdBy" value="Created By : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somACrtdBy" value="#{ideaBean.ideaBean.crtdBy}" var="#{ca}">
+					<p:selectOneMenu id="somACrtdBy" value="#{ideaBean.ideaBean.crtdById}">
 						<f:selectItem itemLabel="Select One" itemValue="" />
-						<f:selectItems value="#{ideaBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.scName}" />
+						<f:selectItems value="#{ideaBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>
 				</p:column>
 				<p:row>
 					<p:column colspan="2">
-						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{ideaBean.updateIdea}" />
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{ideaBean.saveIdea}" />
 					</p:column>
 				</p:row>
 			</p:panelGrid>

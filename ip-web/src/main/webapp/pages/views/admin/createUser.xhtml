@@ -3,6 +3,16 @@
 	<ui:composition template="/templates/layout.xhtml">
 		<ui:define name="title">Create User</ui:define>
 		<ui:define name="body">
+			<p:dialog id="dlgFBHelp" widgetVar="dlgFB" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true">
+				<h:panelGrid columns="2" style="margin-bottom:10px">
+					<p:graphicImage id="giFBHandle" name="fb_help.jpg" library="images" />
+				</h:panelGrid>
+			</p:dialog>
+			<p:dialog id="dlgTWHelp" widgetVar="dlgTW" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true">
+				<h:panelGrid columns="2" style="margin-bottom:10px">
+					<p:graphicImage id="giTWHandle" name="tw_help.jpg" library="images" />
+				</h:panelGrid>
+			</p:dialog>
 			<p:panelGrid id="pnlCrtUser">
 				<p:row>
 					<p:column>
@@ -71,13 +81,25 @@
 						<p:outputLabel id="lblFBHandle" value="Facebook Handle : " />
 					</p:column>
 					<p:column>
-						<p:inputText id="txtFBHandle" value="#{adminBean.userBean.fbHandle}" required="true" requiredMessage="Facebook Handle is Mandatory" />
+						<p:row>
+							<p:inputText id="txtFBHandle" value="#{adminBean.userBean.fbHandle}" required="true" requiredMessage="Facebook Handle is Mandatory">
+								<!-- <f:validator validatorId="za.co.idea.web.util.SocialConnectorValidator" /> -->
+								<f:attribute name="function" value="FB" />
+							</p:inputText>
+							<p:graphicImage id="giFBHelp" name="info.jpg" library="images" height="25px" width="25px" onclick="PF('dlgFB').show();" />
+						</p:row>
 					</p:column>
 					<p:column>
 						<p:outputLabel id="lblTWHandle" value="Twitter Handle : " />
 					</p:column>
 					<p:column>
-						<p:inputText id="txtTWHandle" value="#{adminBean.userBean.twHandle}" required="true" requiredMessage="Twitter Handle is Mandatory" />
+						<p:row>
+							<p:inputText id="txtTWHandle" value="#{adminBean.userBean.twHandle}" required="true" requiredMessage="Twitter Handle is Mandatory">
+								<!-- <f:validator validatorId="za.co.idea.web.util.SocialConnectorValidator" /> -->
+								<f:attribute name="function" value="TW" />
+							</p:inputText>
+							<p:graphicImage id="giTWHelp" name="info.jpg" library="images" height="25px" width="25px" onclick="PF('dlgTW').show();" />
+						</p:row>
 					</p:column>
 				</p:row>
 				<p:row>
