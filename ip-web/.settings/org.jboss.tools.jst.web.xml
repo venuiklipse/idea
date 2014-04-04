@@ -1,11 +1,208 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<file-systems application-name="ip-web" model-entity="FileSystems" VERSION="2.0.0" workspace-home="./src/main/webapp/WEB-INF">
-	<file-system model-entity="FileSystemFolder" location="%workspace.home%" NAME="WEB-INF" />
-	<file-system model-entity="FileSystemFolder" info="Content-Type=Web" location="%workspace.home%/.." NAME="WEB-ROOT" />
-	<file-system model-entity="FileSystemFolder" location="%workspace.home%/../../java" NAME="src" />
-	<file-system model-entity="FileSystemFolder" location="%workspace.home%/lib" NAME="lib" />
-	<file-system model-entity="FileSystemFolder" location="%workspace.home%/classes" NAME="classes" />
-	<web model-entity="JstWeb" model-path="/web.xml" SERVLET_VERSION="2.4">
-		<module model-entity="WebJSFModule" model-path="/faces-config.xml" root="WEB-ROOT" src="src" URI="/WEB-INF/faces-config.xml" />
-	</web>
+<file-systems VERSION="2.0.0" application-name="ip-web"
+ model-entity="FileSystems" workspace-home="./src/main/webapp/WEB-INF">
+ <file-system NAME="WEB-INF" location="%workspace.home%" model-entity="FileSystemFolder"/>
+ <file-system NAME="WEB-ROOT" info="Content-Type=Web"
+  location="%workspace.home%/.." model-entity="FileSystemFolder"/>
+ <file-system NAME="src" location="%workspace.home%/../../java" model-entity="FileSystemFolder"/>
+ <file-system NAME="lib" location="%workspace.home%/lib" model-entity="FileSystemFolder"/>
+ <file-system NAME="classes" location="%workspace.home%/classes" model-entity="FileSystemFolder"/>
+ <file-system NAME="ip-web" location="%eclipse.project%" model-entity="FileSystemFolder"/>
+ <file-system NAME="lib-junit-3.8.1.jar"
+  location="/noformat/java/repository/junit/junit/3.8.1/junit-3.8.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-primefaces-4.0.jar"
+  location="/noformat/java/repository/org/primefaces/primefaces/4.0/primefaces-4.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-primefaces-mobile-0.9.4.jar"
+  location="/noformat/java/repository/org/primefaces/primefaces-mobile/0.9.4/primefaces-mobile-0.9.4.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-el-api-1.0.jar"
+  location="/noformat/java/repository/el-api/el-api/1.0/el-api-1.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-el-ri-1.0.jar"
+  location="/noformat/java/repository/el-ri/el-ri/1.0/el-ri-1.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsf-facelets-1.1.14.jar"
+  location="/noformat/java/repository/com/sun/facelets/jsf-facelets/1.1.14/jsf-facelets-1.1.14.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsf-impl-2.1.21.jar"
+  location="/noformat/java/repository/com/sun/faces/jsf-impl/2.1.21/jsf-impl-2.1.21.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsf-api-2.1.21.jar"
+  location="/noformat/java/repository/com/sun/faces/jsf-api/2.1.21/jsf-api-2.1.21.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-asm-1.5.3.jar"
+  location="/noformat/java/repository/asm/asm/1.5.3/asm-1.5.3.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jackson-jaxrs-1.9.13.jar"
+  location="/noformat/java/repository/org/codehaus/jackson/jackson-jaxrs/1.9.13/jackson-jaxrs-1.9.13.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jackson-core-asl-1.9.13.jar"
+  location="/noformat/java/repository/org/codehaus/jackson/jackson-core-asl/1.9.13/jackson-core-asl-1.9.13.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jackson-mapper-asl-1.9.13.jar"
+  location="/noformat/java/repository/org/codehaus/jackson/jackson-mapper-asl/1.9.13/jackson-mapper-asl-1.9.13.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-lang3-3.3.1.jar"
+  location="/noformat/java/repository/org/apache/commons/commons-lang3/3.3.1/commons-lang3-3.3.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-collections4-4.0.jar"
+  location="/noformat/java/repository/org/apache/commons/commons-collections4/4.0/commons-collections4-4.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-fileupload-1.3.1.jar"
+  location="/noformat/java/repository/commons-fileupload/commons-fileupload/1.3.1/commons-fileupload-1.3.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-io-2.2.jar"
+  location="/noformat/java/repository/commons-io/commons-io/2.2/commons-io-2.2.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-cxf-rt-frontend-jaxrs-2.7.10.jar"
+  location="/noformat/java/repository/org/apache/cxf/cxf-rt-frontend-jaxrs/2.7.10/cxf-rt-frontend-jaxrs-2.7.10.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-cxf-api-2.7.10.jar"
+  location="/noformat/java/repository/org/apache/cxf/cxf-api/2.7.10/cxf-api-2.7.10.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-woodstox-core-asl-4.2.0.jar"
+  location="/noformat/java/repository/org/codehaus/woodstox/woodstox-core-asl/4.2.0/woodstox-core-asl-4.2.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-stax2-api-3.1.1.jar"
+  location="/noformat/java/repository/org/codehaus/woodstox/stax2-api/3.1.1/stax2-api-3.1.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-xmlschema-core-2.1.0.jar"
+  location="/noformat/java/repository/org/apache/ws/xmlschema/xmlschema-core/2.1.0/xmlschema-core-2.1.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-geronimo-javamail_1.4_spec-1.7.1.jar"
+  location="/noformat/java/repository/org/apache/geronimo/specs/geronimo-javamail_1.4_spec/1.7.1/geronimo-javamail_1.4_spec-1.7.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-wsdl4j-1.6.3.jar"
+  location="/noformat/java/repository/wsdl4j/wsdl4j/1.6.3/wsdl4j-1.6.3.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-cxf-rt-core-2.7.10.jar"
+  location="/noformat/java/repository/org/apache/cxf/cxf-rt-core/2.7.10/cxf-rt-core-2.7.10.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jaxb-impl-2.2.6.jar"
+  location="/noformat/java/repository/com/sun/xml/bind/jaxb-impl/2.2.6/jaxb-impl-2.2.6.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.ws.rs-api-2.0-m10.jar"
+  location="/noformat/java/repository/javax/ws/rs/javax.ws.rs-api/2.0-m10/javax.ws.rs-api-2.0-m10.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-cxf-rt-bindings-xml-2.7.10.jar"
+  location="/noformat/java/repository/org/apache/cxf/cxf-rt-bindings-xml/2.7.10/cxf-rt-bindings-xml-2.7.10.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-cxf-rt-transports-http-2.7.10.jar"
+  location="/noformat/java/repository/org/apache/cxf/cxf-rt-transports-http/2.7.10/cxf-rt-transports-http-2.7.10.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-cxf-rt-ws-policy-2.7.10.jar"
+  location="/noformat/java/repository/org/apache/cxf/cxf-rt-ws-policy/2.7.10/cxf-rt-ws-policy-2.7.10.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-neethi-3.0.3.jar"
+  location="/noformat/java/repository/org/apache/neethi/neethi/3.0.3/neethi-3.0.3.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-spring-context-3.2.4.RELEASE.jar"
+  location="/noformat/java/repository/org/springframework/spring-context/3.2.4.RELEASE/spring-context-3.2.4.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-spring-aop-3.2.4.RELEASE.jar"
+  location="/noformat/java/repository/org/springframework/spring-aop/3.2.4.RELEASE/spring-aop-3.2.4.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-spring-beans-3.2.4.RELEASE.jar"
+  location="/noformat/java/repository/org/springframework/spring-beans/3.2.4.RELEASE/spring-beans-3.2.4.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-spring-core-3.2.4.RELEASE.jar"
+  location="/noformat/java/repository/org/springframework/spring-core/3.2.4.RELEASE/spring-core-3.2.4.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-logging-1.1.1.jar"
+  location="/noformat/java/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-spring-expression-3.2.4.RELEASE.jar"
+  location="/noformat/java/repository/org/springframework/spring-expression/3.2.4.RELEASE/spring-expression-3.2.4.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-spring-web-3.2.4.RELEASE.jar"
+  location="/noformat/java/repository/org/springframework/spring-web/3.2.4.RELEASE/spring-web-3.2.4.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-aopalliance-1.0.jar"
+  location="/noformat/java/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-spring-orm-3.2.4.RELEASE.jar"
+  location="/noformat/java/repository/org/springframework/spring-orm/3.2.4.RELEASE/spring-orm-3.2.4.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-spring-jdbc-3.2.4.RELEASE.jar"
+  location="/noformat/java/repository/org/springframework/spring-jdbc/3.2.4.RELEASE/spring-jdbc-3.2.4.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-spring-tx-3.2.4.RELEASE.jar"
+  location="/noformat/java/repository/org/springframework/spring-tx/3.2.4.RELEASE/spring-tx-3.2.4.RELEASE.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-resources.jar"
+  location="/install/java/myeclipse/binary/com.sun.java.jdk7.linux.x86_64_1.7.0.u45/jre/lib/resources.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jfr.jar"
+  location="/install/java/myeclipse/binary/com.sun.java.jdk7.linux.x86_64_1.7.0.u45/jre/lib/jfr.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-localedata.jar"
+  location="/install/java/myeclipse/binary/com.sun.java.jdk7.linux.x86_64_1.7.0.u45/jre/lib/ext/localedata.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-dnsns.jar"
+  location="/install/java/myeclipse/binary/com.sun.java.jdk7.linux.x86_64_1.7.0.u45/jre/lib/ext/dnsns.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-sunpkcs11.jar"
+  location="/install/java/myeclipse/binary/com.sun.java.jdk7.linux.x86_64_1.7.0.u45/jre/lib/ext/sunpkcs11.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-zipfs.jar"
+  location="/install/java/myeclipse/binary/com.sun.java.jdk7.linux.x86_64_1.7.0.u45/jre/lib/ext/zipfs.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-sunec.jar"
+  location="/install/java/myeclipse/binary/com.sun.java.jdk7.linux.x86_64_1.7.0.u45/jre/lib/ext/sunec.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-sunjce_provider.jar"
+  location="/install/java/myeclipse/binary/com.sun.java.jdk7.linux.x86_64_1.7.0.u45/jre/lib/ext/sunjce_provider.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-cdi-api-1.1.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/enterprise/api/main/cdi-api-1.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-concurrency-api_1.0_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/enterprise/concurrent/api/main/jboss-concurrency-api_1.0_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-validation-api-1.1.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/validation/api/main/validation-api-1.1.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-el-api_3.0_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/el/api/main/jboss-el-api_3.0_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.inject-1.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/inject/api/main/javax.inject-1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-interceptors-api_1.2_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/interceptor/api/main/jboss-interceptors-api_1.2_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-jaxws-api_2.2_spec-2.0.2.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/xml/ws/api/main/jboss-jaxws-api_2.2_spec-2.0.2.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-saaj-api_1.3_spec-1.0.3.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/xml/soap/api/main/jboss-saaj-api_1.3_spec-1.0.3.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-jaxb-api_2.2_spec-1.0.4.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/xml/bind/api/main/jboss-jaxb-api_2.2_spec-1.0.4.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-jaxrpc-api_1.1_spec-1.0.1.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/xml/rpc/api/main/jboss-jaxrpc-api_1.1_spec-1.0.1.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-transaction-api_1.2_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/transaction/api/main/jboss-transaction-api_1.2_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-j2eemgmt-api_1.1_spec-1.0.1.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/management/j2ee/api/main/jboss-j2eemgmt-api_1.1_spec-1.0.1.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsr181-api-1.0-MR1.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/jws/api/main/jsr181-api-1.0-MR1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-activation-1.1.1.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/activation/api/main/activation-1.1.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-servlet-api_3.1_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/servlet/api/main/jboss-servlet-api_3.1_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-jsp-api_2.3_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/servlet/jsp/api/main/jboss-jsp-api_2.3_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-jstl-api_1.2_spec-1.0.4.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/servlet/jstl/api/main/jboss-jstl-api_1.2_spec-1.0.4.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jaxrs-api-3.0.6.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/ws/rs/api/main/jaxrs-api-3.0.6.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-javax.mail-1.5.1.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/mail/api/main/javax.mail-1.5.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-annotations-api_1.2_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/annotation/api/main/jboss-annotations-api_1.2_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-jaspi-api_1.1_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/security/auth/message/api/main/jboss-jaspi-api_1.1_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-jacc-api_1.5_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/security/jacc/api/main/jboss-jacc-api_1.5_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-connector-api_1.7_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/resource/api/main/jboss-connector-api_1.7_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-websocket-api_1.0_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/websocket/api/main/jboss-websocket-api_1.0_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-jsf-api_2.2_spec-2.2.5.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/faces/api/main/jboss-jsf-api_2.2_spec-2.2.5.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-ejb-api_3.2_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/ejb/api/main/jboss-ejb-api_3.2_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-batch-api_1.0_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/batch/api/main/jboss-batch-api_1.0_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-rmi-api_1.0_spec-1.0.4.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/rmi/api/main/jboss-rmi-api_1.0_spec-1.0.4.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-hibernate-jpa-2.1-api-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/persistence/api/main/hibernate-jpa-2.1-api-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-jms-api_2.0_spec-1.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/javax/jms/api/main/jboss-jms-api_2.0_spec-1.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-hibernate-validator-cdi-5.0.3.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/hibernate/validator/cdi/main/hibernate-validator-cdi-5.0.3.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-hibernate-validator-5.0.3.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/hibernate/validator/main/hibernate-validator-5.0.3.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-picketbox-4.0.20.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/picketbox/main/picketbox-4.0.20.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-picketbox-commons-1.0.0.final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/picketbox/main/picketbox-commons-1.0.0.final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-picketbox-infinispan-4.0.20.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/picketbox/main/picketbox-infinispan-4.0.20.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-wildfly-controller-client-8.0.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/jboss/as/controller-client/main/wildfly-controller-client-8.0.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-dmr-1.2.0.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/jboss/dmr/main/jboss-dmr-1.2.0.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-logging-3.1.4.GA.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/jboss/logging/main/jboss-logging-3.1.4.GA.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-resteasy-multipart-provider-3.0.6.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/jboss/resteasy/resteasy-multipart-provider/main/resteasy-multipart-provider-3.0.6.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-resteasy-jaxb-provider-3.0.6.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/jboss/resteasy/resteasy-jaxb-provider/main/resteasy-jaxb-provider-3.0.6.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-async-http-servlet-3.0-3.0.6.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/jboss/resteasy/resteasy-jaxrs/main/async-http-servlet-3.0-3.0.6.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-resteasy-client-3.0.6.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/jboss/resteasy/resteasy-jaxrs/main/resteasy-client-3.0.6.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-resteasy-jaxrs-3.0.6.Final.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/jboss/resteasy/resteasy-jaxrs/main/resteasy-jaxrs-3.0.6.Final.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jboss-ejb3-ext-api-2.1.0.jar"
+  location="/install/java/wildfly-8.0.0/modules/system/layers/base/org/jboss/ejb3/main/jboss-ejb3-ext-api-2.1.0.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="src-1"
+  location="%workspace.home%/../../../test/java" model-entity="FileSystemFolder"/>
+ <file-system NAME="src-2" location="%workspace.home%/../../resources" model-entity="FileSystemFolder"/>
+ <file-system NAME="lib-restfb-1.6.14.jar"
+  location="/noformat/java/repository/com/restfb/restfb/1.6.14/restfb-1.6.14.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-twitter4j-core-4.0.1.jar"
+  location="/noformat/java/repository/org/twitter4j/twitter4j-core/4.0.1/twitter4j-core-4.0.1.jar" model-entity="FileSystemJar"/>
+ <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
+  <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
+   model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>
+ </web>
 </file-systems>

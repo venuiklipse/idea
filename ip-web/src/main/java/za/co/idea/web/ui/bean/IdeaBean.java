@@ -16,6 +16,7 @@ public class IdeaBean implements Serializable {
 	private String ideaTag;
 	private String fileUpload;
 	private String contentType;
+	private String fileName;
 	private Long crtdById;
 	private Date crtdDate;
 
@@ -89,6 +90,14 @@ public class IdeaBean implements Serializable {
 
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	public Long getCrtdById() {

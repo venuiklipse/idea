@@ -24,6 +24,8 @@ public class IpIdea implements java.io.Serializable {
 	private Date ideaDate;
 	private String ideaTag;
 	private String ideaBlob;
+	private String ideaFileType;
+	private String ideaFileName;
 
 	// Constructors
 
@@ -32,7 +34,7 @@ public class IpIdea implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag) {
+	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag, String ideaFileName, String ideaFileType) {
 		this.ideaId = ideaId;
 		this.ipIdeaStatus = ipIdeaStatus;
 		this.ipUser = ipUser;
@@ -42,10 +44,12 @@ public class IpIdea implements java.io.Serializable {
 		this.ideaBa = ideaBa;
 		this.ideaDate = ideaDate;
 		this.ideaTag = ideaTag;
+		this.ideaFileName = ideaFileName;
+		this.ideaFileType = ideaFileType;
 	}
 
 	/** full constructor */
-	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag, String ideaBlob) {
+	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag, String ideaBlob, String ideaFileName, String ideaFileType) {
 		this.ideaId = ideaId;
 		this.ipIdeaStatus = ipIdeaStatus;
 		this.ipUser = ipUser;
@@ -56,6 +60,8 @@ public class IpIdea implements java.io.Serializable {
 		this.ideaDate = ideaDate;
 		this.ideaTag = ideaTag;
 		this.ideaBlob = ideaBlob;
+		this.ideaFileName = ideaFileName;
+		this.ideaFileType = ideaFileType;
 	}
 
 	// Property accessors
@@ -138,6 +144,22 @@ public class IpIdea implements java.io.Serializable {
 
 	public void setIdeaBlob(String ideaBlob) {
 		this.ideaBlob = ideaBlob;
+	}
+
+	public String getIdeaFileType() {
+		return ideaFileType;
+	}
+
+	public void setIdeaFileType(String ideaFileType) {
+		this.ideaFileType = ideaFileType;
+	}
+
+	public String getIdeaFileName() {
+		return ideaFileName;
+	}
+
+	public void setIdeaFileName(String ideaFileName) {
+		this.ideaFileName = ideaFileName;
 	}
 
 }

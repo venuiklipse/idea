@@ -13,7 +13,39 @@
 					<p:graphicImage id="giTWHandle" name="tw_help.jpg" library="images" />
 				</h:panelGrid>
 			</p:dialog>
+			<p:dialog id="dlgImgUpload" widgetVar="dlgImgUpload" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true" onHide="PF('imgAvatar').update();">
+				<h:panelGrid columns="2" style="margin-bottom:10px">
+					<p:imageCropper id="imgCrpUploadPhoto" widgetVar="imgCrpUploadPhoto" value="#{imageBean.croppedImage}" image="#{imageBean.image}" rendered="#{imageBean.show}" />
+					<p:fileUpload id="fuImg" widgetVar="fuImg" update="imgCrpUploadPhoto" fileUploadListener="#{imageBean.uploadImageFile}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+				</h:panelGrid>
+			</p:dialog>
+			<p:dialog id="dlgImgCapture" widgetVar="dlgImgCapture" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true" onHide="PF('imgAvatar').update();">
+				<h:panelGrid columns="2" style="margin-bottom:10px">
+					<p:imageCropper id="imgCrpCapturePhoto" widgetVar="imgCrpCapturePhoto" value="#{imageBean.croppedImage}" image="#{imageBean.image}" rendered="#{imageBean.show}" />
+					<p:photoCam widgetVar="pc" listener="#{imageBean.captureImage}" update="imgCrpCapturePhoto" />
+					<p:commandButton type="button" value="Capture" onclick="PF('pc').capture()" />
+				</h:panelGrid>
+			</p:dialog>
 			<p:panelGrid id="pnlCrtUser">
+				<p:row>
+					<p:column rowspan="10" style="align: top;">
+						<h:panelGrid id="pnlImg" columns="1">
+							<p:column>
+								<p:graphicImage id="imgAvatar" value="#{imageBean.image}" alt="Upload Image" height="100px" width="100px" />
+							</p:column>
+							<p:column>
+								<h:panelGrid id="imgSelBtns" columns="2">
+									<p:column>
+										<p:commandButton id="btnUploadShow" value="Upload" ajax="true" onclick="PF('dlgImgUpload').show();" style="widt:50px;" />
+									</p:column>
+									<p:column>
+										<p:commandButton id="btnCaptureShow" value="Capture" ajax="true" onclick="PF('dlgImgCapture').show();" style="widt:50px;" />
+									</p:column>
+								</h:panelGrid>
+							</p:column>
+						</h:panelGrid>
+					</p:column>
+				</p:row>
 				<p:row>
 					<p:column>
 						<p:outputLabel id="lblFName" value="First Name : " />

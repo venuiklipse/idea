@@ -16,6 +16,11 @@
 		<managed-bean-class>za.co.idea.web.ui.IdeaController</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>imageBean</managed-bean-name>
+		<managed-bean-class>za.co.idea.web.ui.ImageController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>home</from-outcome>

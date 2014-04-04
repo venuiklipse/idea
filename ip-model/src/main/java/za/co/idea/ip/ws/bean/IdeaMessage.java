@@ -15,6 +15,7 @@ public class IdeaMessage {
 	private String contentType;
 	private Long crtdById;
 	private Date crtdDate;
+	private String fileName;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -102,6 +103,14 @@ public class IdeaMessage {
 
 	public void setCrtdDate(Date crtdDate) {
 		this.crtdDate = crtdDate;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }

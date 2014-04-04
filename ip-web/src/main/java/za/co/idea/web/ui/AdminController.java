@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -35,140 +37,200 @@ public class AdminController implements Serializable {
 	private List<GroupBean> viewGroups;
 
 	public String showViewUsers() {
-		viewUsers = fetchAllUsers();
-		return "admvu";
+		try {
+			viewUsers = fetchAllUsers();
+			return "admvu";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
 	}
 
 	public String showEditUser() {
-		userBean.setcPw(userBean.getPwd());
-		return "admeu";
+		try {
+			userBean.setcPw(userBean.getPwd());
+			return "admeu";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
 	}
 
 	public String showCreateUser() {
-		userBean = new UserBean();
-		return "admcu";
+		try {
+			userBean = new UserBean();
+			return "admcu";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
 	}
 
 	public String saveUser() {
-		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
-		WebClient addUserClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/add", providers);
-		addUserClient.header("Content-Type", "application/json");
-		addUserClient.header("Accept", "application/json");
-		UserMessage bean = new UserMessage();
-		bean.setAvatar(userBean.getAvatar());
-		bean.setBio(userBean.getBio());
-		bean.setContact(userBean.getContact());
-		bean.seteMail(userBean.geteMail());
-		bean.setFbHandle(userBean.getFbHandle());
-		bean.setfName(userBean.getfName());
-		bean.setIdNum(userBean.getIdNum());
-		bean.setIsActive(userBean.getIsActive());
-		bean.setlName(userBean.getlName());
-		bean.setmName(userBean.getmName());
-		bean.setPwd(userBean.getPwd());
-		bean.setScName(userBean.getScName());
-		bean.setSkills(userBean.getSkills());
-		bean.setTwHandle(userBean.getTwHandle());
-		bean.setIsActive(true);
-		bean.setuId(System.currentTimeMillis());
-		Response response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean);
-		if (response.getStatus() == Response.Status.OK.getStatusCode())
-			return "home";
-		else {
+		try {
+			List providers = new ArrayList();
+			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			WebClient addUserClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/add", providers);
+			addUserClient.header("Content-Type", "application/json");
+			addUserClient.header("Accept", "application/json");
+			UserMessage bean = new UserMessage();
+			bean.setAvatar(userBean.getAvatar());
+			bean.setBio(userBean.getBio());
+			bean.setContact(userBean.getContact());
+			bean.seteMail(userBean.geteMail());
+			bean.setFbHandle(userBean.getFbHandle());
+			bean.setfName(userBean.getfName());
+			bean.setIdNum(userBean.getIdNum());
+			bean.setIsActive(userBean.getIsActive());
+			bean.setlName(userBean.getlName());
+			bean.setmName(userBean.getmName());
+			bean.setPwd(userBean.getPwd());
+			bean.setScName(userBean.getScName());
+			bean.setSkills(userBean.getSkills());
+			bean.setTwHandle(userBean.getTwHandle());
+			bean.setIsActive(true);
+			bean.setuId(System.currentTimeMillis());
+			Response response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean);
+			if (response.getStatus() == Response.Status.OK.getStatusCode())
+				return "home";
+			else {
+				return "";
+			}
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
 
 	public String updateUser() {
-		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
-		WebClient updateUserClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/modify", providers);
-		updateUserClient.header("Content-Type", "application/json");
-		updateUserClient.header("Accept", "application/json");
-		UserMessage bean = new UserMessage();
-		bean.setAvatar(userBean.getAvatar());
-		bean.setBio(userBean.getBio());
-		bean.setContact(userBean.getContact());
-		bean.seteMail(userBean.geteMail());
-		bean.setFbHandle(userBean.getFbHandle());
-		bean.setfName(userBean.getfName());
-		bean.setIdNum(userBean.getIdNum());
-		bean.setIsActive(userBean.getIsActive());
-		bean.setlName(userBean.getlName());
-		bean.setmName(userBean.getmName());
-		bean.setPwd(userBean.getPwd());
-		bean.setScName(userBean.getScName());
-		bean.setSkills(userBean.getSkills());
-		bean.setTwHandle(userBean.getTwHandle());
-		bean.setIsActive(true);
-		bean.setuId(userBean.getuId());
-		Response response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean);
-		if (response.getStatus() == Response.Status.OK.getStatusCode())
-			return "home";
-		else {
+		try {
+			List providers = new ArrayList();
+			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			WebClient updateUserClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/modify", providers);
+			updateUserClient.header("Content-Type", "application/json");
+			updateUserClient.header("Accept", "application/json");
+			UserMessage bean = new UserMessage();
+			bean.setAvatar(userBean.getAvatar());
+			bean.setBio(userBean.getBio());
+			bean.setContact(userBean.getContact());
+			bean.seteMail(userBean.geteMail());
+			bean.setFbHandle(userBean.getFbHandle());
+			bean.setfName(userBean.getfName());
+			bean.setIdNum(userBean.getIdNum());
+			bean.setIsActive(userBean.getIsActive());
+			bean.setlName(userBean.getlName());
+			bean.setmName(userBean.getmName());
+			bean.setPwd(userBean.getPwd());
+			bean.setScName(userBean.getScName());
+			bean.setSkills(userBean.getSkills());
+			bean.setTwHandle(userBean.getTwHandle());
+			bean.setIsActive(true);
+			bean.setuId(userBean.getuId());
+			Response response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean);
+			if (response.getStatus() == Response.Status.OK.getStatusCode())
+				return "home";
+			else {
+				return "";
+			}
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
 
 	public String showViewGroups() {
-		viewGroups = fetchAllGroups();
-		pGrps = fetchAllGroups();
-		admUsers = fetchAllUsers();
-		return "admvg";
+		try {
+			viewGroups = fetchAllGroups();
+			pGrps = fetchAllGroups();
+			admUsers = fetchAllUsers();
+			return "admvg";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
 	}
 
 	public String showEditGroup() {
-		pGrps = fetchAllGroups();
-		admUsers = fetchAllUsers();
-		return "admeg";
+		try {
+			pGrps = fetchAllGroups();
+			admUsers = fetchAllUsers();
+			return "admeg";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
 	}
 
 	public String showCreateGroup() {
-		groupBean = new GroupBean();
-		pGrps = fetchAllGroups();
-		admUsers = fetchAllUsers();
-		return "admcg";
+		try {
+			groupBean = new GroupBean();
+			pGrps = fetchAllGroups();
+			admUsers = fetchAllUsers();
+			return "admcg";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
 	}
 
 	public String saveGroup() {
-		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
-		WebClient addGroupClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/group/add", providers);
-		addGroupClient.header("Content-Type", "application/json");
-		addGroupClient.header("Accept", "application/json");
-		GroupMessage groupMessage = new GroupMessage();
-		groupMessage.setAdmUserId(groupBean.getSelAdmUser());
-		groupMessage.setGeMail(groupBean.getGeMail());
-		groupMessage.setgId(System.currentTimeMillis());
-		groupMessage.setgName(groupBean.getgName());
-		groupMessage.setIsActive(true);
-		groupMessage.setpGrpId(groupBean.getSelPGrp());
-		Response response = addGroupClient.accept(MediaType.APPLICATION_JSON).post(groupMessage);
-		if (response.getStatus() == Response.Status.OK.getStatusCode())
-			return "home";
-		else {
+		try {
+			List providers = new ArrayList();
+			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			WebClient addGroupClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/group/add", providers);
+			addGroupClient.header("Content-Type", "application/json");
+			addGroupClient.header("Accept", "application/json");
+			GroupMessage groupMessage = new GroupMessage();
+			groupMessage.setAdmUserId(groupBean.getSelAdmUser());
+			groupMessage.setGeMail(groupBean.getGeMail());
+			groupMessage.setgId(System.currentTimeMillis());
+			groupMessage.setgName(groupBean.getgName());
+			groupMessage.setIsActive(true);
+			groupMessage.setpGrpId(groupBean.getSelPGrp());
+			Response response = addGroupClient.accept(MediaType.APPLICATION_JSON).post(groupMessage);
+			if (response.getStatus() == Response.Status.OK.getStatusCode())
+				return "home";
+			else {
+				return "";
+			}
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
 
 	public String updateGroup() {
-		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
-		WebClient updateGroupClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/group/modify", providers);
-		updateGroupClient.header("Content-Type", "application/json");
-		updateGroupClient.header("Accept", "application/json");
-		GroupMessage groupMessage = new GroupMessage();
-		groupMessage.setAdmUserId(groupBean.getSelAdmUser());
-		groupMessage.setGeMail(groupBean.getGeMail());
-		groupMessage.setgId(groupBean.getgId());
-		groupMessage.setgName(groupBean.getgName());
-		groupMessage.setIsActive(true);
-		groupMessage.setpGrpId(groupBean.getSelPGrp());
-		Response response = updateGroupClient.accept(MediaType.APPLICATION_JSON).put(groupMessage);
-		if (response.getStatus() == Response.Status.OK.getStatusCode())
-			return "home";
-		else {
+		try {
+			List providers = new ArrayList();
+			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			WebClient updateGroupClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/group/modify", providers);
+			updateGroupClient.header("Content-Type", "application/json");
+			updateGroupClient.header("Accept", "application/json");
+			GroupMessage groupMessage = new GroupMessage();
+			groupMessage.setAdmUserId(groupBean.getSelAdmUser());
+			groupMessage.setGeMail(groupBean.getGeMail());
+			groupMessage.setgId(groupBean.getgId());
+			groupMessage.setgName(groupBean.getgName());
+			groupMessage.setIsActive(true);
+			groupMessage.setpGrpId(groupBean.getSelPGrp());
+			Response response = updateGroupClient.accept(MediaType.APPLICATION_JSON).put(groupMessage);
+			if (response.getStatus() == Response.Status.OK.getStatusCode())
+				return "home";
+			else {
+				return "";
+			}
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
@@ -328,4 +390,5 @@ public class AdminController implements Serializable {
 	public void setViewGroups(List<GroupBean> viewGroups) {
 		this.viewGroups = viewGroups;
 	}
+
 }

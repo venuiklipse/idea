@@ -1,10 +1,13 @@
 package za.co.idea.web.ui;
 
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -12,6 +15,8 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import za.co.idea.ip.ws.bean.IdeaMessage;
@@ -36,78 +41,119 @@ public class IdeaController implements Serializable {
 	 * View Beans
 	 */
 	private List<IdeaBean> viewIdeas;
+	private StreamedContent fileContent;
+	private boolean fileAvail;
 
 	public String showViewIdeas() {
-		viewIdeas = fetchAllIdeas();
-		ideaCats = fetchAllIdeaCat();
-		admUsers = fetchAllUsers();
-		ideaStatuses = fetchAllIdeaStatuses();
-		return "ideavi";
+		try {
+			viewIdeas = fetchAllIdeas();
+			ideaCats = fetchAllIdeaCat();
+			admUsers = fetchAllUsers();
+			ideaStatuses = fetchAllIdeaStatuses();
+			return "ideavi";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
 	}
 
 	public String showEditIdea() {
-		ideaCats = fetchAllIdeaCat();
-		admUsers = fetchAllUsers();
-		ideaStatuses = fetchAllIdeaStatuses();
-		return "ideaei";
+		try {
+			ideaCats = fetchAllIdeaCat();
+			admUsers = fetchAllUsers();
+			ideaStatuses = fetchAllIdeaStatuses();
+			if (ideaBean.getFileUpload() != null && ideaBean.getFileUpload().length() > 0) {
+				fileAvail = true;
+				fileContent = new DefaultStreamedContent(new ByteArrayInputStream(ideaBean.getFileUpload().getBytes()), ideaBean.getContentType(), ideaBean.getFileName());
+			} else {
+				fileAvail = false;
+				fileContent = null;
+			}
+			return "ideaei";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
 	}
 
 	public String showCreateIdea() {
-		ideaCats = fetchAllIdeaCat();
-		admUsers = fetchAllUsers();
-		ideaStatuses = fetchAllIdeaStatuses();
-		ideaBean = new IdeaBean();
-		return "ideaci";
+		try {
+			ideaCats = fetchAllIdeaCat();
+			admUsers = fetchAllUsers();
+			ideaStatuses = fetchAllIdeaStatuses();
+			ideaBean = new IdeaBean();
+			return "ideaci";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
 	}
 
 	public String saveIdea() {
-		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
-		WebClient addIdeaClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/add", providers);
-		addIdeaClient.header("Content-Type", "application/json");
-		addIdeaClient.header("Accept", "application/json");
-		IdeaMessage ideaMessage = new IdeaMessage();
-		ideaMessage.setContentType(ideaBean.getContentType());
-		ideaMessage.setCrtdById(ideaBean.getCrtdById());
-		ideaMessage.setCrtdDate(new Date());
-		ideaMessage.setFileUpload(ideaBean.getFileUpload());
-		ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
-		ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
-		ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
-		ideaMessage.setIdeaId(System.currentTimeMillis());
-		ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
-		ideaMessage.setSelCatId(ideaBean.getSelCatId());
-		ideaMessage.setSetStatusId(1l);
-		Response response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage);
-		if (response.getStatus() == Response.Status.OK.getStatusCode())
-			return "home";
-		else {
+		try {
+			List providers = new ArrayList();
+			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			WebClient addIdeaClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/add", providers);
+			addIdeaClient.header("Content-Type", "application/json");
+			addIdeaClient.header("Accept", "application/json");
+			IdeaMessage ideaMessage = new IdeaMessage();
+			ideaMessage.setContentType(ideaBean.getContentType());
+			ideaMessage.setCrtdById(ideaBean.getCrtdById());
+			ideaMessage.setCrtdDate(new Date());
+			ideaMessage.setFileUpload(ideaBean.getFileUpload());
+			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
+			ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
+			ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
+			ideaMessage.setIdeaId(System.currentTimeMillis());
+			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
+			ideaMessage.setSelCatId(ideaBean.getSelCatId());
+			ideaMessage.setFileName(ideaBean.getFileName());
+			ideaMessage.setSetStatusId(1l);
+			Response response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage);
+			if (response.getStatus() == Response.Status.OK.getStatusCode())
+				return "home";
+			else {
+				return "";
+			}
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
 
 	public String updateIdea() {
-		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
-		WebClient updateIdeaClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/modify", providers);
-		updateIdeaClient.header("Content-Type", "application/json");
-		updateIdeaClient.header("Accept", "application/json");
-		IdeaMessage ideaMessage = new IdeaMessage();
-		ideaMessage.setContentType(ideaBean.getContentType());
-		ideaMessage.setCrtdById(ideaBean.getCrtdById());
-		ideaMessage.setCrtdDate(new Date());
-		ideaMessage.setFileUpload(ideaBean.getFileUpload());
-		ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
-		ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
-		ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
-		ideaMessage.setIdeaId(ideaBean.getIdeaId());
-		ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
-		ideaMessage.setSelCatId(ideaBean.getSelCatId());
-		ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
-		Response response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage);
-		if (response.getStatus() == Response.Status.OK.getStatusCode())
-			return "home";
-		else {
+		try {
+			List providers = new ArrayList();
+			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			WebClient updateIdeaClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/modify", providers);
+			updateIdeaClient.header("Content-Type", "application/json");
+			updateIdeaClient.header("Accept", "application/json");
+			IdeaMessage ideaMessage = new IdeaMessage();
+			ideaMessage.setContentType(ideaBean.getContentType());
+			ideaMessage.setCrtdById(ideaBean.getCrtdById());
+			ideaMessage.setCrtdDate(new Date());
+			ideaMessage.setFileUpload(ideaBean.getFileUpload());
+			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
+			ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
+			ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
+			ideaMessage.setIdeaId(ideaBean.getIdeaId());
+			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
+			ideaMessage.setSelCatId(ideaBean.getSelCatId());
+			ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
+			ideaMessage.setFileName(ideaBean.getFileName());
+			Response response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage);
+			if (response.getStatus() == Response.Status.OK.getStatusCode())
+				return "home";
+			else {
+				return "";
+			}
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
@@ -133,6 +179,7 @@ public class IdeaController implements Serializable {
 			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
 			bean.setSelCatId(ideaMessage.getSelCatId());
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setFileName(ideaMessage.getFileName());
 			ret.add(bean);
 		}
 		return ret;
@@ -173,9 +220,15 @@ public class IdeaController implements Serializable {
 	}
 
 	public void fileUploadHandle(FileUploadEvent e) {
-		UploadedFile file = e.getFile();
-		this.ideaBean.setFileUpload(new String(file.getContents()));
-		this.ideaBean.setContentType(file.getContentType());
+		try {
+			UploadedFile file = e.getFile();
+			this.ideaBean.setFileUpload(new String(file.getContents()));
+			this.ideaBean.setContentType(file.getContentType());
+			this.ideaBean.setFileName(file.getFileName());
+		} catch (Exception ex) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), ex.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		}
 	}
 
 	private List<UserBean> fetchAllUsers() {
@@ -257,6 +310,22 @@ public class IdeaController implements Serializable {
 
 	public void setIdeaStatuses(List<ListSelectorBean> ideaStatuses) {
 		this.ideaStatuses = ideaStatuses;
+	}
+
+	public StreamedContent getFileContent() {
+		return fileContent;
+	}
+
+	public void setFileContent(StreamedContent fileContent) {
+		this.fileContent = fileContent;
+	}
+
+	public boolean isFileAvail() {
+		return fileAvail;
+	}
+
+	public void setFileAvail(boolean fileAvail) {
+		this.fileAvail = fileAvail;
 	}
 
 }

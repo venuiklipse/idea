@@ -115,6 +115,8 @@ public class IdeaService {
 		ipIdea.setIdeaDesc(idea.getIdeaDesc());
 		ipIdea.setIdeaTag(idea.getIdeaTag());
 		ipIdea.setIdeaTitle(idea.getIdeaTitle());
+		ipIdea.setIdeaFileName(idea.getFileName());
+		ipIdea.setIdeaFileType(idea.getContentType());
 		if (idea.getSelCatId() != null && idea.getSelCatId().longValue() != 0)
 			ipIdea.setIpIdeaCat(ipIdeaCatDAO.findById(idea.getSelCatId().intValue()));
 		if (idea.getSetStatusId() != null && idea.getSetStatusId().longValue() != 0)
@@ -143,6 +145,8 @@ public class IdeaService {
 		ipIdea.setIdeaDesc(idea.getIdeaDesc());
 		ipIdea.setIdeaTag(idea.getIdeaTag());
 		ipIdea.setIdeaTitle(idea.getIdeaTitle());
+		ipIdea.setIdeaFileName(idea.getFileName());
+		ipIdea.setIdeaFileType(idea.getContentType());
 		if (idea.getSelCatId() != null && idea.getSelCatId().longValue() != 0)
 			ipIdea.setIpIdeaCat(ipIdeaCatDAO.findById(idea.getSelCatId().intValue()));
 		if (idea.getSetStatusId() != null && idea.getSetStatusId().longValue() != 0)
@@ -176,6 +180,8 @@ public class IdeaService {
 				idea.setIdeaDesc(ipIdea.getIdeaDesc());
 				idea.setIdeaTag(ipIdea.getIdeaTag());
 				idea.setIdeaTitle(ipIdea.getIdeaTitle());
+				idea.setContentType(ipIdea.getIdeaFileType());
+				idea.setFileName(ipIdea.getIdeaFileName());
 				if (ipIdea.getIpIdeaCat() != null)
 					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
 				if (ipIdea.getIpIdeaStatus() != null)
@@ -204,6 +210,8 @@ public class IdeaService {
 			idea.setIdeaDesc(ipIdea.getIdeaDesc());
 			idea.setIdeaTag(ipIdea.getIdeaTag());
 			idea.setIdeaTitle(ipIdea.getIdeaTitle());
+			idea.setIdeaTitle(ipIdea.getIdeaTitle());
+			idea.setContentType(ipIdea.getIdeaFileType());
 			if (ipIdea.getIpIdeaCat() != null)
 				idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
 			if (ipIdea.getIpIdeaStatus() != null)
