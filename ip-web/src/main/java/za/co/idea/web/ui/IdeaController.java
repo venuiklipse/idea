@@ -64,10 +64,10 @@ public class IdeaController implements Serializable {
 			admUsers = fetchAllUsers();
 			ideaStatuses = fetchAllIdeaStatuses();
 			if (ideaBean.getFileUpload() != null && ideaBean.getFileUpload().length() > 0) {
-				fileAvail = true;
+				fileAvail = false;
 				fileContent = new DefaultStreamedContent(new ByteArrayInputStream(ideaBean.getFileUpload().getBytes()), ideaBean.getContentType(), ideaBean.getFileName());
 			} else {
-				fileAvail = false;
+				fileAvail = true;
 				fileContent = null;
 			}
 			return "ideaei";
