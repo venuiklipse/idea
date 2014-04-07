@@ -15,7 +15,7 @@ public class IpGroup implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1880043039681872128L;
 	private Long groupId;
 	private IpUser ipUser;
 	private IpGroup ipGroup;
@@ -24,6 +24,8 @@ public class IpGroup implements java.io.Serializable {
 	private String groupEmail;
 	private Set ipFunctions = new HashSet(0);
 	private Set ipGroups = new HashSet(0);
+	private Set ipChallengeGroups = new HashSet(0);
+	private Set ipRewardsGroups = new HashSet(0);
 
 	// Constructors
 
@@ -38,7 +40,7 @@ public class IpGroup implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpGroup(Long groupId, IpUser ipUser, IpGroup ipGroup, String groupName, String groupStatus, String groupEmail, Set ipFunctions, Set ipGroups) {
+	public IpGroup(Long groupId, IpUser ipUser, IpGroup ipGroup, String groupName, String groupStatus, String groupEmail, Set ipFunctions, Set ipGroups, Set ipChallengeGroups, Set ipRewardsGroups) {
 		this.groupId = groupId;
 		this.ipUser = ipUser;
 		this.ipGroup = ipGroup;
@@ -47,6 +49,8 @@ public class IpGroup implements java.io.Serializable {
 		this.groupEmail = groupEmail;
 		this.ipFunctions = ipFunctions;
 		this.ipGroups = ipGroups;
+		this.ipChallengeGroups = ipChallengeGroups;
+		this.ipRewardsGroups = ipRewardsGroups;
 	}
 
 	// Property accessors
@@ -113,6 +117,22 @@ public class IpGroup implements java.io.Serializable {
 
 	public void setIpGroups(Set ipGroups) {
 		this.ipGroups = ipGroups;
+	}
+
+	public Set getIpChallengeGroups() {
+		return this.ipChallengeGroups;
+	}
+
+	public void setIpChallengeGroups(Set ipChallengeGroups) {
+		this.ipChallengeGroups = ipChallengeGroups;
+	}
+
+	public Set getIpRewardsGroups() {
+		return this.ipRewardsGroups;
+	}
+
+	public void setIpRewardsGroups(Set ipRewardsGroups) {
+		this.ipRewardsGroups = ipRewardsGroups;
 	}
 
 }

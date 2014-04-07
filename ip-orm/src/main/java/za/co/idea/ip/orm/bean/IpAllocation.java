@@ -15,7 +15,7 @@ public class IpAllocation implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6204940908807135390L;
 	private Integer allocId;
 	private String allocDesc;
 	private Integer allocVal;

@@ -15,7 +15,7 @@ public class IpRewardsStatus implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2246385947352864270L;
 	private Integer rsId;
 	private String rsDesc;
 	private Set ipRewardses = new HashSet(0);

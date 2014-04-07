@@ -1,5 +1,6 @@
 package za.co.idea.ip.orm.bean;
 
+import java.sql.Blob;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ public class IpIdea implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7253727646617779214L;
 	private Long ideaId;
 	private IpIdeaStatus ipIdeaStatus;
 	private IpUser ipUser;
@@ -23,7 +24,7 @@ public class IpIdea implements java.io.Serializable {
 	private String ideaBa;
 	private Date ideaDate;
 	private String ideaTag;
-	private String ideaBlob;
+	private Blob ideaBlob;
 	private String ideaFileType;
 	private String ideaFileName;
 
@@ -34,7 +35,7 @@ public class IpIdea implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag, String ideaFileName, String ideaFileType) {
+	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag) {
 		this.ideaId = ideaId;
 		this.ipIdeaStatus = ipIdeaStatus;
 		this.ipUser = ipUser;
@@ -44,12 +45,10 @@ public class IpIdea implements java.io.Serializable {
 		this.ideaBa = ideaBa;
 		this.ideaDate = ideaDate;
 		this.ideaTag = ideaTag;
-		this.ideaFileName = ideaFileName;
-		this.ideaFileType = ideaFileType;
 	}
 
 	/** full constructor */
-	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag, String ideaBlob, String ideaFileName, String ideaFileType) {
+	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag, Blob ideaBlob, String ideaFileType, String ideaFileName) {
 		this.ideaId = ideaId;
 		this.ipIdeaStatus = ipIdeaStatus;
 		this.ipUser = ipUser;
@@ -60,8 +59,8 @@ public class IpIdea implements java.io.Serializable {
 		this.ideaDate = ideaDate;
 		this.ideaTag = ideaTag;
 		this.ideaBlob = ideaBlob;
-		this.ideaFileName = ideaFileName;
 		this.ideaFileType = ideaFileType;
+		this.ideaFileName = ideaFileName;
 	}
 
 	// Property accessors
@@ -138,16 +137,16 @@ public class IpIdea implements java.io.Serializable {
 		this.ideaTag = ideaTag;
 	}
 
-	public String getIdeaBlob() {
+	public Blob getIdeaBlob() {
 		return this.ideaBlob;
 	}
 
-	public void setIdeaBlob(String ideaBlob) {
+	public void setIdeaBlob(Blob ideaBlob) {
 		this.ideaBlob = ideaBlob;
 	}
 
 	public String getIdeaFileType() {
-		return ideaFileType;
+		return this.ideaFileType;
 	}
 
 	public void setIdeaFileType(String ideaFileType) {
@@ -155,7 +154,7 @@ public class IpIdea implements java.io.Serializable {
 	}
 
 	public String getIdeaFileName() {
-		return ideaFileName;
+		return this.ideaFileName;
 	}
 
 	public void setIdeaFileName(String ideaFileName) {

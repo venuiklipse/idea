@@ -11,13 +11,31 @@
             <generator class="assigned" />
         </id>
         <many-to-one name="ipSolutionStatus" class="za.co.idea.ip.orm.bean.IpSolutionStatus" fetch="select">
-            <column name="sol_status_id" />
+            <column name="sol_status" not-null="true" />
+        </many-to-one>
+        <many-to-one name="ipSolutionCat" class="za.co.idea.ip.orm.bean.IpSolutionCat" fetch="select">
+            <column name="sol_cat" />
         </many-to-one>
         <many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select">
-            <column name="sub_user_id" />
+            <column name="sol_crtd_by" not-null="true" />
         </many-to-one>
         <many-to-one name="ipChallenge" class="za.co.idea.ip.orm.bean.IpChallenge" fetch="select">
-            <column name="chal_id" />
+            <column name="sol_chal_id" not-null="true" />
         </many-to-one>
+        <property name="solTitle" type="java.lang.String">
+            <column name="sol_title" length="100" not-null="true" />
+        </property>
+        <property name="solDesc" type="java.lang.String">
+            <column name="sol_desc" length="1000" not-null="true" />
+        </property>
+        <property name="solTags" type="java.lang.String">
+            <column name="sol_tags" length="500" />
+        </property>
+        <property name="solBlob" type="java.lang.String">
+            <column name="sol_blob" />
+        </property>
+        <property name="solCrtdDt" type="java.sql.Timestamp">
+            <column name="sol_crtd_dt" length="19" not-null="true" />
+        </property>
     </class>
 </hibernate-mapping>

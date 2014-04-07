@@ -15,13 +15,13 @@
 			</p:dialog>
 			<p:dialog id="dlgImgUpload" widgetVar="dlgImgUpload" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true" onHide="PF('imgAvatar').update();">
 				<h:panelGrid columns="2" style="margin-bottom:10px">
-					<p:imageCropper id="imgCrpUploadPhoto" widgetVar="imgCrpUploadPhoto" value="#{imageBean.croppedImage}" image="#{imageBean.image}" rendered="#{imageBean.show}" />
+					<p:imageCropper id="imgCrpUploadPhoto" widgetVar="imgCrpUploadPhoto" value="#{imageBean.croppedImage}" image="#{imageBean.cropImgSrc}" rendered="#{imageBean.show}" />
 					<p:fileUpload id="fuImg" widgetVar="fuImg" update="imgCrpUploadPhoto" fileUploadListener="#{imageBean.uploadImageFile}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
 				</h:panelGrid>
 			</p:dialog>
 			<p:dialog id="dlgImgCapture" widgetVar="dlgImgCapture" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true" onHide="PF('imgAvatar').update();">
 				<h:panelGrid columns="2" style="margin-bottom:10px">
-					<p:imageCropper id="imgCrpCapturePhoto" widgetVar="imgCrpCapturePhoto" value="#{imageBean.croppedImage}" image="#{imageBean.image}" rendered="#{imageBean.show}" />
+					<p:imageCropper id="imgCrpCapturePhoto" widgetVar="imgCrpCapturePhoto" value="#{imageBean.croppedImage}" image="#{imageBean.cropImgSrc}" rendered="#{imageBean.show}" />
 					<p:photoCam widgetVar="pc" listener="#{imageBean.captureImage}" update="imgCrpCapturePhoto" />
 					<p:commandButton type="button" value="Capture" onclick="PF('pc').capture()" />
 				</h:panelGrid>

@@ -24,8 +24,14 @@ import za.co.idea.ip.orm.bean.IpRewards;
 @SuppressWarnings("rawtypes")
 public class IpRewardsDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpRewardsDAO.class);
-
 	// property constants
+	public static final String RW_TITLE = "rwTitle";
+	public static final String RW_DESC = "rwDesc";
+	public static final String RW_VALUE = "rwValue";
+	public static final String RW_STOCK_CODE_NUM = "rwStockCodeNum";
+	public static final String RW_HOVER_TEXT = "rwHoverText";
+	public static final String RW_TAG = "rwTag";
+	public static final String RW_BLOB = "rwBlob";
 
 	protected void initDao() {
 		// do nothing
@@ -53,7 +59,7 @@ public class IpRewardsDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public IpRewards findById(java.lang.Integer id) {
+	public IpRewards findById(java.lang.Long id) {
 		log.debug("getting IpRewards instance with id: " + id);
 		try {
 			IpRewards instance = (IpRewards) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpRewards", id);
@@ -85,6 +91,34 @@ public class IpRewardsDAO extends HibernateDaoSupport {
 			log.error("find by property name failed", re);
 			throw re;
 		}
+	}
+
+	public List findByRwTitle(Object rwTitle) {
+		return findByProperty(RW_TITLE, rwTitle);
+	}
+
+	public List findByRwDesc(Object rwDesc) {
+		return findByProperty(RW_DESC, rwDesc);
+	}
+
+	public List findByRwValue(Object rwValue) {
+		return findByProperty(RW_VALUE, rwValue);
+	}
+
+	public List findByRwStockCodeNum(Object rwStockCodeNum) {
+		return findByProperty(RW_STOCK_CODE_NUM, rwStockCodeNum);
+	}
+
+	public List findByRwHoverText(Object rwHoverText) {
+		return findByProperty(RW_HOVER_TEXT, rwHoverText);
+	}
+
+	public List findByRwTag(Object rwTag) {
+		return findByProperty(RW_TAG, rwTag);
+	}
+
+	public List findByRwBlob(Object rwBlob) {
+		return findByProperty(RW_BLOB, rwBlob);
 	}
 
 	public List findAll() {

@@ -24,8 +24,11 @@ import za.co.idea.ip.orm.bean.IpSolution;
 @SuppressWarnings("rawtypes")
 public class IpSolutionDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpSolutionDAO.class);
-
 	// property constants
+	public static final String SOL_TITLE = "solTitle";
+	public static final String SOL_DESC = "solDesc";
+	public static final String SOL_TAGS = "solTags";
+	public static final String SOL_BLOB = "solBlob";
 
 	protected void initDao() {
 		// do nothing
@@ -85,6 +88,22 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 			log.error("find by property name failed", re);
 			throw re;
 		}
+	}
+
+	public List findBySolTitle(Object solTitle) {
+		return findByProperty(SOL_TITLE, solTitle);
+	}
+
+	public List findBySolDesc(Object solDesc) {
+		return findByProperty(SOL_DESC, solDesc);
+	}
+
+	public List findBySolTags(Object solTags) {
+		return findByProperty(SOL_TAGS, solTags);
+	}
+
+	public List findBySolBlob(Object solBlob) {
+		return findByProperty(SOL_BLOB, solBlob);
 	}
 
 	public List findAll() {

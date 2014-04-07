@@ -11,7 +11,7 @@ public class IpTag implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7062420850700464640L;
 	private Long tagId;
 	private IpUser ipUser;
 	private IpTagEntityType ipTagEntityType;

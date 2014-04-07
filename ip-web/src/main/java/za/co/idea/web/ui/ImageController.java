@@ -1,8 +1,14 @@
 package za.co.idea.web.ui;
 
+import java.io.File;
 import java.io.Serializable;
+import java.util.UUID;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.servlet.ServletContext;
 
 import org.primefaces.event.CaptureEvent;
 import org.primefaces.event.FileUploadEvent;
@@ -20,6 +26,7 @@ public class ImageController implements Serializable {
 	private String uploadSrc;
 	private boolean webCamEnabled;
 	private boolean uploadEnabled;
+	private String cropImgSrc;
 	private boolean show;
 
 	public String cropImage() {
@@ -27,7 +34,21 @@ public class ImageController implements Serializable {
 	}
 
 	public void captureImage(CaptureEvent event) {
+		String photo = UUID.randomUUID().toString();
+		byte[] data = event.getData();
 
+		ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+		String newFileName = servletContext.getRealPath("") + File.separator + "images" + File.separator + photo + ".png";
+
+		FileImageOutputStream imageOutput;
+		try {
+			imageOutput = new FileImageOutputStream(new File(newFileName));
+			imageOutput.write(data, 0, data.length);
+			imageOutput.close();
+			cropImgSrc = newFileName;
+		} catch (Exception e) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage()));
+		}
 	}
 
 	public void uploadImageFile(FileUploadEvent event) {
@@ -86,6 +107,14 @@ public class ImageController implements Serializable {
 
 	public void setUploadEnabled(boolean uploadEnabled) {
 		this.uploadEnabled = uploadEnabled;
+	}
+
+	public String getCropImgSrc() {
+		return cropImgSrc;
+	}
+
+	public void setCropImgSrc(String cropImgSrc) {
+		this.cropImgSrc = cropImgSrc;
 	}
 
 	public boolean isShow() {

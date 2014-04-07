@@ -13,7 +13,7 @@ public class IpConfig implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 845519725292513945L;
 	private Integer configId;
 	private String configKey;
 	private String configValue;

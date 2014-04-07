@@ -30,6 +30,8 @@ public class IpIdeaDAO extends HibernateDaoSupport {
 	public static final String IDEA_BA = "ideaBa";
 	public static final String IDEA_TAG = "ideaTag";
 	public static final String IDEA_BLOB = "ideaBlob";
+	public static final String IDEA_FILE_TYPE = "ideaFileType";
+	public static final String IDEA_FILE_NAME = "ideaFileName";
 
 	protected void initDao() {
 		// do nothing
@@ -109,6 +111,14 @@ public class IpIdeaDAO extends HibernateDaoSupport {
 
 	public List findByIdeaBlob(Object ideaBlob) {
 		return findByProperty(IDEA_BLOB, ideaBlob);
+	}
+
+	public List findByIdeaFileType(Object ideaFileType) {
+		return findByProperty(IDEA_FILE_TYPE, ideaFileType);
+	}
+
+	public List findByIdeaFileName(Object ideaFileName) {
+		return findByProperty(IDEA_FILE_NAME, ideaFileName);
 	}
 
 	public List findAll() {

@@ -15,7 +15,7 @@ public class IpClaimStatus implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5951907640114110917L;
 	private Integer csId;
 	private String csDesc;
 	private Set ipClaims = new HashSet(0);

@@ -15,7 +15,7 @@ public class IpChallengeStatus implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1471019467173378045L;
 	private Integer csId;
 	private String csDesc;
 	private Set ipChallenges = new HashSet(0);

@@ -1,5 +1,7 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.Date;
+
 /**
  * IpSolution entity. @author MyEclipse Persistence Tools
  */
@@ -11,11 +13,17 @@ public class IpSolution implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3744868475222553664L;
 	private Long solId;
 	private IpSolutionStatus ipSolutionStatus;
+	private IpSolutionCat ipSolutionCat;
 	private IpUser ipUser;
 	private IpChallenge ipChallenge;
+	private String solTitle;
+	private String solDesc;
+	private String solTags;
+	private String solBlob;
+	private Date solCrtdDt;
 
 	// Constructors
 
@@ -24,16 +32,28 @@ public class IpSolution implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpSolution(Long solId) {
-		this.solId = solId;
-	}
-
-	/** full constructor */
-	public IpSolution(Long solId, IpSolutionStatus ipSolutionStatus, IpUser ipUser, IpChallenge ipChallenge) {
+	public IpSolution(Long solId, IpSolutionStatus ipSolutionStatus, IpUser ipUser, IpChallenge ipChallenge, String solTitle, String solDesc, Date solCrtdDt) {
 		this.solId = solId;
 		this.ipSolutionStatus = ipSolutionStatus;
 		this.ipUser = ipUser;
 		this.ipChallenge = ipChallenge;
+		this.solTitle = solTitle;
+		this.solDesc = solDesc;
+		this.solCrtdDt = solCrtdDt;
+	}
+
+	/** full constructor */
+	public IpSolution(Long solId, IpSolutionStatus ipSolutionStatus, IpSolutionCat ipSolutionCat, IpUser ipUser, IpChallenge ipChallenge, String solTitle, String solDesc, String solTags, String solBlob, Date solCrtdDt) {
+		this.solId = solId;
+		this.ipSolutionStatus = ipSolutionStatus;
+		this.ipSolutionCat = ipSolutionCat;
+		this.ipUser = ipUser;
+		this.ipChallenge = ipChallenge;
+		this.solTitle = solTitle;
+		this.solDesc = solDesc;
+		this.solTags = solTags;
+		this.solBlob = solBlob;
+		this.solCrtdDt = solCrtdDt;
 	}
 
 	// Property accessors
@@ -54,6 +74,14 @@ public class IpSolution implements java.io.Serializable {
 		this.ipSolutionStatus = ipSolutionStatus;
 	}
 
+	public IpSolutionCat getIpSolutionCat() {
+		return this.ipSolutionCat;
+	}
+
+	public void setIpSolutionCat(IpSolutionCat ipSolutionCat) {
+		this.ipSolutionCat = ipSolutionCat;
+	}
+
 	public IpUser getIpUser() {
 		return this.ipUser;
 	}
@@ -68,6 +96,46 @@ public class IpSolution implements java.io.Serializable {
 
 	public void setIpChallenge(IpChallenge ipChallenge) {
 		this.ipChallenge = ipChallenge;
+	}
+
+	public String getSolTitle() {
+		return this.solTitle;
+	}
+
+	public void setSolTitle(String solTitle) {
+		this.solTitle = solTitle;
+	}
+
+	public String getSolDesc() {
+		return this.solDesc;
+	}
+
+	public void setSolDesc(String solDesc) {
+		this.solDesc = solDesc;
+	}
+
+	public String getSolTags() {
+		return this.solTags;
+	}
+
+	public void setSolTags(String solTags) {
+		this.solTags = solTags;
+	}
+
+	public String getSolBlob() {
+		return this.solBlob;
+	}
+
+	public void setSolBlob(String solBlob) {
+		this.solBlob = solBlob;
+	}
+
+	public Date getSolCrtdDt() {
+		return this.solCrtdDt;
+	}
+
+	public void setSolCrtdDt(Date solCrtdDt) {
+		this.solCrtdDt = solCrtdDt;
 	}
 
 }

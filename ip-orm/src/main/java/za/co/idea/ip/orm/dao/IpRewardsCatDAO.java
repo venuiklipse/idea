@@ -8,31 +8,31 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import za.co.idea.ip.orm.bean.IpClaim;
+import za.co.idea.ip.orm.bean.IpRewardsCat;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * IpClaim entities. Transaction control of the save(), update() and delete()
- * operations can directly support Spring container-managed transactions or they
- * can be augmented to handle user-managed Spring transactions. Each of these
- * methods provides additional information for how to configure it for the
- * desired type of transaction control.
+ * IpRewardsCat entities. Transaction control of the save(), update() and
+ * delete() operations can directly support Spring container-managed
+ * transactions or they can be augmented to handle user-managed Spring
+ * transactions. Each of these methods provides additional information for how
+ * to configure it for the desired type of transaction control.
  * 
- * @see za.co.idea.ip.orm.bean.IpClaim
+ * @see za.co.idea.ip.orm.bean.IpRewardsCat
  * @author MyEclipse Persistence Tools
  */
 @SuppressWarnings("rawtypes")
-public class IpClaimDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpClaimDAO.class);
+public class IpRewardsCatDAO extends HibernateDaoSupport {
+	private static final Logger log = LoggerFactory.getLogger(IpRewardsCatDAO.class);
 	// property constants
-	public static final String CLAIM_DESC = "claimDesc";
+	public static final String RC_DESC = "rcDesc";
 
 	protected void initDao() {
 		// do nothing
 	}
 
-	public void save(IpClaim transientInstance) {
-		log.debug("saving IpClaim instance");
+	public void save(IpRewardsCat transientInstance) {
+		log.debug("saving IpRewardsCat instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
@@ -42,8 +42,8 @@ public class IpClaimDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void delete(IpClaim persistentInstance) {
-		log.debug("deleting IpClaim instance");
+	public void delete(IpRewardsCat persistentInstance) {
+		log.debug("deleting IpRewardsCat instance");
 		try {
 			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
@@ -53,10 +53,10 @@ public class IpClaimDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public IpClaim findById(java.lang.Long id) {
-		log.debug("getting IpClaim instance with id: " + id);
+	public IpRewardsCat findById(java.lang.Integer id) {
+		log.debug("getting IpRewardsCat instance with id: " + id);
 		try {
-			IpClaim instance = (IpClaim) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpClaim", id);
+			IpRewardsCat instance = (IpRewardsCat) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpRewardsCat", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -64,8 +64,8 @@ public class IpClaimDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpClaim instance) {
-		log.debug("finding IpClaim instance by example");
+	public List findByExample(IpRewardsCat instance) {
+		log.debug("finding IpRewardsCat instance by example");
 		try {
 			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: " + results.size());
@@ -77,9 +77,9 @@ public class IpClaimDAO extends HibernateDaoSupport {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding IpClaim instance with property: " + propertyName + ", value: " + value);
+		log.debug("finding IpRewardsCat instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from IpClaim as model where model." + propertyName + "= ?";
+			String queryString = "from IpRewardsCat as model where model." + propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -87,14 +87,14 @@ public class IpClaimDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByClaimDesc(Object claimDesc) {
-		return findByProperty(CLAIM_DESC, claimDesc);
+	public List findByRcDesc(Object rcDesc) {
+		return findByProperty(RC_DESC, rcDesc);
 	}
 
 	public List findAll() {
-		log.debug("finding all IpClaim instances");
+		log.debug("finding all IpRewardsCat instances");
 		try {
-			String queryString = "from IpClaim";
+			String queryString = "from IpRewardsCat";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -102,10 +102,10 @@ public class IpClaimDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public IpClaim merge(IpClaim detachedInstance) {
-		log.debug("merging IpClaim instance");
+	public IpRewardsCat merge(IpRewardsCat detachedInstance) {
+		log.debug("merging IpRewardsCat instance");
 		try {
-			IpClaim result = (IpClaim) getHibernateTemplate().merge(detachedInstance);
+			IpRewardsCat result = (IpRewardsCat) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -114,8 +114,8 @@ public class IpClaimDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachDirty(IpClaim instance) {
-		log.debug("attaching dirty IpClaim instance");
+	public void attachDirty(IpRewardsCat instance) {
+		log.debug("attaching dirty IpRewardsCat instance");
 		try {
 			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -125,8 +125,8 @@ public class IpClaimDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachClean(IpClaim instance) {
-		log.debug("attaching clean IpClaim instance");
+	public void attachClean(IpRewardsCat instance) {
+		log.debug("attaching clean IpRewardsCat instance");
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -136,7 +136,7 @@ public class IpClaimDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static IpClaimDAO getFromApplicationContext(ApplicationContext ctx) {
-		return (IpClaimDAO) ctx.getBean("IpClaimDAO");
+	public static IpRewardsCatDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpRewardsCatDAO) ctx.getBean("IpRewardsCatDAO");
 	}
 }

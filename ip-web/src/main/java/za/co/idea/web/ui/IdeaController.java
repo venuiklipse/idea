@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -103,7 +104,10 @@ public class IdeaController implements Serializable {
 			ideaMessage.setContentType(ideaBean.getContentType());
 			ideaMessage.setCrtdById(ideaBean.getCrtdById());
 			ideaMessage.setCrtdDate(new Date());
-			ideaMessage.setFileUpload(ideaBean.getFileUpload());
+			if (ideaBean.getFileUpload() != null && ideaBean.getFileUpload().length() > 0)
+				ideaMessage.setFileUpload(Base64.encodeBase64String(ideaBean.getFileUpload().getBytes()));
+			else
+				ideaMessage.setFileUpload(null);
 			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
 			ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
 			ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
@@ -136,7 +140,10 @@ public class IdeaController implements Serializable {
 			ideaMessage.setContentType(ideaBean.getContentType());
 			ideaMessage.setCrtdById(ideaBean.getCrtdById());
 			ideaMessage.setCrtdDate(new Date());
-			ideaMessage.setFileUpload(ideaBean.getFileUpload());
+			if (ideaBean.getFileUpload() != null && ideaBean.getFileUpload().length() > 0)
+				ideaMessage.setFileUpload(Base64.encodeBase64String(ideaBean.getFileUpload().getBytes()));
+			else
+				ideaMessage.setFileUpload(null);
 			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
 			ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
 			ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
@@ -171,7 +178,10 @@ public class IdeaController implements Serializable {
 			bean.setContentType(ideaMessage.getContentType());
 			bean.setCrtdById(ideaMessage.getCrtdById());
 			bean.setCrtdDate(ideaMessage.getCrtdDate());
-			bean.setFileUpload(ideaMessage.getFileUpload());
+			if (ideaMessage.getFileUpload() != null && ideaMessage.getFileUpload().length() > 0)
+				bean.setFileUpload(new String(Base64.decodeBase64(ideaMessage.getFileUpload().getBytes())));
+			else
+				bean.setFileUpload(null);
 			bean.setIdeaBa(ideaMessage.getIdeaBa());
 			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
 			bean.setIdeaTag(ideaMessage.getIdeaTag());

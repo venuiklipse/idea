@@ -15,7 +15,7 @@ public class IpTagType implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4368860406018432934L;
 	private Integer ttId;
 	private String ttDesc;
 	private Set ipTags = new HashSet(0);

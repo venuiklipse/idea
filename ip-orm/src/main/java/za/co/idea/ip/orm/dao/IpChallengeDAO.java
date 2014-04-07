@@ -24,8 +24,12 @@ import za.co.idea.ip.orm.bean.IpChallenge;
 @SuppressWarnings("rawtypes")
 public class IpChallengeDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(IpChallengeDAO.class);
-
 	// property constants
+	public static final String CHAL_TITLE = "chalTitle";
+	public static final String CHAL_DESC = "chalDesc";
+	public static final String CHAL_HOVER_TXT = "chalHoverTxt";
+	public static final String CHAL_TAGS = "chalTags";
+	public static final String CHAL_BLOB = "chalBlob";
 
 	protected void initDao() {
 		// do nothing
@@ -85,6 +89,26 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 			log.error("find by property name failed", re);
 			throw re;
 		}
+	}
+
+	public List findByChalTitle(Object chalTitle) {
+		return findByProperty(CHAL_TITLE, chalTitle);
+	}
+
+	public List findByChalDesc(Object chalDesc) {
+		return findByProperty(CHAL_DESC, chalDesc);
+	}
+
+	public List findByChalHoverTxt(Object chalHoverTxt) {
+		return findByProperty(CHAL_HOVER_TXT, chalHoverTxt);
+	}
+
+	public List findByChalTags(Object chalTags) {
+		return findByProperty(CHAL_TAGS, chalTags);
+	}
+
+	public List findByChalBlob(Object chalBlob) {
+		return findByProperty(CHAL_BLOB, chalBlob);
 	}
 
 	public List findAll() {

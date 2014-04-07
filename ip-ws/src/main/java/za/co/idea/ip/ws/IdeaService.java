@@ -13,6 +13,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.codec.binary.Base64;
+import org.hibernate.Hibernate;
+
 import za.co.idea.ip.orm.bean.IpIdea;
 import za.co.idea.ip.orm.bean.IpIdeaCat;
 import za.co.idea.ip.orm.bean.IpIdeaStatus;
@@ -110,7 +113,10 @@ public class IdeaService {
 		IpIdea ipIdea = new IpIdea();
 		ipIdea.setIdeaId(idea.getIdeaId());
 		ipIdea.setIdeaBa(idea.getIdeaBa());
-		ipIdea.setIdeaBlob(idea.getFileUpload());
+		if (idea.getFileUpload() != null && idea.getFileUpload().length() > 0)
+			ipIdea.setIdeaBlob(Hibernate.createBlob(Base64.decodeBase64(idea.getFileUpload().getBytes())));
+		else
+			ipIdea.setIdeaBlob(null);
 		ipIdea.setIdeaDate(idea.getCrtdDate());
 		ipIdea.setIdeaDesc(idea.getIdeaDesc());
 		ipIdea.setIdeaTag(idea.getIdeaTag());
@@ -140,7 +146,10 @@ public class IdeaService {
 		IpIdea ipIdea = new IpIdea();
 		ipIdea.setIdeaId(idea.getIdeaId());
 		ipIdea.setIdeaBa(idea.getIdeaBa());
-		ipIdea.setIdeaBlob(idea.getFileUpload());
+		if (idea.getFileUpload() != null && idea.getFileUpload().length() > 0)
+			ipIdea.setIdeaBlob(Hibernate.createBlob(Base64.decodeBase64(idea.getFileUpload().getBytes())));
+		else
+			ipIdea.setIdeaBlob(null);
 		ipIdea.setIdeaDate(idea.getCrtdDate());
 		ipIdea.setIdeaDesc(idea.getIdeaDesc());
 		ipIdea.setIdeaTag(idea.getIdeaTag());
@@ -175,7 +184,10 @@ public class IdeaService {
 				IdeaMessage idea = new IdeaMessage();
 				idea.setIdeaId(ipIdea.getIdeaId());
 				idea.setIdeaBa(ipIdea.getIdeaBa());
-				idea.setFileUpload(ipIdea.getIdeaBlob());
+				if (ipIdea.getIdeaBlob() != null && ipIdea.getIdeaBlob().length() > 0)
+					idea.setFileUpload(Base64.encodeBase64String(ipIdea.getIdeaBlob().getBytes(0l, (int) ipIdea.getIdeaBlob().length())));
+				else
+					idea.setFileUpload(null);
 				idea.setCrtdDate(ipIdea.getIdeaDate());
 				idea.setIdeaDesc(ipIdea.getIdeaDesc());
 				idea.setIdeaTag(ipIdea.getIdeaTag());
@@ -205,7 +217,10 @@ public class IdeaService {
 			IpIdea ipIdea = ipIdeaDAO.findById(id);
 			idea.setIdeaId(ipIdea.getIdeaId());
 			idea.setIdeaBa(ipIdea.getIdeaBa());
-			idea.setFileUpload(ipIdea.getIdeaBlob());
+			if (ipIdea.getIdeaBlob() != null && ipIdea.getIdeaBlob().length() > 0)
+				idea.setFileUpload(Base64.encodeBase64String(ipIdea.getIdeaBlob().getBytes(0l, (int) ipIdea.getIdeaBlob().length())));
+			else
+				idea.setFileUpload(null);
 			idea.setCrtdDate(ipIdea.getIdeaDate());
 			idea.setIdeaDesc(ipIdea.getIdeaDesc());
 			idea.setIdeaTag(ipIdea.getIdeaTag());

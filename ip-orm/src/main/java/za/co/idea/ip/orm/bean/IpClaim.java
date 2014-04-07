@@ -1,5 +1,7 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.Date;
+
 /**
  * IpClaim entity. @author MyEclipse Persistence Tools
  */
@@ -11,11 +13,13 @@ public class IpClaim implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4079307383770566338L;
 	private Long claimId;
 	private IpUser ipUser;
 	private IpClaimStatus ipClaimStatus;
 	private IpRewards ipRewards;
+	private String claimDesc;
+	private Date claimCrtdDt;
 
 	// Constructors
 
@@ -29,11 +33,13 @@ public class IpClaim implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpClaim(Long claimId, IpUser ipUser, IpClaimStatus ipClaimStatus, IpRewards ipRewards) {
+	public IpClaim(Long claimId, IpUser ipUser, IpClaimStatus ipClaimStatus, IpRewards ipRewards, String claimDesc, Date claimCrtdDt) {
 		this.claimId = claimId;
 		this.ipUser = ipUser;
 		this.ipClaimStatus = ipClaimStatus;
 		this.ipRewards = ipRewards;
+		this.claimDesc = claimDesc;
+		this.claimCrtdDt = claimCrtdDt;
 	}
 
 	// Property accessors
@@ -68,6 +74,22 @@ public class IpClaim implements java.io.Serializable {
 
 	public void setIpRewards(IpRewards ipRewards) {
 		this.ipRewards = ipRewards;
+	}
+
+	public String getClaimDesc() {
+		return this.claimDesc;
+	}
+
+	public void setClaimDesc(String claimDesc) {
+		this.claimDesc = claimDesc;
+	}
+
+	public Date getClaimCrtdDt() {
+		return this.claimCrtdDt;
+	}
+
+	public void setClaimCrtdDt(Date claimCrtdDt) {
+		this.claimCrtdDt = claimCrtdDt;
 	}
 
 }

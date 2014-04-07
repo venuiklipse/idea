@@ -15,7 +15,7 @@ public class IpUser implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7226648133888328599L;
 	private Long userId;
 	private String userFName;
 	private String userLName;
@@ -30,8 +30,8 @@ public class IpUser implements java.io.Serializable {
 	private String userTwHandle;
 	private String userAvatar;
 	private String userStatus;
-	private Set ipSolutions = new HashSet(0);
 	private Set ipIdeas = new HashSet(0);
+	private Set ipSolutions = new HashSet(0);
 	private Set ipTags = new HashSet(0);
 	private Set ipPointses = new HashSet(0);
 	private Set ipFunctions = new HashSet(0);
@@ -46,7 +46,7 @@ public class IpUser implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpUser(Long userId, String userFName, String userLName, Long userIdNum, String userScreenName, String userEmail, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userAvatar, String userStatus) {
+	public IpUser(Long userId, String userFName, String userLName, Long userIdNum, String userScreenName, String userEmail, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userStatus) {
 		this.userId = userId;
 		this.userFName = userFName;
 		this.userLName = userLName;
@@ -57,12 +57,11 @@ public class IpUser implements java.io.Serializable {
 		this.userBio = userBio;
 		this.userFbHandle = userFbHandle;
 		this.userTwHandle = userTwHandle;
-		this.userAvatar = userAvatar;
 		this.userStatus = userStatus;
 	}
 
 	/** full constructor */
-	public IpUser(Long userId, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userAvatar, String userStatus, Set ipSolutions, Set ipIdeas, Set ipTags, Set ipPointses, Set ipFunctions, Set ipClaims, Set ipGroups, Set ipChallenges) {
+	public IpUser(Long userId, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userAvatar, String userStatus, Set ipIdeas, Set ipSolutions, Set ipTags, Set ipPointses, Set ipFunctions, Set ipClaims, Set ipGroups, Set ipChallenges) {
 		this.userId = userId;
 		this.userFName = userFName;
 		this.userLName = userLName;
@@ -77,8 +76,8 @@ public class IpUser implements java.io.Serializable {
 		this.userTwHandle = userTwHandle;
 		this.userAvatar = userAvatar;
 		this.userStatus = userStatus;
-		this.ipSolutions = ipSolutions;
 		this.ipIdeas = ipIdeas;
+		this.ipSolutions = ipSolutions;
 		this.ipTags = ipTags;
 		this.ipPointses = ipPointses;
 		this.ipFunctions = ipFunctions;
@@ -201,20 +200,20 @@ public class IpUser implements java.io.Serializable {
 		this.userStatus = userStatus;
 	}
 
-	public Set getIpSolutions() {
-		return this.ipSolutions;
-	}
-
-	public void setIpSolutions(Set ipSolutions) {
-		this.ipSolutions = ipSolutions;
-	}
-
 	public Set getIpIdeas() {
 		return this.ipIdeas;
 	}
 
 	public void setIpIdeas(Set ipIdeas) {
 		this.ipIdeas = ipIdeas;
+	}
+
+	public Set getIpSolutions() {
+		return this.ipSolutions;
+	}
+
+	public void setIpSolutions(Set ipSolutions) {
+		this.ipSolutions = ipSolutions;
 	}
 
 	public Set getIpTags() {

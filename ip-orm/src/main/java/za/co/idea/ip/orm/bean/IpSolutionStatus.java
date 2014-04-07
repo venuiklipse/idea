@@ -15,7 +15,7 @@ public class IpSolutionStatus implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -4146896209543935818L;
 	private Integer ssId;
 	private String ssDesc;
 	private Set ipSolutions = new HashSet(0);

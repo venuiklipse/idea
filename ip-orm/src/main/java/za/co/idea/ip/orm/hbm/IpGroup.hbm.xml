@@ -37,5 +37,17 @@
             </key>
             <one-to-many class="za.co.idea.ip.orm.bean.IpGroup" />
         </set>
+        <set name="ipChallengeGroups" inverse="true">
+            <key>
+                <column name="cg_group_id" />
+            </key>
+            <one-to-many class="za.co.idea.ip.orm.bean.IpChallengeGroup" />
+        </set>
+        <set name="ipRewardsGroups" inverse="true">
+            <key>
+                <column name="rg_group_id" />
+            </key>
+            <one-to-many class="za.co.idea.ip.orm.bean.IpRewardsGroup" />
+        </set>
     </class>
 </hibernate-mapping>

@@ -11,7 +11,7 @@ public class IpPoints implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6456518924772050061L;
 	private Long pointId;
 	private IpAllocation ipAllocation;
 	private IpUser ipUser;

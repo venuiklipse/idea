@@ -23,7 +23,7 @@
             <column name="tag_entity_id" not-null="true" />
         </property>
         <property name="tagText" type="java.lang.String">
-            <column name="tag_text" length="450" />
+            <column name="tag_text" length="1000" />
         </property>
     </class>
 </hibernate-mapping>

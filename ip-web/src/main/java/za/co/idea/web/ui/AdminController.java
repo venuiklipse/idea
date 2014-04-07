@@ -128,7 +128,7 @@ public class AdminController implements Serializable {
 			bean.setScName(userBean.getScName());
 			bean.setSkills(userBean.getSkills());
 			bean.setTwHandle(userBean.getTwHandle());
-			bean.setIsActive(true);
+			bean.setIsActive(userBean.getIsActive());
 			bean.setuId(userBean.getuId());
 			Response response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean);
 			if (response.getStatus() == Response.Status.OK.getStatusCode())
@@ -220,7 +220,7 @@ public class AdminController implements Serializable {
 			groupMessage.setGeMail(groupBean.getGeMail());
 			groupMessage.setgId(groupBean.getgId());
 			groupMessage.setgName(groupBean.getgName());
-			groupMessage.setIsActive(true);
+			groupMessage.setIsActive(groupBean.getIsActive());
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
 			Response response = updateGroupClient.accept(MediaType.APPLICATION_JSON).put(groupMessage);
 			if (response.getStatus() == Response.Status.OK.getStatusCode())
@@ -259,7 +259,7 @@ public class AdminController implements Serializable {
 			bean.setScName(userMessage.getScName());
 			bean.setSkills(userMessage.getSkills());
 			bean.setTwHandle(userMessage.getTwHandle());
-			bean.setIsActive(true);
+			bean.setIsActive(userMessage.getIsActive());
 			bean.setuId(userMessage.getuId());
 			ret.add(bean);
 		}

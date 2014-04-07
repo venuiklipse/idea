@@ -15,7 +15,7 @@ public class IpIdeaCat implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6302309942670555070L;
 	private Integer icId;
 	private String icDesc;
 	private Set ipIdeas = new HashSet(0);

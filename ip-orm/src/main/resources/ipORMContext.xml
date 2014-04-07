@@ -21,29 +21,34 @@
 		<property name="mappingResources">
 			<list>
 				<value>za/co/idea/ip/orm/hbm/IpAllocation.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpChallengeStatus.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpClaimStatus.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpFunction.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpIdeaCat.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpIdeaStatus.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpRewards.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpSolution.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpTagEntityType.hbm.xml</value>
-				<value>za/co/idea/ip/orm/hbm/IpTagType.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpChallengeCat.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpChallenge.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpChallengeGroup.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpChallengeStatus.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpClaim.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpClaimStatus.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpConfig.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpFunction.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpGroup.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpIdea.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpIdeaCat.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpIdeaStatus.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpPoints.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpRewards.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpRewardsCat.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpRewardsGroup.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpRewardsStatus.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpSolution.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpSolutionCat.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpSolutionStatus.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpTag.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpTagEntityType.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpTagType.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpUser.hbm.xml</value>
 			</list>
 		</property>
 	</bean>
-	<bean id="IpTagDAO" class="za.co.idea.ip.orm.dao.IpTagDAO">
+	<bean id="IpChallengeStatusDAO" class="za.co.idea.ip.orm.dao.IpChallengeStatusDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
@@ -53,32 +58,37 @@
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="IpChallengeStatusDAO" class="za.co.idea.ip.orm.dao.IpChallengeStatusDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
 	<bean id="IpGroupDAO" class="za.co.idea.ip.orm.dao.IpGroupDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="IpIdeaDAO" class="za.co.idea.ip.orm.dao.IpIdeaDAO">
+	<bean id="IpRewardsDAO" class="za.co.idea.ip.orm.dao.IpRewardsDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="IpUserDAO" class="za.co.idea.ip.orm.dao.IpUserDAO">
+	<bean id="IpClaimStatusDAO" class="za.co.idea.ip.orm.dao.IpClaimStatusDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="IpTagEntityTypeDAO" class="za.co.idea.ip.orm.dao.IpTagEntityTypeDAO">
+	<bean id="IpClaimDAO" class="za.co.idea.ip.orm.dao.IpClaimDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpPointsDAO" class="za.co.idea.ip.orm.dao.IpPointsDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
 	<bean id="IpIdeaStatusDAO" class="za.co.idea.ip.orm.dao.IpIdeaStatusDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpSolutionStatusDAO" class="za.co.idea.ip.orm.dao.IpSolutionStatusDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
@@ -93,7 +103,72 @@
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
+	<bean id="IpTagDAO" class="za.co.idea.ip.orm.dao.IpTagDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpRewardsStatusDAO" class="za.co.idea.ip.orm.dao.IpRewardsStatusDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpFunctionDAO" class="za.co.idea.ip.orm.dao.IpFunctionDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpIdeaDAO" class="za.co.idea.ip.orm.dao.IpIdeaDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpAllocationDAO" class="za.co.idea.ip.orm.dao.IpAllocationDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpSolutionDAO" class="za.co.idea.ip.orm.dao.IpSolutionDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpUserDAO" class="za.co.idea.ip.orm.dao.IpUserDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpTagEntityTypeDAO" class="za.co.idea.ip.orm.dao.IpTagEntityTypeDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
 	<bean id="IpChallengeDAO" class="za.co.idea.ip.orm.dao.IpChallengeDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpChallehgeCatDAO" class="za.co.idea.ip.orm.dao.IpChallehgeCatDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpSolutionCatDAO" class="za.co.idea.ip.orm.dao.IpSolutionCatDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpRewardsCatDAO" class="za.co.idea.ip.orm.dao.IpRewardsCatDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpChallengeGroupDAO" class="za.co.idea.ip.orm.dao.IpChallengeGroupDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpRewardsGroupDAO" class="za.co.idea.ip.orm.dao.IpRewardsGroupDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

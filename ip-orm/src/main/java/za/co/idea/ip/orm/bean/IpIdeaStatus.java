@@ -15,7 +15,7 @@ public class IpIdeaStatus implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2183703925197685802L;
 	private Integer isId;
 	private String isDesc;
 	private Set ipIdeas = new HashSet(0);

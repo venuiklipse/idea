@@ -19,7 +19,7 @@
         <property name="configEnv" type="java.lang.String">
             <column name="config_env" length="45" not-null="true" />
         </property>
-        <property name="createdDate" type="java.util.Date">
+        <property name="createdDate" type="java.sql.Timestamp">
             <column name="created_date" length="19" not-null="true" />
         </property>
         <property name="createdBy" type="java.lang.String">
