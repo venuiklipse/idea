@@ -34,7 +34,7 @@
         <property name="ideaTag" type="java.lang.String">
             <column name="idea_tag" length="500" not-null="true" />
         </property>
-        <property name="ideaBlob" type="java.lang.String">
+        <property name="ideaBlob" type="java.sql.Blob">
             <column name="idea_blob" />
         </property>
         <property name="ideaFileType" type="java.lang.String">

@@ -79,6 +79,10 @@ public class IdeaController implements Serializable {
 		}
 	}
 
+	public String showSummaryIdea() {
+		return "ideasi";
+	}
+
 	public String showCreateIdea() {
 		try {
 			ideaCats = fetchAllIdeaCat();

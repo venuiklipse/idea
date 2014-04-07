@@ -35,6 +35,11 @@
 						<f:setPropertyActionListener value="#{idea}" target="#{ideaBean.ideaBean}" />
 					</p:commandButton>
 				</p:column>
+				<p:column>
+					<p:commandButton id="summaryButton" value="Summary" icon="ui-icon-search" ajax="false" immediate="true" action="#{ideaBean.showSummaryIdea}">
+						<f:setPropertyActionListener value="#{idea}" target="#{ideaBean.ideaBean}" />
+					</p:commandButton>
+				</p:column>
 			</p:dataTable>
 		</ui:define>
 	</ui:composition>

@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+	<ui:composition template="/templates/layout.xhtml">
+		<ui:define name="title">Idea Summary</ui:define>
+		<ui:define name="body">
+			<p:panelGrid columns="2" id="pnlEditIdea">
+				<p:column>
+					<p:outputLabel id="lblITitle" value="Title : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" disabled="true" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblIDesc" value="Description : " />
+				</p:column>
+				<p:column>
+					<p:editor id="txtIDesc" value="#{ideaBean.ideaBean.ideaDesc}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblIBa" value="Business Areas : " />
+				</p:column>
+				<p:column>
+					<p:editor id="txtIBa" value="#{ideaBean.ideaBean.ideaBa}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblITag" value="Tags : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" />
+				</p:column>
+			</p:panelGrid>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
