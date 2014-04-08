@@ -159,6 +159,7 @@ public class IpTagDAO extends HibernateDaoSupport {
 				Hibernate.initialize(tag.getIpTagEntityType());
 				Hibernate.initialize(tag.getIpTagType());
 			}
+			session.close();
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -182,6 +183,7 @@ public class IpTagDAO extends HibernateDaoSupport {
 				Hibernate.initialize(tag.getIpTagEntityType());
 				Hibernate.initialize(tag.getIpTagType());
 			}
+			session.close();
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);

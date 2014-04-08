@@ -90,7 +90,9 @@ public class TagService {
 	@Produces("application/json")
 	public Response createTag(TagMessage tag) {
 		try {
-			if (ipTagDAO.getTagByFilterB(tag.getEntityId(), tag.getTeId(), tag.getTtId(), tag.getUserId()).size() == 0) {
+			if (!tag.isDuplicate() && ipTagDAO.getTagByFilterB(tag.getEntityId(), tag.getTeId(), tag.getTtId(), tag.getUserId()).size() != 0) {
+				return Response.status(Status.EXPECTATION_FAILED).build();
+			} else {
 				IpTag ipTag = new IpTag();
 				ipTag.setIpTagEntityType(ipTagEntityTypeDAO.findById(tag.getTeId()));
 				ipTag.setIpTagType(ipTagTypeDAO.findById(tag.getTtId()));
@@ -100,8 +102,6 @@ public class TagService {
 				ipTag.setTagText(tag.getTagText());
 				ipTagDAO.save(ipTag);
 				return Response.ok().build();
-			} else {
-				return Response.status(Status.EXPECTATION_FAILED).build();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

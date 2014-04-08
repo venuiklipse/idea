@@ -3,16 +3,6 @@
 	<ui:composition template="/templates/layout.xhtml">
 		<ui:define name="title">Idea Summary</ui:define>
 		<ui:define name="body">
-			<p:dialog id="dlgIdeaComment" widgetVar="dlgIdeaComment" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="@(body)">
-				<p:panelGrid id="pnlIdeaComment">
-				</p:panelGrid>
-			</p:dialog>
-			<p:dialog id="dlgIdeaLike" widgetVar="dlgIdeaLike" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true">
-				<p:tagCloud id="tgLikes" model="#{ideaBean.likes}" />
-			</p:dialog>
-			<p:dialog id="dlgIdeaBuildOn" widgetVar="dlgIdeaBuildOn" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true">
-
-			</p:dialog>
 			<p:panelGrid columns="2" id="pnlSummaryIdea">
 				<p:column>
 					<p:outputLabel id="lblITitle" value="Title : " />
@@ -42,13 +32,59 @@
 					<p:outputLabel id="lblISocial" value="Social : " />
 				</p:column>
 				<p:column>
-					<p:commandLink id="clIdeaLike" actionListener="#{ideaBean.likeIdea}" process="@this">
+					<p:outputLabel id="lblLikeCnt" value="#{ideaBean.likeCnt}" style="height:25px; width:25px;" />
+					<p:commandLink id="clIdeaLike" action="#{ideaBean.likeIdea}" ajax="false" immediate="true">
 						<p:graphicImage id="giIdeaLike" name="like-128.png" library="images" height="25px" width="25px" />
 					</p:commandLink>
-					<p:graphicImage id="giIdeaComment" name="comment.jpg" library="images" height="25px" width="25px" onclick="PF('dlgIdeaComment').show();" />
-					<p:graphicImage id="giIdeaBuildOn" name="lego.png" library="images" height="25px" width="25px" onclick="PF('dlgIdeaBuildOn').show();" />
+					<p:outputLabel id="lblCommentCnt" value="#{ideaBean.commentCnt}" style="height:25px; width:25px;" />
+					<p:commandLink id="clIdeaComment" action="#{ideaBean.showCommentIdea}" ajax="false" immediate="true">
+						<p:graphicImage id="giIdeaComment" name="comment.jpg" library="images" height="25px" width="25px" onclick="PF('dlgIdeaComment').show();" />
+					</p:commandLink>
+					<p:outputLabel id="lblBuildOnCnt" value="#{ideaBean.buildOnCnt}" style="height:25px; width:25px;" />
+					<p:commandLink id="clIdeaBuildOn" action="#{ideaBean.showBuildOnIdea}" ajax="false" immediate="true">
+						<p:graphicImage id="giIdeaBuildOn" name="lego.png" library="images" height="25px" width="25px" onclick="PF('dlgIdeaBuildOn').show();" />
+					</p:commandLink>
 				</p:column>
 			</p:panelGrid>
+			<h:panelGrid id="pnlIdeaComment" rendered="#{ideaBean.showIdeaComments}">
+				<p:column>
+					<p:dataTable id="dtViewComments" widgetVar="dtViewComments" value="#{ideaBean.comments}" var="comment" scrollable="true" scrollRows="5" emptyMessage="No Comments Found">
+						<p:column width="30%">
+							<p:outputLabel id="lblCommentBy" value="#{comment.usrScreenName}" />
+						</p:column>
+						<p:column width="70%">
+							<p:outputLabel id="lblCommentText" value="#{comment.tagText}" escape="false" />
+						</p:column>
+					</p:dataTable>
+				</p:column>
+				<p:column>
+					<p:editor id="edComment" value="#{ideaBean.commentText}" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnSubmitComment" value="Post" action="#{ideaBean.commentIdea}" ajax="false" />
+				</p:column>
+			</h:panelGrid>
+			<h:panelGrid id="pnlIdeaLikes" rendered="#{ideaBean.showIdeaLikes}">
+				<p:tagCloud id="tgLikes" model="#{ideaBean.likes}" />
+			</h:panelGrid>
+			<h:panelGrid id="pnlIdeaBuildOn" rendered="#{ideaBean.showIdeaBuildOns}">
+				<p:column>
+					<p:dataTable id="dtViewBuildOns" widgetVar="dtViewBuildOns" value="#{ideaBean.buildOns}" var="buildOn" scrollable="true" scrollRows="5" emptyMessage="No BuildOns Found">
+						<p:column width="30%">
+							<p:outputLabel id="lblBuildOnBy" value="#{buildOn.usrScreenName}" />
+						</p:column>
+						<p:column width="70%">
+							<p:outputLabel id="lblBuildOnText" value="#{buildOn.tagText}" escape="false" />
+						</p:column>
+					</p:dataTable>
+				</p:column>
+				<p:column>
+					<p:editor id="edBuildOn" value="#{ideaBean.buildOnText}" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnSubmitBuildOn" value="Post" action="#{ideaBean.buildOnIdea}" ajax="false" />
+				</p:column>
+			</h:panelGrid>
 		</ui:define>
 	</ui:composition>
 </h:body>

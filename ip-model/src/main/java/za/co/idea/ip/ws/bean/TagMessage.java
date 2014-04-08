@@ -12,6 +12,7 @@ public class TagMessage implements Serializable {
 	private Long entityId;
 	private Long userId;
 	private Long tagId;
+	private boolean duplicate;
 
 	public String getUsrScreenName() {
 		return usrScreenName;
@@ -75,5 +76,13 @@ public class TagMessage implements Serializable {
 
 	public void setTagId(Long tagId) {
 		this.tagId = tagId;
+	}
+
+	public boolean isDuplicate() {
+		return duplicate;
+	}
+
+	public void setDuplicate(boolean duplicate) {
+		this.duplicate = duplicate;
 	}
 }

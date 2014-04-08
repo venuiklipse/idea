@@ -8,8 +8,11 @@ public class TagBean implements Serializable {
 	private String userFullName;
 	private Integer teId;
 	private Integer ttId;
-	private Integer tagText;
+	private String tagText;
 	private Long entityId;
+	private Long userId;
+	private Long tagId;
+	private boolean duplicate;
 
 	public String getUsrScreenName() {
 		return usrScreenName;
@@ -43,11 +46,11 @@ public class TagBean implements Serializable {
 		this.ttId = ttId;
 	}
 
-	public Integer getTagText() {
+	public String getTagText() {
 		return tagText;
 	}
 
-	public void setTagText(Integer tagText) {
+	public void setTagText(String tagText) {
 		this.tagText = tagText;
 	}
 
@@ -57,5 +60,29 @@ public class TagBean implements Serializable {
 
 	public void setEntityId(Long entityId) {
 		this.entityId = entityId;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public Long getTagId() {
+		return tagId;
+	}
+
+	public void setTagId(Long tagId) {
+		this.tagId = tagId;
+	}
+
+	public boolean isDuplicate() {
+		return duplicate;
+	}
+
+	public void setDuplicate(boolean duplicate) {
+		this.duplicate = duplicate;
 	}
 }

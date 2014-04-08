@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -16,7 +15,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -31,6 +29,7 @@ import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.web.ui.bean.IdeaBean;
 import za.co.idea.web.ui.bean.ListSelectorBean;
+import za.co.idea.web.ui.bean.TagBean;
 import za.co.idea.web.ui.bean.UserBean;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -49,11 +48,18 @@ public class IdeaController implements Serializable {
 	 */
 	private List<IdeaBean> viewIdeas;
 	private TagCloudModel likes;
-	private List<TagMessage> comments;
-	private List<TagMessage> buildOns;
-	private String tagText;
+	private List<TagBean> comments;
+	private List<TagBean> buildOns;
 	private StreamedContent fileContent;
+	private String commentText;
+	private String buildOnText;
 	private boolean fileAvail;
+	private boolean showIdeaComments;
+	private boolean showIdeaLikes;
+	private boolean showIdeaBuildOns;
+	private String likeCnt;
+	private String commentCnt;
+	private String buildOnCnt;
 
 	public String showViewIdeas() {
 		try {
@@ -90,12 +96,35 @@ public class IdeaController implements Serializable {
 	}
 
 	public String showSummaryIdea() {
+		likes = fetchAllLikes();
 		comments = fetchAllComments();
 		buildOns = fetchAllBuildOns();
+		likeCnt = "(" + likes.getTags().size() + ")";
+		commentCnt = "(" + comments.size() + ")";
+		buildOnCnt = "(" + buildOns.size() + ")";
+		showIdeaComments = false;
+		showIdeaLikes = false;
+		showIdeaBuildOns = false;
 		return "ideasi";
 	}
 
-	public void likeIdea(ActionEvent event) {
+	public String showCommentIdea() {
+		comments = fetchAllComments();
+		showIdeaComments = true;
+		showIdeaLikes = false;
+		showIdeaBuildOns = false;
+		return "";
+	}
+
+	public String showBuildOnIdea() {
+		buildOns = fetchAllBuildOns();
+		showIdeaComments = false;
+		showIdeaLikes = false;
+		showIdeaBuildOns = true;
+		return "";
+	}
+
+	public String likeIdea() {
 		List providers = new ArrayList();
 		providers.add(new JacksonJsonProvider(new ObjectMapper()));
 		WebClient addTagClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add", providers);
@@ -107,14 +136,20 @@ public class IdeaController implements Serializable {
 		message.setTeId(1);
 		message.setTtId(1);
 		message.setUserId(ideaBean.getCrtdById());
+		message.setDuplicate(false);
 		Response response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message);
 		if (response.getStatus() != Response.Status.OK.getStatusCode() && response.getStatus() != Response.Status.EXPECTATION_FAILED.getStatusCode())
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
 		likes = fetchAllLikes();
-		RequestContext.getCurrentInstance().execute("PF('dlgIdeaLike').show();");
+		likeCnt = "(" + likes.getTags().size() + ")";
+		showIdeaComments = false;
+		showIdeaLikes = true;
+		showIdeaBuildOns = false;
+		addTagClient.close();
+		return "";
 	}
 
-	public void commentIdea(ActionEvent event) {
+	public String commentIdea() {
 		List providers = new ArrayList();
 		providers.add(new JacksonJsonProvider(new ObjectMapper()));
 		WebClient addTagClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add", providers);
@@ -123,16 +158,25 @@ public class IdeaController implements Serializable {
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
 		message.setTagId(System.currentTimeMillis());
-		message.setTagText(tagText);
+		message.setTagText(commentText);
 		message.setTeId(1);
 		message.setTtId(2);
+		message.setDuplicate(true);
 		message.setUserId(ideaBean.getCrtdById());
 		Response response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message);
 		if (response.getStatus() != Response.Status.OK.getStatusCode())
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
+		comments = fetchAllComments();
+		commentCnt = "(" + comments.size() + ")";
+		commentText = "";
+		showIdeaComments = true;
+		showIdeaLikes = false;
+		showIdeaBuildOns = false;
+		addTagClient.close();
+		return "";
 	}
 
-	public void buildOnIdea(ActionEvent event) {
+	public String buildOnIdea() {
 		List providers = new ArrayList();
 		providers.add(new JacksonJsonProvider(new ObjectMapper()));
 		WebClient addTagClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add", providers);
@@ -141,13 +185,22 @@ public class IdeaController implements Serializable {
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
 		message.setTagId(System.currentTimeMillis());
-		message.setTagText(tagText);
+		message.setTagText(buildOnText);
 		message.setTeId(1);
 		message.setTtId(3);
+		message.setDuplicate(true);
 		message.setUserId(ideaBean.getCrtdById());
 		Response response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message);
 		if (response.getStatus() != Response.Status.OK.getStatusCode())
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Build-On", "Error While Saving Build-On"));
+		buildOns = fetchAllBuildOns();
+		buildOnCnt = "(" + buildOns.size() + ")";
+		buildOnText = "";
+		showIdeaComments = false;
+		showIdeaLikes = false;
+		showIdeaBuildOns = true;
+		addTagClient.close();
+		return "";
 	}
 
 	public String showCreateIdea() {
@@ -188,9 +241,11 @@ public class IdeaController implements Serializable {
 			ideaMessage.setFileName(ideaBean.getFileName());
 			ideaMessage.setSetStatusId(1l);
 			Response response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage);
-			if (response.getStatus() == Response.Status.OK.getStatusCode())
+			if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+				addIdeaClient.close();
 				return "home";
-			else {
+			} else {
+				addIdeaClient.close();
 				return "";
 			}
 		} catch (Exception e) {
@@ -224,9 +279,11 @@ public class IdeaController implements Serializable {
 			ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
 			ideaMessage.setFileName(ideaBean.getFileName());
 			Response response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage);
-			if (response.getStatus() == Response.Status.OK.getStatusCode())
+			if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+				updateIdeaClient.close();
 				return "home";
-			else {
+			} else {
+				updateIdeaClient.close();
 				return "";
 			}
 		} catch (Exception e) {
@@ -246,17 +303,44 @@ public class IdeaController implements Serializable {
 		List<TagMessage> likeList = new ArrayList<TagMessage>(fetchIdeaLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		for (TagMessage tagMessage : likeList)
 			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
+		fetchIdeaLikesClient.close();
 		return likes;
 	}
 
-	private List<TagMessage> fetchAllComments() {
-		List<TagMessage> comments = new ArrayList<TagMessage>();
-		return comments;
+	private List<TagBean> fetchAllComments() {
+		List providers = new ArrayList();
+		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		WebClient fetchIdeaCommentsClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/2", providers);
+		fetchIdeaCommentsClient.header("Content-Type", "application/json");
+		fetchIdeaCommentsClient.header("Accept", "application/json");
+		ArrayList<TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
+		fetchIdeaCommentsClient.close();
+		List<TagBean> ret = new ArrayList<TagBean>();
+		for (TagMessage msg : msgs) {
+			TagBean bean = new TagBean();
+			bean.setTagText(msg.getTagText());
+			bean.setUsrScreenName(msg.getUsrScreenName());
+			ret.add(bean);
+		}
+		return ret;
 	}
 
-	private List<TagMessage> fetchAllBuildOns() {
-		List<TagMessage> comments = new ArrayList<TagMessage>();
-		return comments;
+	private List<TagBean> fetchAllBuildOns() {
+		List providers = new ArrayList();
+		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		WebClient fetchIdeaBuildOnsClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/3", providers);
+		fetchIdeaBuildOnsClient.header("Content-Type", "application/json");
+		fetchIdeaBuildOnsClient.header("Accept", "application/json");
+		ArrayList<TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
+		fetchIdeaBuildOnsClient.close();
+		List<TagBean> ret = new ArrayList<TagBean>();
+		for (TagMessage msg : msgs) {
+			TagBean bean = new TagBean();
+			bean.setTagText(msg.getTagText());
+			bean.setUsrScreenName(msg.getUsrScreenName());
+			ret.add(bean);
+		}
+		return ret;
 	}
 
 	private List<IdeaBean> fetchAllIdeas() {
@@ -286,6 +370,7 @@ public class IdeaController implements Serializable {
 			bean.setFileName(ideaMessage.getFileName());
 			ret.add(bean);
 		}
+		fetchIdeaClient.close();
 		return ret;
 	}
 
@@ -303,6 +388,7 @@ public class IdeaController implements Serializable {
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
+		viewIdeaSelectClient.close();
 		return ret;
 	}
 
@@ -320,6 +406,7 @@ public class IdeaController implements Serializable {
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
+		viewIdeaSelectClient.close();
 		return ret;
 	}
 
@@ -363,6 +450,7 @@ public class IdeaController implements Serializable {
 			bean.setuId(userMessage.getuId());
 			ret.add(bean);
 		}
+		viewUsersClient.close();
 		return ret;
 	}
 
@@ -394,19 +482,23 @@ public class IdeaController implements Serializable {
 		this.likes = likes;
 	}
 
-	public List<TagMessage> getComments() {
+	public List<TagBean> getComments() {
+		if (comments == null)
+			comments = new ArrayList<TagBean>();
 		return comments;
 	}
 
-	public void setComments(List<TagMessage> comments) {
+	public void setComments(List<TagBean> comments) {
 		this.comments = comments;
 	}
 
-	public List<TagMessage> getBuildOns() {
+	public List<TagBean> getBuildOns() {
+		if (buildOns == null)
+			buildOns = new ArrayList<TagBean>();
 		return buildOns;
 	}
 
-	public void setBuildOns(List<TagMessage> buildOns) {
+	public void setBuildOns(List<TagBean> buildOns) {
 		this.buildOns = buildOns;
 	}
 
@@ -440,14 +532,6 @@ public class IdeaController implements Serializable {
 		this.ideaStatuses = ideaStatuses;
 	}
 
-	public String getTagText() {
-		return tagText;
-	}
-
-	public void setTagText(String tagText) {
-		this.tagText = tagText;
-	}
-
 	public StreamedContent getFileContent() {
 		return fileContent;
 	}
@@ -462,6 +546,70 @@ public class IdeaController implements Serializable {
 
 	public void setFileAvail(boolean fileAvail) {
 		this.fileAvail = fileAvail;
+	}
+
+	public boolean isShowIdeaComments() {
+		return showIdeaComments;
+	}
+
+	public void setShowIdeaComments(boolean showIdeaComments) {
+		this.showIdeaComments = showIdeaComments;
+	}
+
+	public boolean isShowIdeaLikes() {
+		return showIdeaLikes;
+	}
+
+	public void setShowIdeaLikes(boolean showIdeaLikes) {
+		this.showIdeaLikes = showIdeaLikes;
+	}
+
+	public boolean isShowIdeaBuildOns() {
+		return showIdeaBuildOns;
+	}
+
+	public void setShowIdeaBuildOns(boolean showIdeaBuildOns) {
+		this.showIdeaBuildOns = showIdeaBuildOns;
+	}
+
+	public String getCommentText() {
+		return commentText;
+	}
+
+	public void setCommentText(String commentText) {
+		this.commentText = commentText;
+	}
+
+	public String getBuildOnText() {
+		return buildOnText;
+	}
+
+	public void setBuildOnText(String buildOnText) {
+		this.buildOnText = buildOnText;
+	}
+
+	public String getLikeCnt() {
+		return likeCnt;
+	}
+
+	public void setLikeCnt(String likeCnt) {
+		this.likeCnt = likeCnt;
+	}
+
+	public String getCommentCnt() {
+		return commentCnt;
+	}
+
+	public void setCommentCnt(String commentCnt) {
+		this.commentCnt = commentCnt;
+	}
+
+	public String getBuildOnCnt() {
+		return buildOnCnt;
+	}
+
+	public void setBuildOnCnt(String buildOnCnt) {
+		this.buildOnCnt = buildOnCnt;
 	}
 
 }

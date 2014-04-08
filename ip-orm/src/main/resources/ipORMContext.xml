@@ -2,7 +2,7 @@
 
 
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-		<property name="url" value="jdbc:mysql://127.0.0.1:3306/ipdb"></property>
+		<property name="url" value="jdbc:mysql://127.0.0.1:3306/ipdb?characterEncoding=UTF-8"></property>
 		<property name="username" value="root"></property>
 		<property name="password" value="password"></property>
 	</bean>
@@ -15,7 +15,7 @@
 				<prop key="hibernate.dialect">
 					org.hibernate.dialect.MySQLDialect
 				</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
 			</props>
 		</property>
 		<property name="mappingResources">
