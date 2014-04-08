@@ -9,6 +9,7 @@
 		<jaxrs:serviceBeans>
 			<ref bean="adminService" />
 			<ref bean="ideaService" />
+			<ref bean="tagService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:extensionMappings>
 			<entry key="json" value="application/json" />

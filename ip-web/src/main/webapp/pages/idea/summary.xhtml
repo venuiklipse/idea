@@ -3,30 +3,50 @@
 	<ui:composition template="/templates/layout.xhtml">
 		<ui:define name="title">Idea Summary</ui:define>
 		<ui:define name="body">
-			<p:panelGrid columns="2" id="pnlEditIdea">
+			<p:dialog id="dlgIdeaComment" widgetVar="dlgIdeaComment" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="@(body)">
+				<p:panelGrid id="pnlIdeaComment">
+				</p:panelGrid>
+			</p:dialog>
+			<p:dialog id="dlgIdeaLike" widgetVar="dlgIdeaLike" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true">
+				<p:tagCloud id="tgLikes" model="#{ideaBean.likes}" />
+			</p:dialog>
+			<p:dialog id="dlgIdeaBuildOn" widgetVar="dlgIdeaBuildOn" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true">
+
+			</p:dialog>
+			<p:panelGrid columns="2" id="pnlSummaryIdea">
 				<p:column>
 					<p:outputLabel id="lblITitle" value="Title : " />
 				</p:column>
 				<p:column>
-					<p:inputText id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" disabled="true" />
+					<h:outputText id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIDesc" value="Description : " />
 				</p:column>
 				<p:column>
-					<p:editor id="txtIDesc" value="#{ideaBean.ideaBean.ideaDesc}" />
+					<h:outputText id="txtIDesc" value="#{ideaBean.ideaBean.ideaDesc}" escape="false" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIBa" value="Business Areas : " />
 				</p:column>
 				<p:column>
-					<p:editor id="txtIBa" value="#{ideaBean.ideaBean.ideaBa}" />
+					<h:outputText id="txtIBa" value="#{ideaBean.ideaBean.ideaBa}" escape="false" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblITag" value="Tags : " />
 				</p:column>
 				<p:column>
-					<p:inputText id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" />
+					<h:outputText id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" escape="false" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblISocial" value="Social : " />
+				</p:column>
+				<p:column>
+					<p:commandLink id="clIdeaLike" actionListener="#{ideaBean.likeIdea}" process="@this">
+						<p:graphicImage id="giIdeaLike" name="like-128.png" library="images" height="25px" width="25px" />
+					</p:commandLink>
+					<p:graphicImage id="giIdeaComment" name="comment.jpg" library="images" height="25px" width="25px" onclick="PF('dlgIdeaComment').show();" />
+					<p:graphicImage id="giIdeaBuildOn" name="lego.png" library="images" height="25px" width="25px" onclick="PF('dlgIdeaBuildOn').show();" />
 				</p:column>
 			</p:panelGrid>
 		</ui:define>

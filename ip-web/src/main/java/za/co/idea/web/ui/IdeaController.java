@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -15,13 +16,18 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
+import org.primefaces.model.tagcloud.DefaultTagCloudItem;
+import org.primefaces.model.tagcloud.DefaultTagCloudModel;
+import org.primefaces.model.tagcloud.TagCloudModel;
 
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
+import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.web.ui.bean.IdeaBean;
 import za.co.idea.web.ui.bean.ListSelectorBean;
@@ -42,6 +48,10 @@ public class IdeaController implements Serializable {
 	 * View Beans
 	 */
 	private List<IdeaBean> viewIdeas;
+	private TagCloudModel likes;
+	private List<TagMessage> comments;
+	private List<TagMessage> buildOns;
+	private String tagText;
 	private StreamedContent fileContent;
 	private boolean fileAvail;
 
@@ -80,7 +90,64 @@ public class IdeaController implements Serializable {
 	}
 
 	public String showSummaryIdea() {
+		comments = fetchAllComments();
+		buildOns = fetchAllBuildOns();
 		return "ideasi";
+	}
+
+	public void likeIdea(ActionEvent event) {
+		List providers = new ArrayList();
+		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		WebClient addTagClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add", providers);
+		addTagClient.header("Content-Type", "application/json");
+		addTagClient.header("Accept", "application/json");
+		TagMessage message = new TagMessage();
+		message.setEntityId(ideaBean.getIdeaId());
+		message.setTagId(System.currentTimeMillis());
+		message.setTeId(1);
+		message.setTtId(1);
+		message.setUserId(ideaBean.getCrtdById());
+		Response response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message);
+		if (response.getStatus() != Response.Status.OK.getStatusCode() && response.getStatus() != Response.Status.EXPECTATION_FAILED.getStatusCode())
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
+		likes = fetchAllLikes();
+		RequestContext.getCurrentInstance().execute("PF('dlgIdeaLike').show();");
+	}
+
+	public void commentIdea(ActionEvent event) {
+		List providers = new ArrayList();
+		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		WebClient addTagClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add", providers);
+		addTagClient.header("Content-Type", "application/json");
+		addTagClient.header("Accept", "application/json");
+		TagMessage message = new TagMessage();
+		message.setEntityId(ideaBean.getIdeaId());
+		message.setTagId(System.currentTimeMillis());
+		message.setTagText(tagText);
+		message.setTeId(1);
+		message.setTtId(2);
+		message.setUserId(ideaBean.getCrtdById());
+		Response response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message);
+		if (response.getStatus() != Response.Status.OK.getStatusCode())
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
+	}
+
+	public void buildOnIdea(ActionEvent event) {
+		List providers = new ArrayList();
+		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		WebClient addTagClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add", providers);
+		addTagClient.header("Content-Type", "application/json");
+		addTagClient.header("Accept", "application/json");
+		TagMessage message = new TagMessage();
+		message.setEntityId(ideaBean.getIdeaId());
+		message.setTagId(System.currentTimeMillis());
+		message.setTagText(tagText);
+		message.setTeId(1);
+		message.setTtId(3);
+		message.setUserId(ideaBean.getCrtdById());
+		Response response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message);
+		if (response.getStatus() != Response.Status.OK.getStatusCode())
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
 	}
 
 	public String showCreateIdea() {
@@ -167,6 +234,29 @@ public class IdeaController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
+	}
+
+	private TagCloudModel fetchAllLikes() {
+		TagCloudModel likes = new DefaultTagCloudModel();
+		List providers = new ArrayList();
+		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		WebClient fetchIdeaLikesClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/1", providers);
+		fetchIdeaLikesClient.header("Content-Type", "application/json");
+		fetchIdeaLikesClient.header("Accept", "application/json");
+		List<TagMessage> likeList = new ArrayList<TagMessage>(fetchIdeaLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
+		for (TagMessage tagMessage : likeList)
+			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
+		return likes;
+	}
+
+	private List<TagMessage> fetchAllComments() {
+		List<TagMessage> comments = new ArrayList<TagMessage>();
+		return comments;
+	}
+
+	private List<TagMessage> fetchAllBuildOns() {
+		List<TagMessage> comments = new ArrayList<TagMessage>();
+		return comments;
 	}
 
 	private List<IdeaBean> fetchAllIdeas() {
@@ -296,6 +386,30 @@ public class IdeaController implements Serializable {
 		this.viewIdeas = viewIdeas;
 	}
 
+	public TagCloudModel getLikes() {
+		return likes;
+	}
+
+	public void setLikes(TagCloudModel likes) {
+		this.likes = likes;
+	}
+
+	public List<TagMessage> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<TagMessage> comments) {
+		this.comments = comments;
+	}
+
+	public List<TagMessage> getBuildOns() {
+		return buildOns;
+	}
+
+	public void setBuildOns(List<TagMessage> buildOns) {
+		this.buildOns = buildOns;
+	}
+
 	public List<UserBean> getAdmUsers() {
 		if (admUsers == null)
 			admUsers = new ArrayList<UserBean>();
@@ -324,6 +438,14 @@ public class IdeaController implements Serializable {
 
 	public void setIdeaStatuses(List<ListSelectorBean> ideaStatuses) {
 		this.ideaStatuses = ideaStatuses;
+	}
+
+	public String getTagText() {
+		return tagText;
+	}
+
+	public void setTagText(String tagText) {
+		this.tagText = tagText;
 	}
 
 	public StreamedContent getFileContent() {

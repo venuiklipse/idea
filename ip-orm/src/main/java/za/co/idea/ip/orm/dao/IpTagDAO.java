@@ -2,7 +2,10 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -135,6 +138,51 @@ public class IpTagDAO extends HibernateDaoSupport {
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public List getTagByFilterA(Long entityId, Integer teId, Integer ttId) {
+		log.debug("Fetching Tag by Query :: getTagByFilterA");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getTagByFilterA");
+			query.setLong("entityId", entityId);
+			query.setInteger("ttId", ttId);
+			query.setInteger("teId", teId);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpTag tag = (IpTag) object;
+				Hibernate.initialize(tag.getIpUser());
+				Hibernate.initialize(tag.getIpTagEntityType());
+				Hibernate.initialize(tag.getIpTagType());
+			}
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public List getTagByFilterB(Long entityId, Integer teId, Integer ttId, Long userId) {
+		log.debug("Fetching Tag by Query :: getTagByFilterB");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getTagByFilterB");
+			query.setLong("entityId", entityId);
+			query.setLong("userId", userId);
+			query.setInteger("ttId", ttId);
+			query.setInteger("teId", teId);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpTag tag = (IpTag) object;
+				Hibernate.initialize(tag.getIpUser());
+				Hibernate.initialize(tag.getIpTagEntityType());
+				Hibernate.initialize(tag.getIpTagType());
+			}
+			return ret;
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;
