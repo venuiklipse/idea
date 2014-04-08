@@ -56,7 +56,6 @@ public class ImageController implements Serializable {
 	}
 
 	public void changeImgSrc(ValueChangeEvent event) {
-		System.out.println(event.getSource() + " :: " + event.getNewValue());
 		if (uploadSrc.equalsIgnoreCase("srcWebCam")) {
 			webCamEnabled = true;
 			uploadEnabled = false;

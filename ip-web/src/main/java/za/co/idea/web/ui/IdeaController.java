@@ -135,7 +135,7 @@ public class IdeaController implements Serializable {
 		message.setTagId(System.currentTimeMillis());
 		message.setTeId(1);
 		message.setTtId(1);
-		message.setUserId(ideaBean.getCrtdById());
+		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 		message.setDuplicate(false);
 		Response response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message);
 		if (response.getStatus() != Response.Status.OK.getStatusCode() && response.getStatus() != Response.Status.EXPECTATION_FAILED.getStatusCode())
@@ -162,7 +162,7 @@ public class IdeaController implements Serializable {
 		message.setTeId(1);
 		message.setTtId(2);
 		message.setDuplicate(true);
-		message.setUserId(ideaBean.getCrtdById());
+		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 		Response response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message);
 		if (response.getStatus() != Response.Status.OK.getStatusCode())
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
@@ -189,7 +189,7 @@ public class IdeaController implements Serializable {
 		message.setTeId(1);
 		message.setTtId(3);
 		message.setDuplicate(true);
-		message.setUserId(ideaBean.getCrtdById());
+		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 		Response response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message);
 		if (response.getStatus() != Response.Status.OK.getStatusCode())
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Build-On", "Error While Saving Build-On"));
@@ -226,7 +226,7 @@ public class IdeaController implements Serializable {
 			addIdeaClient.header("Accept", "application/json");
 			IdeaMessage ideaMessage = new IdeaMessage();
 			ideaMessage.setContentType(ideaBean.getContentType());
-			ideaMessage.setCrtdById(ideaBean.getCrtdById());
+			ideaMessage.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			ideaMessage.setCrtdDate(new Date());
 			if (ideaBean.getFileUpload() != null && ideaBean.getFileUpload().length() > 0)
 				ideaMessage.setFileUpload(Base64.encodeBase64String(ideaBean.getFileUpload().getBytes()));

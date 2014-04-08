@@ -290,7 +290,6 @@ public class AdminService {
 	public Boolean checkScreenName(@PathParam("sc") String sc) {
 		List usersByScName = ipUserDAO.findByUserScreenName(sc);
 		Boolean ret = (usersByScName != null && usersByScName.size() > 0);
-		System.out.println("User Status for Screen Name :: " + sc + " is :: " + ret);
 		return ret;
 	}
 

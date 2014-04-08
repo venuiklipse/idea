@@ -43,15 +43,6 @@
 				<p:column>
 					<p:fileUpload id="fuIUpload" fileUploadListener="#{ideaBean.fileUploadHandle}" multiple="false" />
 				</p:column>
-				<p:column>
-					<p:outputLabel id="lblCrtdBy" value="Created By : " />
-				</p:column>
-				<p:column>
-					<p:selectOneMenu id="somACrtdBy" value="#{ideaBean.ideaBean.crtdById}">
-						<f:selectItem itemLabel="Select One" itemValue="" />
-						<f:selectItems value="#{ideaBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
-					</p:selectOneMenu>
-				</p:column>
 				<p:row>
 					<p:column colspan="2">
 						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{ideaBean.saveIdea}" />

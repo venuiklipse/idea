@@ -69,8 +69,14 @@ public class AdminController implements Serializable {
 			bean.setIsActive(userMessage.getIsActive());
 			bean.setuId(userMessage.getuId());
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", bean);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userId", bean.getuId());
 			return "home";
 		}
+	}
+
+	public String logout() {
+		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+		return "login";
 	}
 
 	public String showViewUsers() {
