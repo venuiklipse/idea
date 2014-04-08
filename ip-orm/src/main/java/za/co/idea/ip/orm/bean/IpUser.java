@@ -12,10 +12,7 @@ public class IpUser implements java.io.Serializable {
 
 	// Fields
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7226648133888328599L;
+	private static final long serialVersionUID = -2264351377159331291L;
 	private Long userId;
 	private String userFName;
 	private String userLName;
@@ -35,6 +32,7 @@ public class IpUser implements java.io.Serializable {
 	private Set ipTags = new HashSet(0);
 	private Set ipPointses = new HashSet(0);
 	private Set ipFunctions = new HashSet(0);
+	private Set ipLogins = new HashSet(0);
 	private Set ipClaims = new HashSet(0);
 	private Set ipGroups = new HashSet(0);
 	private Set ipChallenges = new HashSet(0);
@@ -61,7 +59,7 @@ public class IpUser implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpUser(Long userId, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userAvatar, String userStatus, Set ipIdeas, Set ipSolutions, Set ipTags, Set ipPointses, Set ipFunctions, Set ipClaims, Set ipGroups, Set ipChallenges) {
+	public IpUser(Long userId, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userAvatar, String userStatus, Set ipIdeas, Set ipSolutions, Set ipTags, Set ipPointses, Set ipFunctions, Set ipLogins, Set ipClaims, Set ipGroups, Set ipChallenges) {
 		this.userId = userId;
 		this.userFName = userFName;
 		this.userLName = userLName;
@@ -81,6 +79,7 @@ public class IpUser implements java.io.Serializable {
 		this.ipTags = ipTags;
 		this.ipPointses = ipPointses;
 		this.ipFunctions = ipFunctions;
+		this.ipLogins = ipLogins;
 		this.ipClaims = ipClaims;
 		this.ipGroups = ipGroups;
 		this.ipChallenges = ipChallenges;
@@ -238,6 +237,14 @@ public class IpUser implements java.io.Serializable {
 
 	public void setIpFunctions(Set ipFunctions) {
 		this.ipFunctions = ipFunctions;
+	}
+
+	public Set getIpLogins() {
+		return this.ipLogins;
+	}
+
+	public void setIpLogins(Set ipLogins) {
+		this.ipLogins = ipLogins;
 	}
 
 	public Set getIpClaims() {

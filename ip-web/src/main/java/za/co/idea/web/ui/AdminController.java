@@ -9,6 +9,8 @@ import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -35,6 +37,41 @@ public class AdminController implements Serializable {
 	 */
 	private List<UserBean> viewUsers;
 	private List<GroupBean> viewGroups;
+	private boolean available;
+
+	public String login() {
+		List providers = new ArrayList();
+		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		WebClient loginClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())), providers);
+		loginClient.header("Content-Type", "application/json");
+		loginClient.header("Accept", "application/json");
+		UserMessage userMessage = loginClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
+		if (userMessage == null) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid User Name Password", "Invalid User Name Password");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		} else {
+			UserBean bean = new UserBean();
+			bean.setAvatar(userMessage.getAvatar());
+			bean.setBio(userMessage.getBio());
+			bean.setContact(userMessage.getContact());
+			bean.seteMail(userMessage.geteMail());
+			bean.setFbHandle(userMessage.getFbHandle());
+			bean.setfName(userMessage.getfName());
+			bean.setIdNum(userMessage.getIdNum());
+			bean.setIsActive(userMessage.getIsActive());
+			bean.setlName(userMessage.getlName());
+			bean.setmName(userMessage.getmName());
+			bean.setPwd(userMessage.getPwd());
+			bean.setScName(userMessage.getScName());
+			bean.setSkills(userMessage.getSkills());
+			bean.setTwHandle(userMessage.getTwHandle());
+			bean.setIsActive(userMessage.getIsActive());
+			bean.setuId(userMessage.getuId());
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", bean);
+			return "home";
+		}
+	}
 
 	public String showViewUsers() {
 		try {
@@ -69,8 +106,31 @@ public class AdminController implements Serializable {
 		}
 	}
 
+	public String checkAvailability() {
+		List providers = new ArrayList();
+		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		WebClient checkAvailablityClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/check/screenName/" + userBean.getScName(), providers);
+		checkAvailablityClient.header("Content-Type", "application/json");
+		checkAvailablityClient.header("Accept", "application/json");
+		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
+		available = avail.booleanValue();
+		if (available) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Screen Name Not Available", "Screen Name Not Available");
+			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
+		} else {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Screen Name Available", "Screen Name Available");
+			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
+		}
+		return "";
+	}
+
 	public String saveUser() {
 		try {
+			if (available) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Screen Name Not Available", "Screen Name Not Available");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
 			List providers = new ArrayList();
 			providers.add(new JacksonJsonProvider(new ObjectMapper()));
 			WebClient addUserClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/add", providers);
@@ -389,6 +449,14 @@ public class AdminController implements Serializable {
 
 	public void setViewGroups(List<GroupBean> viewGroups) {
 		this.viewGroups = viewGroups;
+	}
+
+	public boolean isAvailable() {
+		return available;
+	}
+
+	public void setAvailable(boolean available) {
+		this.available = available;
 	}
 
 }

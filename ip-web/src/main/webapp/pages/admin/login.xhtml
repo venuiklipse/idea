@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="/templates/main.xhtml">
+	<ui:define name="title">Login</ui:define>
+	<ui:define name="body">
+		<h:panelGrid id="pnlLogin" columns="2">
+			<p:column>
+				<p:outputLabel value="Enter Login ID: " />
+			</p:column>
+			<p:column>
+				<p:inputText id="txtScName" value="#{adminBean.userBean.scName}" required="true" requiredMessage="User Name is Mandatory" />
+			</p:column>
+			<p:column>
+				<p:outputLabel value="Enter Password: " />
+			</p:column>
+			<p:column>
+				<p:password id="txtPwd" value="#{adminBean.userBean.pwd}" feedback="false" required="true" requiredMessage="Password is Mandatory" />
+			</p:column>
+			<p:column>
+				<p:commandButton id="btnSave" action="#{adminBean.login}" value="Login" ajax="false" />
+			</p:column>
+			<p:column></p:column>
+		</h:panelGrid>
+	</ui:define>
+</ui:composition>
+</html>

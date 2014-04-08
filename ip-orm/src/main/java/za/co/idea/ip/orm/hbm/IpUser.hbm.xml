@@ -79,6 +79,12 @@
             </key>
             <one-to-many class="za.co.idea.ip.orm.bean.IpFunction" />
         </set>
+        <set name="ipLogins" inverse="true">
+            <key>
+                <column name="login_user_id" not-null="true" />
+            </key>
+            <one-to-many class="za.co.idea.ip.orm.bean.IpLogin" />
+        </set>
         <set name="ipClaims" inverse="true">
             <key>
                 <column name="user_id" />

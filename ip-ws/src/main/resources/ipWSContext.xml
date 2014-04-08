@@ -4,6 +4,7 @@
 	<bean id="adminService" class="za.co.idea.ip.ws.AdminService">
 		<property name="ipGroupDAO" ref="IpGroupDAO" />
 		<property name="ipUserDAO" ref="IpUserDAO" />
+		<property name="ipLoginDAO" ref="IpLoginDAO" />
 	</bean>
 	<bean id="ideaService" class="za.co.idea.ip.ws.IdeaService">
 		<property name="ipIdeaCatDAO" ref="IpIdeaCatDAO" />

@@ -13,17 +13,25 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.codec.digest.Md5Crypt;
+
 import za.co.idea.ip.orm.bean.IpGroup;
+import za.co.idea.ip.orm.bean.IpLogin;
 import za.co.idea.ip.orm.bean.IpUser;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
+import za.co.idea.ip.orm.dao.IpLoginDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 
+@SuppressWarnings("rawtypes")
 @Path(value = "/as")
 public class AdminService {
 	private IpGroupDAO ipGroupDAO;
 	private IpUserDAO ipUserDAO;
+	private IpLoginDAO ipLoginDAO;
 
 	@POST
 	@Path("/group/add")
@@ -71,7 +79,6 @@ public class AdminService {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@GET
 	@Path("/group/list")
 	@Produces("application/json")
@@ -146,6 +153,17 @@ public class AdminService {
 			if (user.getTwHandle() != null && user.getTwHandle().length() > 0)
 				ipUser.setUserTwHandle(user.getTwHandle());
 			ipUserDAO.save(ipUser);
+			IpLogin ipLogin = new IpLogin();
+			ipLogin.setIpUser(ipUser);
+			ipLogin.setLoginName(ipUser.getUserScreenName());
+			ipLogin.setLoginId(user.getuId());
+			ipLogin.setLoginPwd(Base64.encodeBase64URLSafeString(DigestUtils.md5(user.getPwd().getBytes())));
+			try {
+				ipLoginDAO.save(ipLogin);
+			} catch (Exception e) {
+				ipUserDAO.delete(ipUser);
+				throw new RuntimeException("Cannot create user :: " + e.getMessage());
+			}
 			return Response.ok().build();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -180,6 +198,16 @@ public class AdminService {
 			if (user.getTwHandle() != null && user.getTwHandle().length() > 0)
 				ipUser.setUserTwHandle(user.getTwHandle());
 			ipUserDAO.merge(ipUser);
+			IpLogin ipLogin = new IpLogin();
+			ipLogin.setIpUser(ipUser);
+			ipLogin.setLoginName(ipUser.getUserScreenName());
+			ipLogin.setLoginId(user.getuId());
+			ipLogin.setLoginPwd(Md5Crypt.md5Crypt(user.getPwd().getBytes()));
+			try {
+				ipLoginDAO.merge(ipLogin);
+			} catch (Exception e) {
+				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
+			}
 			return Response.ok().build();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -187,7 +215,6 @@ public class AdminService {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@GET
 	@Path("/user/list")
 	@Produces("application/json")
@@ -257,6 +284,54 @@ public class AdminService {
 		return user;
 	}
 
+	@GET
+	@Path("/user/check/screenName/{sc}")
+	@Produces("application/json")
+	public Boolean checkScreenName(@PathParam("sc") String sc) {
+		List usersByScName = ipUserDAO.findByUserScreenName(sc);
+		Boolean ret = (usersByScName != null && usersByScName.size() > 0);
+		System.out.println("User Status for Screen Name :: " + sc + " is :: " + ret);
+		return ret;
+	}
+
+	@GET
+	@Path("/user/login/{login}/{pwd}")
+	@Produces("application/json")
+	public UserMessage login(@PathParam("login") String login, @PathParam("pwd") String pwd) {
+		List logins = ipLoginDAO.verifyLogin(login, pwd);
+		if (logins.size() == 0)
+			return null;
+		else {
+			UserMessage user = new UserMessage();
+			try {
+				IpLogin ipLogin = (IpLogin) logins.get(0);
+				IpUser ipUser = ipLogin.getIpUser();
+				user.setuId(ipUser.getUserId());
+				user.setContact(ipUser.getUserContact());
+				user.seteMail(ipUser.getUserEmail());
+				user.setfName(ipUser.getUserFName());
+				user.setIdNum(ipUser.getUserIdNum());
+				user.setlName(ipUser.getUserLName());
+				user.setScName(ipUser.getUserScreenName());
+				user.setSkills(ipUser.getUserSkills());
+				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
+				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
+					user.setFbHandle(ipUser.getUserFbHandle());
+				if (ipUser.getUserAvatar() != null && ipUser.getUserAvatar().length() > 0)
+					user.setAvatar(ipUser.getUserAvatar());
+				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
+					user.setBio(ipUser.getUserBio());
+				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
+					user.setmName(ipUser.getUserMName());
+				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
+					user.setTwHandle(ipUser.getUserTwHandle());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return user;
+		}
+	}
+
 	public IpGroupDAO getIpGroupDAO() {
 		return ipGroupDAO;
 	}
@@ -271,5 +346,13 @@ public class AdminService {
 
 	public void setIpUserDAO(IpUserDAO ipUserDAO) {
 		this.ipUserDAO = ipUserDAO;
+	}
+
+	public IpLoginDAO getIpLoginDAO() {
+		return ipLoginDAO;
+	}
+
+	public void setIpLoginDAO(IpLoginDAO ipLoginDAO) {
+		this.ipLoginDAO = ipLoginDAO;
 	}
 }
