@@ -25,6 +25,7 @@ import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/is")
 public class IdeaService {
 	private IpIdeaDAO ipIdeaDAO;
@@ -32,12 +33,11 @@ public class IdeaService {
 	private IpIdeaStatusDAO ipIdeaStatusDAO;
 	private IpUserDAO ipUserDAO;
 
-	@SuppressWarnings("rawtypes")
 	@GET
 	@Path("/idea/cat/list")
 	@Produces("application/json")
-	public List<MetaDataMessage> listIdeaCat() {
-		List<MetaDataMessage> ret = new ArrayList<MetaDataMessage>();
+	public <T extends MetaDataMessage> List<T> listIdeaCat() {
+		List<T> ret = new ArrayList<T>();
 		try {
 			List ideaCats = ipIdeaCatDAO.findAll();
 			for (Object object : ideaCats) {
@@ -45,7 +45,7 @@ public class IdeaService {
 				MetaDataMessage message = new MetaDataMessage();
 				message.setId(cat.getIcId());
 				message.setDesc(cat.getIcDesc());
-				ret.add(message);
+				ret.add((T) message);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -53,12 +53,11 @@ public class IdeaService {
 		return ret;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@GET
 	@Path("/idea/status/list")
 	@Produces("application/json")
-	public List<MetaDataMessage> listIdeaStatus() {
-		List<MetaDataMessage> ret = new ArrayList<MetaDataMessage>();
+	public <T extends MetaDataMessage> List<T> listIdeaStatus() {
+		List<T> ret = new ArrayList<T>();
 		try {
 			List ideaStatuses = ipIdeaStatusDAO.findAll();
 			for (Object object : ideaStatuses) {
@@ -66,7 +65,7 @@ public class IdeaService {
 				MetaDataMessage message = new MetaDataMessage();
 				message.setId(status.getIsId());
 				message.setDesc(status.getIsDesc());
-				ret.add(message);
+				ret.add((T) message);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,10 +129,16 @@ public class IdeaService {
 			ipIdea.setIpUser(ipUserDAO.findById(idea.getCrtdById()));
 		try {
 			ipIdeaDAO.save(ipIdea);
-			return ResponseMessage.createSuccess();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseMessage.createException(e);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
 		}
 	}
 
@@ -163,19 +168,24 @@ public class IdeaService {
 			ipIdea.setIpUser(ipUserDAO.findById(idea.getCrtdById()));
 		try {
 			ipIdeaDAO.merge(ipIdea);
-			return ResponseMessage.createSuccess();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseMessage.createException(e);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@GET
 	@Path("/idea/list")
 	@Produces("application/json")
-	public List<IdeaMessage> listIdea() {
-		List<IdeaMessage> ret = new ArrayList<IdeaMessage>();
+	public <T extends IdeaMessage> List<T> listIdea() {
+		List<T> ret = new ArrayList<T>();
 		try {
 			List ideas = ipIdeaDAO.findAll();
 			for (Object object : ideas) {
@@ -199,7 +209,7 @@ public class IdeaService {
 					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
 				if (ipIdea.getIpUser() != null)
 					idea.setCrtdById(ipIdea.getIpUser().getUserId());
-				ret.add(idea);
+				ret.add((T) idea);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

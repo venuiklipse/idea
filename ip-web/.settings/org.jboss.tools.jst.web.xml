@@ -56,8 +56,6 @@
   location="/noformat/java/repository/wsdl4j/wsdl4j/1.6.3/wsdl4j-1.6.3.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-cxf-rt-core-2.7.10.jar"
   location="/noformat/java/repository/org/apache/cxf/cxf-rt-core/2.7.10/cxf-rt-core-2.7.10.jar" model-entity="FileSystemJar"/>
- <file-system NAME="lib-jaxb-impl-2.2.6.jar"
-  location="/noformat/java/repository/com/sun/xml/bind/jaxb-impl/2.2.6/jaxb-impl-2.2.6.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-javax.ws.rs-api-2.0-m10.jar"
   location="/noformat/java/repository/javax/ws/rs/javax.ws.rs-api/2.0-m10/javax.ws.rs-api-2.0-m10.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-cxf-rt-bindings-xml-2.7.10.jar"

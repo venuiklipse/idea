@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
-@XmlRootElement(name="functionMessage")
+
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.annotate.JsonTypeInfo.As;
+import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
+
+@JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "class")
+@XmlRootElement(name = "functionMessage")
 public class FunctionMessage {
 	private Long funcId;
 	private String funcName;

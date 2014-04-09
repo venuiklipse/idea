@@ -5,31 +5,21 @@
 	http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
 	http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
 	<import resource="classpath:ipWSContext.xml" />
-	<util:list id="jsonTypes">
-		<value>application/json</value>
-	</util:list>
+	<bean id="jacksonMapper" class="za.co.idea.ip.ws.util.CustomObjectMapper" />
 	<jaxrs:server id="ipService" address="/ip">
 		<jaxrs:serviceBeans>
 			<ref bean="adminService" />
 			<ref bean="ideaService" />
 			<ref bean="tagService" />
 		</jaxrs:serviceBeans>
+		<jaxrs:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">
+				<property name="mapper" ref="jacksonMapper" />
+			</bean>
+		</jaxrs:providers>
 		<jaxrs:extensionMappings>
 			<entry key="json" value="application/json" />
 		</jaxrs:extensionMappings>
-		<jaxrs:providers>
-			<bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-				<property name="produceMediaTypes" ref="jsonTypes" />
-				<property name="consumeMediaTypes" ref="jsonTypes" />
-			</bean>
-		</jaxrs:providers>
-		<jaxrs:inInterceptors>
-			<bean class="org.apache.cxf.jaxrs.provider.jsonp.JsonpInInterceptor" />
-		</jaxrs:inInterceptors>
-		<jaxrs:outInterceptors>
-			<bean class="org.apache.cxf.jaxrs.provider.jsonp.JsonpPreStreamInterceptor" />
-			<bean class="org.apache.cxf.jaxrs.provider.jsonp.JsonpPostStreamInterceptor" />
-		</jaxrs:outInterceptors>
 		<jaxrs:languageMappings>
 			<entry key="en" value="en-gb" />
 		</jaxrs:languageMappings>

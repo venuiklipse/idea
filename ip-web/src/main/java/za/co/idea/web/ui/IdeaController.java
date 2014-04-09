@@ -3,6 +3,7 @@ package za.co.idea.web.ui;
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
-import org.apache.cxf.jaxrs.provider.json.JSONProvider;
+import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -28,13 +29,13 @@ import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
+import za.co.idea.ip.ws.util.CustomObjectMapper;
 import za.co.idea.ip.ws.util.NumericCounter;
 import za.co.idea.web.ui.bean.IdeaBean;
 import za.co.idea.web.ui.bean.ListSelectorBean;
 import za.co.idea.web.ui.bean.TagBean;
 import za.co.idea.web.ui.bean.UserBean;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
 public class IdeaController implements Serializable {
 
 	private static final long serialVersionUID = -2647562847121760969L;
@@ -58,6 +59,16 @@ public class IdeaController implements Serializable {
 	private String commentCnt;
 	private String buildOnCnt;
 	private static final NumericCounter COUNTER = new NumericCounter();
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private WebClient createCustomClient(String url) {
+		List providers = new ArrayList();
+		providers.add(new JacksonJaxbJsonProvider(new CustomObjectMapper(), JacksonJaxbJsonProvider.DEFAULT_ANNOTATIONS));
+		WebClient client = WebClient.create(url, providers);
+		client.header("Content-Type", "application/json");
+		client.header("Accept", "application/json");
+		return client;
+	}
 
 	public String showViewIdeas() {
 		try {
@@ -127,15 +138,7 @@ public class IdeaController implements Serializable {
 	}
 
 	public String likeIdea() {
-		List providers = new ArrayList();
-		JSONProvider provider = new JSONProvider();
-		ArrayList<String> mediaTypes = new ArrayList<String>();
-		mediaTypes.add(MediaType.APPLICATION_JSON);
-		provider.setProduceMediaTypes(mediaTypes);
-		providers.add(provider);
-		WebClient addTagClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add", providers);
-		addTagClient.header("Content-Type", "application/json");
-		addTagClient.header("Accept", "application/json");
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
 		message.setTagId(COUNTER.nextLong());
@@ -156,15 +159,7 @@ public class IdeaController implements Serializable {
 	}
 
 	public String commentIdea() {
-		List providers = new ArrayList();
-		JSONProvider provider = new JSONProvider();
-		ArrayList<String> mediaTypes = new ArrayList<String>();
-		mediaTypes.add(MediaType.APPLICATION_JSON);
-		provider.setProduceMediaTypes(mediaTypes);
-		providers.add(provider);
-		WebClient addTagClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add", providers);
-		addTagClient.header("Content-Type", "application/json");
-		addTagClient.header("Accept", "application/json");
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
 		message.setTagId(COUNTER.nextLong());
@@ -187,15 +182,7 @@ public class IdeaController implements Serializable {
 	}
 
 	public String buildOnIdea() {
-		List providers = new ArrayList();
-		JSONProvider provider = new JSONProvider();
-		ArrayList<String> mediaTypes = new ArrayList<String>();
-		mediaTypes.add(MediaType.APPLICATION_JSON);
-		provider.setProduceMediaTypes(mediaTypes);
-		providers.add(provider);
-		WebClient addTagClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add", providers);
-		addTagClient.header("Content-Type", "application/json");
-		addTagClient.header("Accept", "application/json");
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
 		message.setTagId(COUNTER.nextLong());
@@ -235,15 +222,7 @@ public class IdeaController implements Serializable {
 
 	public String saveIdea() {
 		try {
-			List providers = new ArrayList();
-			JSONProvider provider = new JSONProvider();
-			ArrayList<String> mediaTypes = new ArrayList<String>();
-			mediaTypes.add(MediaType.APPLICATION_JSON);
-			provider.setProduceMediaTypes(mediaTypes);
-			providers.add(provider);
-			WebClient addIdeaClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/add", providers);
-			addIdeaClient.header("Content-Type", "application/json");
-			addIdeaClient.header("Accept", "application/json");
+			WebClient addIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/add");
 			IdeaMessage ideaMessage = new IdeaMessage();
 			ideaMessage.setContentType(ideaBean.getContentType());
 			ideaMessage.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
@@ -279,15 +258,7 @@ public class IdeaController implements Serializable {
 
 	public String updateIdea() {
 		try {
-			List providers = new ArrayList();
-			JSONProvider provider = new JSONProvider();
-			ArrayList<String> mediaTypes = new ArrayList<String>();
-			mediaTypes.add(MediaType.APPLICATION_JSON);
-			provider.setProduceMediaTypes(mediaTypes);
-			providers.add(provider);
-			WebClient updateIdeaClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/modify", providers);
-			updateIdeaClient.header("Content-Type", "application/json");
-			updateIdeaClient.header("Accept", "application/json");
+			WebClient updateIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/modify");
 			IdeaMessage ideaMessage = new IdeaMessage();
 			ideaMessage.setContentType(ideaBean.getContentType());
 			ideaMessage.setCrtdById(ideaBean.getCrtdById());
@@ -323,16 +294,8 @@ public class IdeaController implements Serializable {
 
 	private TagCloudModel fetchAllLikes() {
 		TagCloudModel likes = new DefaultTagCloudModel();
-		List providers = new ArrayList();
-		JSONProvider provider = new JSONProvider();
-		ArrayList<String> mediaTypes = new ArrayList<String>();
-		mediaTypes.add(MediaType.APPLICATION_JSON);
-		provider.setProduceMediaTypes(mediaTypes);
-		providers.add(provider);
-		WebClient fetchIdeaLikesClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/1", providers);
-		fetchIdeaLikesClient.header("Content-Type", "application/json");
-		fetchIdeaLikesClient.header("Accept", "application/json");
-		List<TagMessage> likeList = new ArrayList<TagMessage>(fetchIdeaLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
+		WebClient fetchIdeaLikesClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/1");
+		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchIdeaLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		for (TagMessage tagMessage : likeList)
 			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
 		fetchIdeaLikesClient.close();
@@ -340,16 +303,8 @@ public class IdeaController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllComments() {
-		List providers = new ArrayList();
-		JSONProvider provider = new JSONProvider();
-		ArrayList<String> mediaTypes = new ArrayList<String>();
-		mediaTypes.add(MediaType.APPLICATION_JSON);
-		provider.setProduceMediaTypes(mediaTypes);
-		providers.add(provider);
-		WebClient fetchIdeaCommentsClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/2", providers);
-		fetchIdeaCommentsClient.header("Content-Type", "application/json");
-		fetchIdeaCommentsClient.header("Accept", "application/json");
-		ArrayList<TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
+		WebClient fetchIdeaCommentsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/2");
+		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchIdeaCommentsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
 		for (TagMessage msg : msgs) {
@@ -362,16 +317,8 @@ public class IdeaController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllBuildOns() {
-		List providers = new ArrayList();
-		JSONProvider provider = new JSONProvider();
-		ArrayList<String> mediaTypes = new ArrayList<String>();
-		mediaTypes.add(MediaType.APPLICATION_JSON);
-		provider.setProduceMediaTypes(mediaTypes);
-		providers.add(provider);
-		WebClient fetchIdeaBuildOnsClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/3", providers);
-		fetchIdeaBuildOnsClient.header("Content-Type", "application/json");
-		fetchIdeaBuildOnsClient.header("Accept", "application/json");
-		ArrayList<TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
+		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/3");
+		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchIdeaBuildOnsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
 		for (TagMessage msg : msgs) {
@@ -385,16 +332,8 @@ public class IdeaController implements Serializable {
 
 	private List<IdeaBean> fetchAllIdeas() {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
-		List providers = new ArrayList();
-		JSONProvider provider = new JSONProvider();
-		ArrayList<String> mediaTypes = new ArrayList<String>();
-		mediaTypes.add(MediaType.APPLICATION_JSON);
-		provider.setProduceMediaTypes(mediaTypes);
-		providers.add(provider);
-		WebClient fetchIdeaClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/list", providers);
-		fetchIdeaClient.header("Content-Type", "application/json");
-		fetchIdeaClient.header("Accept", "application/json");
-		List<IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list");
+		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = new IdeaBean();
 			bean.setContentType(ideaMessage.getContentType());
@@ -420,16 +359,8 @@ public class IdeaController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllIdeaStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		List providers = new ArrayList();
-		JSONProvider provider = new JSONProvider();
-		ArrayList<String> mediaTypes = new ArrayList<String>();
-		mediaTypes.add(MediaType.APPLICATION_JSON);
-		provider.setProduceMediaTypes(mediaTypes);
-		providers.add(provider);
-		WebClient viewIdeaSelectClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/status/list", providers);
-		viewIdeaSelectClient.header("Content-Type", "application/json");
-		viewIdeaSelectClient.header("Accept", "application/json");
-		List<MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
@@ -442,16 +373,8 @@ public class IdeaController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllIdeaCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		List providers = new ArrayList();
-		JSONProvider provider = new JSONProvider();
-		ArrayList<String> mediaTypes = new ArrayList<String>();
-		mediaTypes.add(MediaType.APPLICATION_JSON);
-		provider.setProduceMediaTypes(mediaTypes);
-		providers.add(provider);
-		WebClient viewIdeaSelectClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/cat/list", providers);
-		viewIdeaSelectClient.header("Content-Type", "application/json");
-		viewIdeaSelectClient.header("Accept", "application/json");
-		List<MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/cat/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
@@ -477,16 +400,8 @@ public class IdeaController implements Serializable {
 
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		List providers = new ArrayList();
-		JSONProvider provider = new JSONProvider();
-		ArrayList<String> mediaTypes = new ArrayList<String>();
-		mediaTypes.add(MediaType.APPLICATION_JSON);
-		provider.setProduceMediaTypes(mediaTypes);
-		providers.add(provider);
-		WebClient viewUsersClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/list", providers);
-		viewUsersClient.header("Content-Type", "application/json");
-		viewUsersClient.header("Accept", "application/json");
-		List<UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
+		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list");
+		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		for (UserMessage userMessage : users) {
 			UserBean bean = new UserBean();
 			bean.setAvatar(userMessage.getAvatar());

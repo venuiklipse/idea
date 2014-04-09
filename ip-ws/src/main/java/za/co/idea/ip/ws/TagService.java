@@ -21,6 +21,7 @@ import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 
+@SuppressWarnings("unchecked")
 @Path(value = "/ts")
 public class TagService {
 	private IpTagDAO ipTagDAO;
@@ -31,12 +32,11 @@ public class TagService {
 	private IpChallengeDAO ipChallengeDAO;
 	private IpSolutionDAO ipSolutionDAO;
 
-	@SuppressWarnings("unchecked")
 	@GET
 	@Path("/tag/get/{entityId}/{teId}/{ttId}")
 	@Produces("application/json")
-	public List<TagMessage> getTag(@PathParam("entityId") Long entityId, @PathParam("teId") Integer teId, @PathParam("ttId") Integer ttId) {
-		List<TagMessage> ret = new ArrayList<TagMessage>();
+	public <T extends TagMessage> List<T> getTag(@PathParam("entityId") Long entityId, @PathParam("teId") Integer teId, @PathParam("ttId") Integer ttId) {
+		List<T> ret = new ArrayList<T>();
 		try {
 			List<IpTag> tags = ipTagDAO.getTagByFilterA(entityId, teId, ttId);
 			for (IpTag ipTag : tags) {
@@ -49,7 +49,7 @@ public class TagService {
 				message.setUserFullName(ipTag.getIpUser().getUserFName() + " " + ((ipTag.getIpUser().getUserMName() != null && ipTag.getIpUser().getUserMName().length() > 0) ? (ipTag.getIpUser().getUserMName() + " ") : "") + ipTag.getIpUser().getUserLName());
 				message.setUserId(ipTag.getIpUser().getUserId());
 				message.setTagId(ipTag.getTagId());
-				ret.add(message);
+				ret.add((T) message);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -57,12 +57,11 @@ public class TagService {
 		return ret;
 	}
 
-	@SuppressWarnings("unchecked")
 	@GET
 	@Path("/tag/getByUser/{entityId}/{teId}/{ttId}/{userId}")
 	@Produces("application/json")
-	public List<TagMessage> getTagByUser(@PathParam("entityId") Long entityId, @PathParam("teId") Integer teId, @PathParam("ttId") Integer ttId, @PathParam("userId") Long userId) {
-		List<TagMessage> ret = new ArrayList<TagMessage>();
+	public <T extends TagMessage> List<T> getTagByUser(@PathParam("entityId") Long entityId, @PathParam("teId") Integer teId, @PathParam("ttId") Integer ttId, @PathParam("userId") Long userId) {
+		List<T> ret = new ArrayList<T>();
 		try {
 			List<IpTag> tags = ipTagDAO.getTagByFilterB(entityId, teId, ttId, userId);
 			for (IpTag ipTag : tags) {
@@ -75,7 +74,7 @@ public class TagService {
 				message.setUserFullName(ipTag.getIpUser().getUserFName() + " " + ((ipTag.getIpUser().getUserMName() != null && ipTag.getIpUser().getUserMName().length() > 0) ? (ipTag.getIpUser().getUserMName() + " ") : "") + ipTag.getIpUser().getUserLName());
 				message.setUserId(ipTag.getIpUser().getUserId());
 				message.setTagId(ipTag.getTagId());
-				ret.add(message);
+				ret.add((T) message);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -90,7 +89,10 @@ public class TagService {
 	public ResponseMessage createTag(TagMessage tag) {
 		try {
 			if (!tag.isDuplicate() && ipTagDAO.getTagByFilterB(tag.getEntityId(), tag.getTeId(), tag.getTtId(), tag.getUserId()).size() != 0) {
-				return ResponseMessage.createMessage("Tag Already exists. Cannot Create Duplicate");
+				ResponseMessage message = new ResponseMessage();
+				message.setStatusCode(1);
+				message.setStatusDesc("Tag Already exists. Cannot Create Duplicate");
+				return message;
 			} else {
 				IpTag ipTag = new IpTag();
 				ipTag.setIpTagEntityType(ipTagEntityTypeDAO.findById(tag.getTeId()));
@@ -100,11 +102,17 @@ public class TagService {
 				ipTag.setTagId(tag.getTagId());
 				ipTag.setTagText(tag.getTagText());
 				ipTagDAO.save(ipTag);
-				return ResponseMessage.createSuccess();
+				ResponseMessage message = new ResponseMessage();
+				message.setStatusCode(0);
+				message.setStatusDesc("Success");
+				return message;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseMessage.createException(e);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
 		}
 	}
 
@@ -115,10 +123,16 @@ public class TagService {
 	public ResponseMessage deleteTag(Long tagId) {
 		try {
 			ipTagDAO.delete(ipTagDAO.findById(tagId));
-			return ResponseMessage.createSuccess();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseMessage.createException(e);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
 		}
 	}
 

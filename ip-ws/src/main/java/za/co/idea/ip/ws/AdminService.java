@@ -14,7 +14,6 @@ import javax.ws.rs.Produces;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.codec.digest.Md5Crypt;
 
 import za.co.idea.ip.orm.bean.IpFunction;
 import za.co.idea.ip.orm.bean.IpFunctionConfig;
@@ -31,7 +30,7 @@ import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Path(value = "/as")
 public class AdminService {
 	private IpGroupDAO ipGroupDAO;
@@ -56,10 +55,16 @@ public class AdminService {
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.save(ipGroup);
-			return ResponseMessage.createSuccess();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseMessage.createException(e);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
 		}
 	}
 
@@ -79,18 +84,24 @@ public class AdminService {
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.merge(ipGroup);
-			return ResponseMessage.createSuccess();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseMessage.createException(e);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
 		}
 	}
 
 	@GET
 	@Path("/group/list")
 	@Produces("application/json")
-	public List<GroupMessage> listGroup() {
-		List<GroupMessage> ret = new ArrayList<GroupMessage>();
+	public <T extends GroupMessage> List<T> listGroup() {
+		List<T> ret = new ArrayList<T>();
 		try {
 			List groups = ipGroupDAO.findAll();
 			for (Object object : groups) {
@@ -104,7 +115,7 @@ public class AdminService {
 					group.setpGrpId(ipGroup.getIpGroup().getGroupId());
 				if (ipGroup.getIpUser() != null)
 					group.setAdmUserId(ipGroup.getIpUser().getUserId());
-				ret.add(group);
+				ret.add((T) group);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -115,8 +126,8 @@ public class AdminService {
 	@GET
 	@Path("/func/list")
 	@Produces("application/json")
-	public List<FunctionMessage> listFunction() {
-		List<FunctionMessage> ret = new ArrayList<FunctionMessage>();
+	public <T extends FunctionMessage> List<T> listFunction() {
+		List<T> ret = new ArrayList<T>();
 		try {
 			List functions = ipFunctionDAO.getFunctionByQuery();
 			for (Object object : functions) {
@@ -143,7 +154,7 @@ public class AdminService {
 				}
 				function.setGroupList(groups);
 				function.setUserList(users);
-				ret.add(function);
+				ret.add((T) function);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -240,10 +251,16 @@ public class AdminService {
 				ipUserDAO.delete(ipUser);
 				throw new RuntimeException("Cannot create user :: " + e.getMessage());
 			}
-			return ResponseMessage.createSuccess();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseMessage.createException(e);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
 		}
 	}
 
@@ -271,10 +288,16 @@ public class AdminService {
 				config.setIpUser(ipUserDAO.findById(usrId));
 				ipFunctionConfigDAO.save(config);
 			}
-			return ResponseMessage.createSuccess();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseMessage.createException(e);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
 		}
 	}
 
@@ -303,10 +326,16 @@ public class AdminService {
 				ipFunctionConfigDAO.save(config);
 			}
 			ipFunctionDAO.merge(ipFunction);
-			return ResponseMessage.createSuccess();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseMessage.createException(e);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
 		}
 	}
 
@@ -341,24 +370,30 @@ public class AdminService {
 			ipLogin.setIpUser(ipUser);
 			ipLogin.setLoginName(ipUser.getUserScreenName());
 			ipLogin.setLoginId(user.getuId());
-			ipLogin.setLoginPwd(Md5Crypt.md5Crypt(user.getPwd().getBytes()));
+			ipLogin.setLoginPwd(Base64.encodeBase64URLSafeString(DigestUtils.md5(user.getPwd().getBytes())));
 			try {
 				ipLoginDAO.merge(ipLogin);
 			} catch (Exception e) {
 				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
 			}
-			return ResponseMessage.createSuccess();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseMessage.createException(e);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
 		}
 	}
 
 	@GET
 	@Path("/user/list")
 	@Produces("application/json")
-	public List<UserMessage> listUser() {
-		List<UserMessage> ret = new ArrayList<UserMessage>();
+	public <T extends UserMessage> List<T> listUser() {
+		List<T> ret = new ArrayList<T>();
 		try {
 			List users = ipUserDAO.findAll();
 			for (Object object : users) {
@@ -383,7 +418,7 @@ public class AdminService {
 					user.setmName(ipUser.getUserMName());
 				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
 					user.setTwHandle(ipUser.getUserTwHandle());
-				ret.add(user);
+				ret.add((T) user);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,12 +1,14 @@
 package za.co.idea.ip.ws.bean;
 
-import java.io.Serializable;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="tagMessage")
-public class TagMessage implements Serializable {
-	private static final long serialVersionUID = 3679231894527770044L;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.annotate.JsonTypeInfo.As;
+import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
+
+@JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "class")
+@XmlRootElement(name = "tagMessage")
+public class TagMessage {
 	private String usrScreenName;
 	private String userFullName;
 	private Integer teId;

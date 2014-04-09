@@ -4,7 +4,12 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="ideaMessage")
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.annotate.JsonTypeInfo.As;
+import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
+
+@JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "class")
+@XmlRootElement(name = "ideaMessage")
 public class IdeaMessage {
 
 	private Long ideaId;

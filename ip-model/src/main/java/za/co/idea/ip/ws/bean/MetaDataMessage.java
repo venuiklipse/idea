@@ -2,7 +2,12 @@ package za.co.idea.ip.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name="metaDataMessage")
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.annotate.JsonTypeInfo.As;
+import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
+
+@JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "class")
+@XmlRootElement(name = "metaDataMessage")
 public class MetaDataMessage {
 
 	private Integer id;
