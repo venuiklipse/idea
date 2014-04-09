@@ -1,5 +1,8 @@
 package za.co.idea.ip.ws.bean;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name="metaDataMessage")
 public class MetaDataMessage {
 
 	private Integer id;

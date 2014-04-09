@@ -7,16 +7,17 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.apache.cxf.jaxrs.provider.json.JSONProvider;
 
 import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
+import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.NumericCounter;
 import za.co.idea.web.ui.bean.FunctionBean;
@@ -26,6 +27,7 @@ import za.co.idea.web.ui.bean.UserBean;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class AdminController implements Serializable {
 	private static final long serialVersionUID = 1441325880500732566L;
+	private static final Log LOG = LogFactory.getLog(AdminController.class);
 
 	private UserBean userBean;
 	private GroupBean groupBean;
@@ -40,7 +42,11 @@ public class AdminController implements Serializable {
 
 	public String login() {
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient loginClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())), providers);
 		loginClient.header("Content-Type", "application/json");
 		loginClient.header("Accept", "application/json");
@@ -83,6 +89,8 @@ public class AdminController implements Serializable {
 			viewUsers = fetchAllUsers();
 			return "admvu";
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -94,6 +102,8 @@ public class AdminController implements Serializable {
 			userBean.setcPw(userBean.getPwd());
 			return "admeu";
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -105,6 +115,8 @@ public class AdminController implements Serializable {
 			userBean = new UserBean();
 			return "admcu";
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -118,6 +130,8 @@ public class AdminController implements Serializable {
 			admUsers = fetchAllUsers();
 			return "admvg";
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -130,6 +144,8 @@ public class AdminController implements Serializable {
 			admUsers = fetchAllUsers();
 			return "admeg";
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -143,6 +159,8 @@ public class AdminController implements Serializable {
 			admUsers = fetchAllUsers();
 			return "admcg";
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -155,6 +173,8 @@ public class AdminController implements Serializable {
 			pGrps = fetchAllGroups();
 			return "admcf";
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -168,6 +188,8 @@ public class AdminController implements Serializable {
 			pGrps = fetchAllGroups();
 			return "admvf";
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -180,6 +202,8 @@ public class AdminController implements Serializable {
 			pGrps = fetchAllGroups();
 			return "admef";
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -188,7 +212,11 @@ public class AdminController implements Serializable {
 
 	public String checkAvailability() {
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient checkAvailablityClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/check/screenName/" + userBean.getScName(), providers);
 		checkAvailablityClient.header("Content-Type", "application/json");
 		checkAvailablityClient.header("Accept", "application/json");
@@ -212,7 +240,11 @@ public class AdminController implements Serializable {
 				return "";
 			}
 			List providers = new ArrayList();
-			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			JSONProvider provider = new JSONProvider();
+			ArrayList<String> mediaTypes = new ArrayList<String>();
+			mediaTypes.add(MediaType.APPLICATION_JSON);
+			provider.setProduceMediaTypes(mediaTypes);
+			providers.add(provider);
 			WebClient addUserClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/add", providers);
 			addUserClient.header("Content-Type", "application/json");
 			addUserClient.header("Accept", "application/json");
@@ -233,13 +265,15 @@ public class AdminController implements Serializable {
 			bean.setTwHandle(userBean.getTwHandle());
 			bean.setIsActive(true);
 			bean.setuId(COUNTER.nextLong());
-			Response response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean);
-			if (response.getStatus() == Response.Status.OK.getStatusCode())
+			ResponseMessage response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean, ResponseMessage.class);
+			if (response.getStatusCode() == 0)
 				return "home";
 			else {
 				return "";
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -249,7 +283,11 @@ public class AdminController implements Serializable {
 	public String updateUser() {
 		try {
 			List providers = new ArrayList();
-			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			JSONProvider provider = new JSONProvider();
+			ArrayList<String> mediaTypes = new ArrayList<String>();
+			mediaTypes.add(MediaType.APPLICATION_JSON);
+			provider.setProduceMediaTypes(mediaTypes);
+			providers.add(provider);
 			WebClient updateUserClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/modify", providers);
 			updateUserClient.header("Content-Type", "application/json");
 			updateUserClient.header("Accept", "application/json");
@@ -270,13 +308,15 @@ public class AdminController implements Serializable {
 			bean.setTwHandle(userBean.getTwHandle());
 			bean.setIsActive(userBean.getIsActive());
 			bean.setuId(userBean.getuId());
-			Response response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean);
-			if (response.getStatus() == Response.Status.OK.getStatusCode())
+			ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
+			if (response.getStatusCode() == 0)
 				return "home";
 			else {
 				return "";
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -286,7 +326,11 @@ public class AdminController implements Serializable {
 	public String saveGroup() {
 		try {
 			List providers = new ArrayList();
-			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			JSONProvider provider = new JSONProvider();
+			ArrayList<String> mediaTypes = new ArrayList<String>();
+			mediaTypes.add(MediaType.APPLICATION_JSON);
+			provider.setProduceMediaTypes(mediaTypes);
+			providers.add(provider);
 			WebClient addGroupClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/group/add", providers);
 			addGroupClient.header("Content-Type", "application/json");
 			addGroupClient.header("Accept", "application/json");
@@ -297,13 +341,15 @@ public class AdminController implements Serializable {
 			groupMessage.setgName(groupBean.getgName());
 			groupMessage.setIsActive(true);
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
-			Response response = addGroupClient.accept(MediaType.APPLICATION_JSON).post(groupMessage);
-			if (response.getStatus() == Response.Status.OK.getStatusCode())
+			ResponseMessage response = addGroupClient.accept(MediaType.APPLICATION_JSON).post(groupMessage, ResponseMessage.class);
+			if (response.getStatusCode() == 0)
 				return "home";
 			else {
 				return "";
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -313,7 +359,11 @@ public class AdminController implements Serializable {
 	public String saveFunction() {
 		try {
 			List providers = new ArrayList();
-			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			JSONProvider provider = new JSONProvider();
+			ArrayList<String> mediaTypes = new ArrayList<String>();
+			mediaTypes.add(MediaType.APPLICATION_JSON);
+			provider.setProduceMediaTypes(mediaTypes);
+			providers.add(provider);
 			WebClient addFunctionClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/func/add", providers);
 			addFunctionClient.header("Content-Type", "application/json");
 			addFunctionClient.header("Accept", "application/json");
@@ -322,13 +372,15 @@ public class AdminController implements Serializable {
 			functionMessage.setFuncName(functionBean.getFuncName());
 			functionMessage.setGroupIdList(functionBean.getGroupIdList());
 			functionMessage.setUserIdList(functionBean.getUserIdList());
-			Response response = addFunctionClient.accept(MediaType.APPLICATION_JSON).post(functionMessage);
-			if (response.getStatus() == Response.Status.OK.getStatusCode())
+			ResponseMessage response = addFunctionClient.accept(MediaType.APPLICATION_JSON).post(functionMessage, ResponseMessage.class);
+			if (response.getStatusCode() == 0)
 				return "home";
 			else {
 				return "";
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -338,7 +390,11 @@ public class AdminController implements Serializable {
 	public String updateGroup() {
 		try {
 			List providers = new ArrayList();
-			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			JSONProvider provider = new JSONProvider();
+			ArrayList<String> mediaTypes = new ArrayList<String>();
+			mediaTypes.add(MediaType.APPLICATION_JSON);
+			provider.setProduceMediaTypes(mediaTypes);
+			providers.add(provider);
 			WebClient updateGroupClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/group/modify", providers);
 			updateGroupClient.header("Content-Type", "application/json");
 			updateGroupClient.header("Accept", "application/json");
@@ -349,13 +405,15 @@ public class AdminController implements Serializable {
 			groupMessage.setgName(groupBean.getgName());
 			groupMessage.setIsActive(groupBean.getIsActive());
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
-			Response response = updateGroupClient.accept(MediaType.APPLICATION_JSON).put(groupMessage);
-			if (response.getStatus() == Response.Status.OK.getStatusCode())
+			ResponseMessage response = updateGroupClient.accept(MediaType.APPLICATION_JSON).put(groupMessage, ResponseMessage.class);
+			if (response.getStatusCode() == 0)
 				return "home";
 			else {
 				return "";
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -365,7 +423,11 @@ public class AdminController implements Serializable {
 	public String updateFunction() {
 		try {
 			List providers = new ArrayList();
-			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			JSONProvider provider = new JSONProvider();
+			ArrayList<String> mediaTypes = new ArrayList<String>();
+			mediaTypes.add(MediaType.APPLICATION_JSON);
+			provider.setProduceMediaTypes(mediaTypes);
+			providers.add(provider);
 			WebClient updateFunctionClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/func/modify", providers);
 			updateFunctionClient.header("Content-Type", "application/json");
 			updateFunctionClient.header("Accept", "application/json");
@@ -374,13 +436,15 @@ public class AdminController implements Serializable {
 			functionMessage.setFuncName(functionBean.getFuncName());
 			functionMessage.setGroupIdList(functionBean.getGroupIdList());
 			functionMessage.setUserIdList(functionBean.getUserIdList());
-			Response response = updateFunctionClient.accept(MediaType.APPLICATION_JSON).put(functionMessage);
-			if (response.getStatus() == Response.Status.OK.getStatusCode())
+			ResponseMessage response = updateFunctionClient.accept(MediaType.APPLICATION_JSON).put(functionMessage, ResponseMessage.class);
+			if (response.getStatusCode() == 0)
 				return "home";
 			else {
 				return "";
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -390,7 +454,11 @@ public class AdminController implements Serializable {
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient viewUsersClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/list", providers);
 		viewUsersClient.header("Content-Type", "application/json");
 		viewUsersClient.header("Accept", "application/json");
@@ -421,7 +489,11 @@ public class AdminController implements Serializable {
 	private List<GroupBean> fetchAllGroups() {
 		List<GroupBean> ret = new ArrayList<GroupBean>();
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient viewGroupsClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/group/list", providers);
 		viewGroupsClient.header("Content-Type", "application/json");
 		viewGroupsClient.header("Accept", "application/json");
@@ -442,7 +514,11 @@ public class AdminController implements Serializable {
 	private List<FunctionBean> fetchAllFunctions() {
 		List<FunctionBean> ret = new ArrayList<FunctionBean>();
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient viewFunctionsClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/func/list", providers);
 		viewFunctionsClient.header("Content-Type", "application/json");
 		viewFunctionsClient.header("Accept", "application/json");
@@ -473,7 +549,11 @@ public class AdminController implements Serializable {
 	public GroupBean getParentGroup(Long pGrpId) {
 		GroupBean bean = new GroupBean();
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient groupByIdClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/group/get/" + pGrpId, providers);
 		groupByIdClient.header("Content-Type", "application/json");
 		groupByIdClient.header("Accept", "application/json");
@@ -490,7 +570,11 @@ public class AdminController implements Serializable {
 	public UserBean getUserById(Long id) {
 		UserBean bean = new UserBean();
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient userByIdClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/get/" + id, providers);
 		userByIdClient.header("Content-Type", "application/json");
 		userByIdClient.header("Accept", "application/json");

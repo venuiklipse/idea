@@ -1,5 +1,8 @@
 package za.co.idea.ip.ws.bean;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name="groupMessage")
 public class GroupMessage {
 	private Long gId;
 	private String gName;

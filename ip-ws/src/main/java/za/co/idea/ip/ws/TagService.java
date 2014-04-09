@@ -9,8 +9,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import za.co.idea.ip.orm.bean.IpTag;
 import za.co.idea.ip.orm.dao.IpChallengeDAO;
@@ -20,6 +18,7 @@ import za.co.idea.ip.orm.dao.IpTagDAO;
 import za.co.idea.ip.orm.dao.IpTagEntityTypeDAO;
 import za.co.idea.ip.orm.dao.IpTagTypeDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
+import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 
 @Path(value = "/ts")
@@ -88,10 +87,10 @@ public class TagService {
 	@Path("/tag/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response createTag(TagMessage tag) {
+	public ResponseMessage createTag(TagMessage tag) {
 		try {
 			if (!tag.isDuplicate() && ipTagDAO.getTagByFilterB(tag.getEntityId(), tag.getTeId(), tag.getTtId(), tag.getUserId()).size() != 0) {
-				return Response.status(Status.EXPECTATION_FAILED).build();
+				return ResponseMessage.createMessage("Tag Already exists. Cannot Create Duplicate");
 			} else {
 				IpTag ipTag = new IpTag();
 				ipTag.setIpTagEntityType(ipTagEntityTypeDAO.findById(tag.getTeId()));
@@ -101,11 +100,11 @@ public class TagService {
 				ipTag.setTagId(tag.getTagId());
 				ipTag.setTagText(tag.getTagText());
 				ipTagDAO.save(ipTag);
-				return Response.ok().build();
+				return ResponseMessage.createSuccess();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			return ResponseMessage.createException(e);
 		}
 	}
 
@@ -113,13 +112,13 @@ public class TagService {
 	@Path("/tag/del")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response deleteTag(Long tagId) {
+	public ResponseMessage deleteTag(Long tagId) {
 		try {
 			ipTagDAO.delete(ipTagDAO.findById(tagId));
-			return Response.ok().build();
+			return ResponseMessage.createSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			return ResponseMessage.createException(e);
 		}
 	}
 

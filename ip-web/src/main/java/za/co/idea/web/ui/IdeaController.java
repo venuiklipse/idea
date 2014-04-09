@@ -9,12 +9,12 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
-import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.apache.cxf.jaxrs.provider.json.JSONProvider;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -25,6 +25,7 @@ import org.primefaces.model.tagcloud.TagCloudModel;
 
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
+import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.NumericCounter;
@@ -37,6 +38,7 @@ import za.co.idea.web.ui.bean.UserBean;
 public class IdeaController implements Serializable {
 
 	private static final long serialVersionUID = -2647562847121760969L;
+	private static final Log LOG = LogFactory.getLog(IdeaController.class);
 	private IdeaBean ideaBean;
 	private List<UserBean> admUsers;
 	private List<ListSelectorBean> ideaCats;
@@ -65,6 +67,8 @@ public class IdeaController implements Serializable {
 			ideaStatuses = fetchAllIdeaStatuses();
 			return "ideavi";
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -85,6 +89,8 @@ public class IdeaController implements Serializable {
 			}
 			return "ideaei";
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -122,7 +128,11 @@ public class IdeaController implements Serializable {
 
 	public String likeIdea() {
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient addTagClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add", providers);
 		addTagClient.header("Content-Type", "application/json");
 		addTagClient.header("Accept", "application/json");
@@ -133,8 +143,8 @@ public class IdeaController implements Serializable {
 		message.setTtId(1);
 		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 		message.setDuplicate(false);
-		Response response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message);
-		if (response.getStatus() != Response.Status.OK.getStatusCode() && response.getStatus() != Response.Status.EXPECTATION_FAILED.getStatusCode())
+		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
 		likes = fetchAllLikes();
 		likeCnt = "(" + likes.getTags().size() + ")";
@@ -147,7 +157,11 @@ public class IdeaController implements Serializable {
 
 	public String commentIdea() {
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient addTagClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add", providers);
 		addTagClient.header("Content-Type", "application/json");
 		addTagClient.header("Accept", "application/json");
@@ -159,8 +173,8 @@ public class IdeaController implements Serializable {
 		message.setTtId(2);
 		message.setDuplicate(true);
 		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
-		Response response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message);
-		if (response.getStatus() != Response.Status.OK.getStatusCode())
+		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
 		comments = fetchAllComments();
 		commentCnt = "(" + comments.size() + ")";
@@ -174,7 +188,11 @@ public class IdeaController implements Serializable {
 
 	public String buildOnIdea() {
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient addTagClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add", providers);
 		addTagClient.header("Content-Type", "application/json");
 		addTagClient.header("Accept", "application/json");
@@ -186,8 +204,8 @@ public class IdeaController implements Serializable {
 		message.setTtId(3);
 		message.setDuplicate(true);
 		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
-		Response response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message);
-		if (response.getStatus() != Response.Status.OK.getStatusCode())
+		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Build-On", "Error While Saving Build-On"));
 		buildOns = fetchAllBuildOns();
 		buildOnCnt = "(" + buildOns.size() + ")";
@@ -207,6 +225,8 @@ public class IdeaController implements Serializable {
 			ideaBean = new IdeaBean();
 			return "ideaci";
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -216,7 +236,11 @@ public class IdeaController implements Serializable {
 	public String saveIdea() {
 		try {
 			List providers = new ArrayList();
-			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			JSONProvider provider = new JSONProvider();
+			ArrayList<String> mediaTypes = new ArrayList<String>();
+			mediaTypes.add(MediaType.APPLICATION_JSON);
+			provider.setProduceMediaTypes(mediaTypes);
+			providers.add(provider);
 			WebClient addIdeaClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/add", providers);
 			addIdeaClient.header("Content-Type", "application/json");
 			addIdeaClient.header("Accept", "application/json");
@@ -236,8 +260,8 @@ public class IdeaController implements Serializable {
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setFileName(ideaBean.getFileName());
 			ideaMessage.setSetStatusId(1l);
-			Response response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage);
-			if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+			ResponseMessage response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage, ResponseMessage.class);
+			if (response.getStatusCode() == 0) {
 				addIdeaClient.close();
 				return "home";
 			} else {
@@ -245,6 +269,8 @@ public class IdeaController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -254,7 +280,11 @@ public class IdeaController implements Serializable {
 	public String updateIdea() {
 		try {
 			List providers = new ArrayList();
-			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			JSONProvider provider = new JSONProvider();
+			ArrayList<String> mediaTypes = new ArrayList<String>();
+			mediaTypes.add(MediaType.APPLICATION_JSON);
+			provider.setProduceMediaTypes(mediaTypes);
+			providers.add(provider);
 			WebClient updateIdeaClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/modify", providers);
 			updateIdeaClient.header("Content-Type", "application/json");
 			updateIdeaClient.header("Accept", "application/json");
@@ -274,8 +304,8 @@ public class IdeaController implements Serializable {
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
 			ideaMessage.setFileName(ideaBean.getFileName());
-			Response response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage);
-			if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+			ResponseMessage response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage, ResponseMessage.class);
+			if (response.getStatusCode() == 0) {
 				updateIdeaClient.close();
 				return "home";
 			} else {
@@ -283,6 +313,8 @@ public class IdeaController implements Serializable {
 				return "";
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -292,7 +324,11 @@ public class IdeaController implements Serializable {
 	private TagCloudModel fetchAllLikes() {
 		TagCloudModel likes = new DefaultTagCloudModel();
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient fetchIdeaLikesClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/1", providers);
 		fetchIdeaLikesClient.header("Content-Type", "application/json");
 		fetchIdeaLikesClient.header("Accept", "application/json");
@@ -305,7 +341,11 @@ public class IdeaController implements Serializable {
 
 	private List<TagBean> fetchAllComments() {
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient fetchIdeaCommentsClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/2", providers);
 		fetchIdeaCommentsClient.header("Content-Type", "application/json");
 		fetchIdeaCommentsClient.header("Accept", "application/json");
@@ -323,7 +363,11 @@ public class IdeaController implements Serializable {
 
 	private List<TagBean> fetchAllBuildOns() {
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient fetchIdeaBuildOnsClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/3", providers);
 		fetchIdeaBuildOnsClient.header("Content-Type", "application/json");
 		fetchIdeaBuildOnsClient.header("Accept", "application/json");
@@ -342,7 +386,11 @@ public class IdeaController implements Serializable {
 	private List<IdeaBean> fetchAllIdeas() {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient fetchIdeaClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/list", providers);
 		fetchIdeaClient.header("Content-Type", "application/json");
 		fetchIdeaClient.header("Accept", "application/json");
@@ -373,7 +421,11 @@ public class IdeaController implements Serializable {
 	private List<ListSelectorBean> fetchAllIdeaStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient viewIdeaSelectClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/status/list", providers);
 		viewIdeaSelectClient.header("Content-Type", "application/json");
 		viewIdeaSelectClient.header("Accept", "application/json");
@@ -391,7 +443,11 @@ public class IdeaController implements Serializable {
 	private List<ListSelectorBean> fetchAllIdeaCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient viewIdeaSelectClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/is/idea/cat/list", providers);
 		viewIdeaSelectClient.header("Content-Type", "application/json");
 		viewIdeaSelectClient.header("Accept", "application/json");
@@ -413,6 +469,7 @@ public class IdeaController implements Serializable {
 			this.ideaBean.setContentType(file.getContentType());
 			this.ideaBean.setFileName(file.getFileName());
 		} catch (Exception ex) {
+			LOG.error(ex, ex);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), ex.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
@@ -421,7 +478,11 @@ public class IdeaController implements Serializable {
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
 		List providers = new ArrayList();
-		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		JSONProvider provider = new JSONProvider();
+		ArrayList<String> mediaTypes = new ArrayList<String>();
+		mediaTypes.add(MediaType.APPLICATION_JSON);
+		provider.setProduceMediaTypes(mediaTypes);
+		providers.add(provider);
 		WebClient viewUsersClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/user/list", providers);
 		viewUsersClient.header("Content-Type", "application/json");
 		viewUsersClient.header("Accept", "application/json");

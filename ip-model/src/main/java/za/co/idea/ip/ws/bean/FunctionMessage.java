@@ -3,6 +3,8 @@ package za.co.idea.ip.ws.bean;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement(name="functionMessage")
 public class FunctionMessage {
 	private Long funcId;
 	private String funcName;

@@ -13,8 +13,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -32,6 +30,7 @@ import za.co.idea.ip.orm.dao.IpLoginDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
+import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 
 @SuppressWarnings("rawtypes")
@@ -47,7 +46,7 @@ public class AdminService {
 	@Path("/group/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response createGroup(GroupMessage group) {
+	public ResponseMessage createGroup(GroupMessage group) {
 		IpGroup ipGroup = new IpGroup();
 		ipGroup.setGroupId(group.getgId());
 		ipGroup.setGroupEmail(group.getGeMail());
@@ -59,10 +58,10 @@ public class AdminService {
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.save(ipGroup);
-			return Response.ok().build();
+			return ResponseMessage.createSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			return ResponseMessage.createException(e);
 		}
 	}
 
@@ -70,7 +69,7 @@ public class AdminService {
 	@Path("/group/modify")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response updateGroup(GroupMessage group) {
+	public ResponseMessage updateGroup(GroupMessage group) {
 		IpGroup ipGroup = new IpGroup();
 		ipGroup.setGroupId(group.getgId());
 		ipGroup.setGroupEmail(group.getGeMail());
@@ -82,10 +81,10 @@ public class AdminService {
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.merge(ipGroup);
-			return Response.ok().build();
+			return ResponseMessage.createSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			return ResponseMessage.createException(e);
 		}
 	}
 
@@ -209,7 +208,7 @@ public class AdminService {
 	@Path("/user/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response createUser(UserMessage user) {
+	public ResponseMessage createUser(UserMessage user) {
 		try {
 			IpUser ipUser = new IpUser();
 			ipUser.setUserId(user.getuId());
@@ -243,10 +242,10 @@ public class AdminService {
 				ipUserDAO.delete(ipUser);
 				throw new RuntimeException("Cannot create user :: " + e.getMessage());
 			}
-			return Response.ok().build();
+			return ResponseMessage.createSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			return ResponseMessage.createException(e);
 		}
 	}
 
@@ -254,7 +253,7 @@ public class AdminService {
 	@Path("/func/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response createFunction(FunctionMessage function) {
+	public ResponseMessage createFunction(FunctionMessage function) {
 		try {
 			IpFunction ipFunction = new IpFunction();
 			ipFunction.setFuncId(function.getFuncId());
@@ -276,10 +275,10 @@ public class AdminService {
 			}
 			ipFunction.setIpFunctionConfigs(configs);
 			ipFunctionDAO.save(ipFunction);
-			return Response.ok().build();
+			return ResponseMessage.createSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			return ResponseMessage.createException(e);
 		}
 	}
 
@@ -287,7 +286,7 @@ public class AdminService {
 	@Path("/func/modify")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response updateFunction(FunctionMessage function) {
+	public ResponseMessage updateFunction(FunctionMessage function) {
 		try {
 			ipFunctionConfigDAO.deleteByFunctionId(function.getFuncId());
 			IpFunction ipFunction = new IpFunction();
@@ -310,10 +309,10 @@ public class AdminService {
 			}
 			ipFunction.setIpFunctionConfigs(configs);
 			ipFunctionDAO.merge(ipFunction);
-			return Response.ok().build();
+			return ResponseMessage.createSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			return ResponseMessage.createException(e);
 		}
 	}
 
@@ -321,7 +320,7 @@ public class AdminService {
 	@Path("/user/modify")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response updateUser(UserMessage user) {
+	public ResponseMessage updateUser(UserMessage user) {
 		try {
 			IpUser ipUser = new IpUser();
 			ipUser.setUserId(user.getuId());
@@ -354,10 +353,10 @@ public class AdminService {
 			} catch (Exception e) {
 				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
 			}
-			return Response.ok().build();
+			return ResponseMessage.createSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			return ResponseMessage.createException(e);
 		}
 	}
 

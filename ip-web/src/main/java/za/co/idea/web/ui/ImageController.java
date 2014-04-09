@@ -10,6 +10,8 @@ import javax.faces.event.ValueChangeEvent;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.servlet.ServletContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.primefaces.event.CaptureEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.CroppedImage;
@@ -21,6 +23,7 @@ public class ImageController implements Serializable {
 	 * Image upload properties
 	 */
 	private static final long serialVersionUID = -7238289945335966417L;
+	private static final Log LOG = LogFactory.getLog(ImageController.class);
 	private StreamedContent image;
 	private CroppedImage croppedImage;
 	private String uploadSrc;
@@ -47,6 +50,8 @@ public class ImageController implements Serializable {
 			imageOutput.close();
 			cropImgSrc = newFileName;
 		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage()));
 		}
 	}

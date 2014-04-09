@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:cxf="http://cxf.apache.org/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:jaxrs="http://cxf.apache.org/jaxrs" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util" xmlns:cxf="http://cxf.apache.org/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:jaxrs="http://cxf.apache.org/jaxrs" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util.xsd
 	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
 	http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
 	http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
 	<import resource="classpath:ipWSContext.xml" />
-	<bean id="jacksonMapper" class="org.codehaus.jackson.map.ObjectMapper" />
+	<util:list id="jsonTypes">
+		<value>application/json</value>
+	</util:list>
 	<jaxrs:server id="ipService" address="/ip">
 		<jaxrs:serviceBeans>
 			<ref bean="adminService" />
@@ -15,13 +18,24 @@
 			<entry key="json" value="application/json" />
 		</jaxrs:extensionMappings>
 		<jaxrs:providers>
-			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">
-				<property name="mapper" ref="jacksonMapper" />
+			<bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+				<property name="produceMediaTypes" ref="jsonTypes" />
+				<property name="consumeMediaTypes" ref="jsonTypes" />
 			</bean>
 		</jaxrs:providers>
+		<jaxrs:inInterceptors>
+			<bean class="org.apache.cxf.jaxrs.provider.jsonp.JsonpInInterceptor" />
+		</jaxrs:inInterceptors>
+		<jaxrs:outInterceptors>
+			<bean class="org.apache.cxf.jaxrs.provider.jsonp.JsonpPreStreamInterceptor" />
+			<bean class="org.apache.cxf.jaxrs.provider.jsonp.JsonpPostStreamInterceptor" />
+		</jaxrs:outInterceptors>
 		<jaxrs:languageMappings>
 			<entry key="en" value="en-gb" />
 		</jaxrs:languageMappings>
+		<jaxrs:features>
+			<cxf:logging />
+		</jaxrs:features>
 	</jaxrs:server>
 
 </beans>

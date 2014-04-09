@@ -7,6 +7,11 @@ public class NumericCounter {
 	private AtomicInteger intUUID;
 	private AtomicLong longUUID;
 
+	public NumericCounter() {
+		intUUID = new AtomicInteger();
+		longUUID = new AtomicLong();
+	}
+
 	public Long nextLong() {
 		return longUUID.getAndIncrement();
 	}

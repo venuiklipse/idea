@@ -10,8 +10,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.codec.binary.Base64;
 import org.hibernate.Hibernate;
@@ -25,6 +23,7 @@ import za.co.idea.ip.orm.dao.IpIdeaStatusDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
+import za.co.idea.ip.ws.bean.ResponseMessage;
 
 @Path(value = "/is")
 public class IdeaService {
@@ -109,7 +108,7 @@ public class IdeaService {
 	@Path("/idea/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response createIdea(IdeaMessage idea) {
+	public ResponseMessage createIdea(IdeaMessage idea) {
 		IpIdea ipIdea = new IpIdea();
 		ipIdea.setIdeaId(idea.getIdeaId());
 		ipIdea.setIdeaBa(idea.getIdeaBa());
@@ -131,10 +130,10 @@ public class IdeaService {
 			ipIdea.setIpUser(ipUserDAO.findById(idea.getCrtdById()));
 		try {
 			ipIdeaDAO.save(ipIdea);
-			return Response.ok().build();
+			return ResponseMessage.createSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			return ResponseMessage.createException(e);
 		}
 	}
 
@@ -142,7 +141,7 @@ public class IdeaService {
 	@Path("/idea/modify")
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response updateIdea(IdeaMessage idea) {
+	public ResponseMessage updateIdea(IdeaMessage idea) {
 		IpIdea ipIdea = new IpIdea();
 		ipIdea.setIdeaId(idea.getIdeaId());
 		ipIdea.setIdeaBa(idea.getIdeaBa());
@@ -164,10 +163,10 @@ public class IdeaService {
 			ipIdea.setIpUser(ipUserDAO.findById(idea.getCrtdById()));
 		try {
 			ipIdeaDAO.merge(ipIdea);
-			return Response.ok().build();
+			return ResponseMessage.createSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+			return ResponseMessage.createException(e);
 		}
 	}
 

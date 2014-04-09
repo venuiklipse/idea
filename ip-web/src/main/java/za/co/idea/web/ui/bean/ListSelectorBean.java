@@ -2,10 +2,10 @@ package za.co.idea.web.ui.bean;
 
 import java.io.Serializable;
 
-public class ListSelectorBean implements Serializable{
+public class ListSelectorBean implements Serializable {
 
 	private static final long serialVersionUID = -753190990005408777L;
-	
+
 	private Integer id;
 	private String desc;
 

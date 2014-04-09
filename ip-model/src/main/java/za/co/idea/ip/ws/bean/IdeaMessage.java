@@ -2,6 +2,9 @@ package za.co.idea.ip.ws.bean;
 
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name="ideaMessage")
 public class IdeaMessage {
 
 	private Long ideaId;
