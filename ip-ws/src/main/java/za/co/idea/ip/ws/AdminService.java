@@ -1,7 +1,10 @@
 package za.co.idea.ip.ws;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -128,14 +131,18 @@ public class AdminService {
 				List<GroupMessage> groups = new ArrayList<GroupMessage>();
 				for (Object obj : ipFunction.getIpFunctionConfigs()) {
 					IpFunctionConfig config = (IpFunctionConfig) obj;
-					GroupMessage group = new GroupMessage();
-					group.setgId(config.getIpGroup().getGroupId());
-					group.setgName(config.getIpGroup().getGroupName());
-					groups.add(group);
-					UserMessage user = new UserMessage();
-					user.setuId(config.getIpUser().getUserId());
-					user.setScName(config.getIpUser().getUserScreenName());
-					users.add(user);
+					if (config.getIpGroup() != null && config.getIpGroup().getGroupId() != null) {
+						GroupMessage group = new GroupMessage();
+						group.setgId(config.getIpGroup().getGroupId());
+						group.setgName(config.getIpGroup().getGroupName());
+						groups.add(group);
+					}
+					if (config.getIpUser() != null && config.getIpUser().getUserId() != null) {
+						UserMessage user = new UserMessage();
+						user.setuId(config.getIpUser().getUserId());
+						user.setScName(config.getIpUser().getUserScreenName());
+						users.add(user);
+					}
 				}
 				function.setGroupList(groups);
 				function.setUserList(users);
@@ -180,7 +187,7 @@ public class AdminService {
 	@GET
 	@Path("/group/get/{id}")
 	@Produces("application/json")
-	public GroupMessage getGroup(@PathParam("id") Long id) {
+	public GroupMessage getGroupById(@PathParam("id") Long id) {
 		GroupMessage group = new GroupMessage();
 		try {
 			IpGroup ipGroup = ipGroupDAO.findById(id);
@@ -252,12 +259,23 @@ public class AdminService {
 			IpFunction ipFunction = new IpFunction();
 			ipFunction.setFuncId(function.getFuncId());
 			ipFunction.setFuncName(function.getFuncName());
-			List<IpGroup> grps = new ArrayList<IpGroup>();
-			for (Long grpId : function.getGroupIdList())
-				grps.add(ipGroupDAO.findById(grpId));
-			List<IpUser> usrs = new ArrayList<IpUser>();
-			for (Long usrId : function.getUserIdList())
-				usrs.add(ipUserDAO.findById(usrId));
+			Set<IpFunctionConfig> configs = new HashSet<IpFunctionConfig>();
+			for (Long grpId : function.getGroupIdList()) {
+				IpFunctionConfig config = new IpFunctionConfig();
+				config.setFcId(UUID.randomUUID().toString());
+				config.setIpFunction(ipFunction);
+				config.setIpGroup(ipGroupDAO.findById(grpId));
+				configs.add(config);
+			}
+			for (Long usrId : function.getUserIdList()) {
+				IpFunctionConfig config = new IpFunctionConfig();
+				config.setFcId(UUID.randomUUID().toString());
+				config.setIpFunction(ipFunction);
+				config.setIpUser(ipUserDAO.findById(usrId));
+				configs.add(config);
+			}
+			ipFunction.setIpFunctionConfigs(configs);
+			ipFunctionDAO.save(ipFunction);
 			return Response.ok().build();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -271,6 +289,27 @@ public class AdminService {
 	@Produces("application/json")
 	public Response updateFunction(FunctionMessage function) {
 		try {
+			ipFunctionConfigDAO.deleteByFunctionId(function.getFuncId());
+			IpFunction ipFunction = new IpFunction();
+			ipFunction.setFuncId(function.getFuncId());
+			ipFunction.setFuncName(function.getFuncName());
+			Set<IpFunctionConfig> configs = new HashSet<IpFunctionConfig>();
+			for (Long grpId : function.getGroupIdList()) {
+				IpFunctionConfig config = new IpFunctionConfig();
+				config.setFcId(UUID.randomUUID().toString());
+				config.setIpFunction(ipFunction);
+				config.setIpGroup(ipGroupDAO.findById(grpId));
+				configs.add(config);
+			}
+			for (Long usrId : function.getUserIdList()) {
+				IpFunctionConfig config = new IpFunctionConfig();
+				config.setFcId(UUID.randomUUID().toString());
+				config.setIpFunction(ipFunction);
+				config.setIpUser(ipUserDAO.findById(usrId));
+				configs.add(config);
+			}
+			ipFunction.setIpFunctionConfigs(configs);
+			ipFunctionDAO.merge(ipFunction);
 			return Response.ok().build();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -362,7 +401,7 @@ public class AdminService {
 	@GET
 	@Path("/user/get/{id}")
 	@Produces("application/json")
-	public UserMessage getUser(@PathParam("id") Long id) {
+	public UserMessage getUserById(@PathParam("id") Long id) {
 		UserMessage user = new UserMessage();
 		try {
 			IpUser ipUser = ipUserDAO.findById(id);

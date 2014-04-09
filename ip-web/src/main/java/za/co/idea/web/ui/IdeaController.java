@@ -27,6 +27,7 @@ import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
+import za.co.idea.ip.ws.util.NumericCounter;
 import za.co.idea.web.ui.bean.IdeaBean;
 import za.co.idea.web.ui.bean.ListSelectorBean;
 import za.co.idea.web.ui.bean.TagBean;
@@ -36,16 +37,10 @@ import za.co.idea.web.ui.bean.UserBean;
 public class IdeaController implements Serializable {
 
 	private static final long serialVersionUID = -2647562847121760969L;
-	/**
-	 * Create and Edit Beans
-	 */
 	private IdeaBean ideaBean;
 	private List<UserBean> admUsers;
 	private List<ListSelectorBean> ideaCats;
 	private List<ListSelectorBean> ideaStatuses;
-	/**
-	 * View Beans
-	 */
 	private List<IdeaBean> viewIdeas;
 	private TagCloudModel likes;
 	private List<TagBean> comments;
@@ -60,6 +55,7 @@ public class IdeaController implements Serializable {
 	private String likeCnt;
 	private String commentCnt;
 	private String buildOnCnt;
+	private static final NumericCounter COUNTER = new NumericCounter();
 
 	public String showViewIdeas() {
 		try {
@@ -132,7 +128,7 @@ public class IdeaController implements Serializable {
 		addTagClient.header("Accept", "application/json");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
-		message.setTagId(System.currentTimeMillis());
+		message.setTagId(COUNTER.nextLong());
 		message.setTeId(1);
 		message.setTtId(1);
 		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
@@ -157,7 +153,7 @@ public class IdeaController implements Serializable {
 		addTagClient.header("Accept", "application/json");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
-		message.setTagId(System.currentTimeMillis());
+		message.setTagId(COUNTER.nextLong());
 		message.setTagText(commentText);
 		message.setTeId(1);
 		message.setTtId(2);
@@ -184,7 +180,7 @@ public class IdeaController implements Serializable {
 		addTagClient.header("Accept", "application/json");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
-		message.setTagId(System.currentTimeMillis());
+		message.setTagId(COUNTER.nextLong());
 		message.setTagText(buildOnText);
 		message.setTeId(1);
 		message.setTtId(3);
@@ -235,7 +231,7 @@ public class IdeaController implements Serializable {
 			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
 			ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
 			ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
-			ideaMessage.setIdeaId(System.currentTimeMillis());
+			ideaMessage.setIdeaId(COUNTER.nextLong());
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setFileName(ideaBean.getFileName());

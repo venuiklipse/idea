@@ -18,6 +18,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
+import za.co.idea.ip.ws.util.NumericCounter;
 import za.co.idea.web.ui.bean.FunctionBean;
 import za.co.idea.web.ui.bean.GroupBean;
 import za.co.idea.web.ui.bean.UserBean;
@@ -35,6 +36,7 @@ public class AdminController implements Serializable {
 	private List<UserBean> viewUsers;
 	private List<GroupBean> viewGroups;
 	private boolean available;
+	private static final NumericCounter COUNTER = new NumericCounter();
 
 	public String login() {
 		List providers = new ArrayList();
@@ -230,7 +232,7 @@ public class AdminController implements Serializable {
 			bean.setSkills(userBean.getSkills());
 			bean.setTwHandle(userBean.getTwHandle());
 			bean.setIsActive(true);
-			bean.setuId(System.currentTimeMillis());
+			bean.setuId(COUNTER.nextLong());
 			Response response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean);
 			if (response.getStatus() == Response.Status.OK.getStatusCode())
 				return "home";
@@ -291,11 +293,36 @@ public class AdminController implements Serializable {
 			GroupMessage groupMessage = new GroupMessage();
 			groupMessage.setAdmUserId(groupBean.getSelAdmUser());
 			groupMessage.setGeMail(groupBean.getGeMail());
-			groupMessage.setgId(System.currentTimeMillis());
+			groupMessage.setgId(COUNTER.nextLong());
 			groupMessage.setgName(groupBean.getgName());
 			groupMessage.setIsActive(true);
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
 			Response response = addGroupClient.accept(MediaType.APPLICATION_JSON).post(groupMessage);
+			if (response.getStatus() == Response.Status.OK.getStatusCode())
+				return "home";
+			else {
+				return "";
+			}
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String saveFunction() {
+		try {
+			List providers = new ArrayList();
+			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			WebClient addFunctionClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/func/add", providers);
+			addFunctionClient.header("Content-Type", "application/json");
+			addFunctionClient.header("Accept", "application/json");
+			FunctionMessage functionMessage = new FunctionMessage();
+			functionMessage.setFuncId(COUNTER.nextLong());
+			functionMessage.setFuncName(functionBean.getFuncName());
+			functionMessage.setGroupIdList(functionBean.getGroupIdList());
+			functionMessage.setUserIdList(functionBean.getUserIdList());
+			Response response = addFunctionClient.accept(MediaType.APPLICATION_JSON).post(functionMessage);
 			if (response.getStatus() == Response.Status.OK.getStatusCode())
 				return "home";
 			else {
@@ -323,6 +350,31 @@ public class AdminController implements Serializable {
 			groupMessage.setIsActive(groupBean.getIsActive());
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
 			Response response = updateGroupClient.accept(MediaType.APPLICATION_JSON).put(groupMessage);
+			if (response.getStatus() == Response.Status.OK.getStatusCode())
+				return "home";
+			else {
+				return "";
+			}
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String updateFunction() {
+		try {
+			List providers = new ArrayList();
+			providers.add(new JacksonJsonProvider(new ObjectMapper()));
+			WebClient updateFunctionClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/func/modify", providers);
+			updateFunctionClient.header("Content-Type", "application/json");
+			updateFunctionClient.header("Accept", "application/json");
+			FunctionMessage functionMessage = new FunctionMessage();
+			functionMessage.setFuncId(functionBean.getFuncId());
+			functionMessage.setFuncName(functionBean.getFuncName());
+			functionMessage.setGroupIdList(functionBean.getGroupIdList());
+			functionMessage.setUserIdList(functionBean.getUserIdList());
+			Response response = updateFunctionClient.accept(MediaType.APPLICATION_JSON).put(functionMessage);
 			if (response.getStatus() == Response.Status.OK.getStatusCode())
 				return "home";
 			else {

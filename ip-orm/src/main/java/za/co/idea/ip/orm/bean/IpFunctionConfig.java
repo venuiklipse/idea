@@ -12,7 +12,7 @@ public class IpFunctionConfig implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -5433234680552306935L;
-	private Long fcId;
+	private String fcId;
 	private IpGroup ipGroup;
 	private IpFunction ipFunction;
 	private IpUser ipUser;
@@ -24,12 +24,12 @@ public class IpFunctionConfig implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpFunctionConfig(Long fcId) {
+	public IpFunctionConfig(String fcId) {
 		this.fcId = fcId;
 	}
 
 	/** full constructor */
-	public IpFunctionConfig(Long fcId, IpGroup ipGroup, IpFunction ipFunction, IpUser ipUser) {
+	public IpFunctionConfig(String fcId, IpGroup ipGroup, IpFunction ipFunction, IpUser ipUser) {
 		this.fcId = fcId;
 		this.ipGroup = ipGroup;
 		this.ipFunction = ipFunction;
@@ -38,11 +38,11 @@ public class IpFunctionConfig implements java.io.Serializable {
 
 	// Property accessors
 
-	public Long getFcId() {
+	public String getFcId() {
 		return this.fcId;
 	}
 
-	public void setFcId(Long fcId) {
+	public void setFcId(String fcId) {
 		this.fcId = fcId;
 	}
 

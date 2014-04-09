@@ -6,7 +6,7 @@
 -->
 <hibernate-mapping>
     <class name="za.co.idea.ip.orm.bean.IpFunctionConfig" table="ip_function_config" catalog="ipdb">
-        <id name="fcId" type="java.lang.Long">
+        <id name="fcId" type="java.lang.String">
             <column name="fc_id" />
             <generator class="assigned" />
         </id>

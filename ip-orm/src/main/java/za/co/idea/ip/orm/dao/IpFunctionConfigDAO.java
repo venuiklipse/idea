@@ -3,6 +3,7 @@ package za.co.idea.ip.orm.dao;
 import java.util.List;
 
 import org.hibernate.LockMode;
+import org.hibernate.SQLQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -53,7 +54,7 @@ public class IpFunctionConfigDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public IpFunctionConfig findById(java.lang.Long id) {
+	public IpFunctionConfig findById(java.lang.String id) {
 		log.debug("getting IpFunctionConfig instance with id: " + id);
 		try {
 			IpFunctionConfig instance = (IpFunctionConfig) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpFunctionConfig", id);
@@ -134,5 +135,17 @@ public class IpFunctionConfigDAO extends HibernateDaoSupport {
 
 	public static IpFunctionConfigDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpFunctionConfigDAO) ctx.getBean("IpFunctionConfigDAO");
+	}
+
+	public void deleteByFunctionId(Long funcId) {
+		log.debug("deleting IpFunctionConfig by Function ID");
+		try {
+			SQLQuery query = getSession().createSQLQuery("delete from ip_function_config where fc_func_id=" + funcId);
+			query.executeUpdate();
+			log.debug("delete successful");
+		} catch (RuntimeException re) {
+			log.error("delete failed", re);
+			throw re;
+		}
 	}
 }

@@ -201,6 +201,12 @@
   location="/noformat/java/repository/com/restfb/restfb/1.6.14/restfb-1.6.14.jar" model-entity="FileSystemJar"/>
  <file-system NAME="lib-twitter4j-core-4.0.1.jar"
   location="/noformat/java/repository/org/twitter4j/twitter4j-core/4.0.1/twitter4j-core-4.0.1.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsf-impl-2.1.11.jar"
+  location="/noformat/java/repository/com/sun/faces/jsf-impl/2.1.11/jsf-impl-2.1.11.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-jsf-api-2.1.11.jar"
+  location="/noformat/java/repository/com/sun/faces/jsf-api/2.1.11/jsf-api-2.1.11.jar" model-entity="FileSystemJar"/>
+ <file-system NAME="lib-commons-codec-1.9.jar"
+  location="/noformat/java/repository/commons-codec/commons-codec/1.9/commons-codec-1.9.jar" model-entity="FileSystemJar"/>
  <web SERVLET_VERSION="2.4" model-entity="JstWeb" model-path="/web.xml">
   <module URI="/WEB-INF/faces-config.xml" model-entity="WebJSFModule"
    model-path="/faces-config.xml" src="src" web-root="WEB-ROOT"/>
