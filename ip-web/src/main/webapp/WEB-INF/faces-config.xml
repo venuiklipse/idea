@@ -54,6 +54,18 @@
 			<to-view-id>/pages/admin/viewGroups.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>admcf</from-outcome>
+			<to-view-id>/pages/admin/createFunction.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admef</from-outcome>
+			<to-view-id>/pages/admin/editFunction.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>admvf</from-outcome>
+			<to-view-id>/pages/admin/viewFunction.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>ideaci</from-outcome>
 			<to-view-id>/pages/idea/create.xhtml</to-view-id>
 		</navigation-case>

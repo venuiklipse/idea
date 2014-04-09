@@ -1,9 +1,13 @@
 package za.co.idea.ip.orm.bean;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * IpFunction entity. @author MyEclipse Persistence Tools
  */
 
+@SuppressWarnings("rawtypes")
 public class IpFunction implements java.io.Serializable {
 
 	// Fields
@@ -11,11 +15,10 @@ public class IpFunction implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4188336242416759204L;
-	private Integer funcId;
-	private IpUser ipUser;
-	private IpGroup ipGroup;
+	private static final long serialVersionUID = -2202065199665268149L;
+	private Long funcId;
 	private String funcName;
+	private Set ipFunctionConfigs = new HashSet(0);
 
 	// Constructors
 
@@ -24,43 +27,26 @@ public class IpFunction implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpFunction(Integer funcId, String funcName) {
+	public IpFunction(Long funcId, String funcName) {
 		this.funcId = funcId;
 		this.funcName = funcName;
 	}
 
 	/** full constructor */
-	public IpFunction(Integer funcId, IpUser ipUser, IpGroup ipGroup, String funcName) {
+	public IpFunction(Long funcId, String funcName, Set ipFunctionConfigs) {
 		this.funcId = funcId;
-		this.ipUser = ipUser;
-		this.ipGroup = ipGroup;
 		this.funcName = funcName;
+		this.ipFunctionConfigs = ipFunctionConfigs;
 	}
 
 	// Property accessors
 
-	public Integer getFuncId() {
+	public Long getFuncId() {
 		return this.funcId;
 	}
 
-	public void setFuncId(Integer funcId) {
+	public void setFuncId(Long funcId) {
 		this.funcId = funcId;
-	}
-
-	public IpUser getIpUser() {
-		return this.ipUser;
-	}
-
-	public void setIpUser(IpUser ipUser) {
-		this.ipUser = ipUser;
-	}
-
-	public IpGroup getIpGroup() {
-		return this.ipGroup;
-	}
-
-	public void setIpGroup(IpGroup ipGroup) {
-		this.ipGroup = ipGroup;
 	}
 
 	public String getFuncName() {
@@ -69,6 +55,14 @@ public class IpFunction implements java.io.Serializable {
 
 	public void setFuncName(String funcName) {
 		this.funcName = funcName;
+	}
+
+	public Set getIpFunctionConfigs() {
+		return this.ipFunctionConfigs;
+	}
+
+	public void setIpFunctionConfigs(Set ipFunctionConfigs) {
+		this.ipFunctionConfigs = ipFunctionConfigs;
 	}
 
 }

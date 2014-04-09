@@ -17,12 +17,17 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.digest.Md5Crypt;
 
+import za.co.idea.ip.orm.bean.IpFunction;
+import za.co.idea.ip.orm.bean.IpFunctionConfig;
 import za.co.idea.ip.orm.bean.IpGroup;
 import za.co.idea.ip.orm.bean.IpLogin;
 import za.co.idea.ip.orm.bean.IpUser;
+import za.co.idea.ip.orm.dao.IpFunctionConfigDAO;
+import za.co.idea.ip.orm.dao.IpFunctionDAO;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
 import za.co.idea.ip.orm.dao.IpLoginDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
+import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 
@@ -32,6 +37,8 @@ public class AdminService {
 	private IpGroupDAO ipGroupDAO;
 	private IpUserDAO ipUserDAO;
 	private IpLoginDAO ipLoginDAO;
+	private IpFunctionDAO ipFunctionDAO;
+	private IpFunctionConfigDAO ipFunctionConfigDAO;
 
 	@POST
 	@Path("/group/add")
@@ -106,6 +113,71 @@ public class AdminService {
 	}
 
 	@GET
+	@Path("/func/list")
+	@Produces("application/json")
+	public List<FunctionMessage> listFunction() {
+		List<FunctionMessage> ret = new ArrayList<FunctionMessage>();
+		try {
+			List functions = ipFunctionDAO.findAll();
+			for (Object object : functions) {
+				IpFunction ipFunction = (IpFunction) object;
+				FunctionMessage function = new FunctionMessage();
+				function.setFuncId(ipFunction.getFuncId());
+				function.setFuncName(ipFunction.getFuncName());
+				List<UserMessage> users = new ArrayList<UserMessage>();
+				List<GroupMessage> groups = new ArrayList<GroupMessage>();
+				for (Object obj : ipFunction.getIpFunctionConfigs()) {
+					IpFunctionConfig config = (IpFunctionConfig) obj;
+					GroupMessage group = new GroupMessage();
+					group.setgId(config.getIpGroup().getGroupId());
+					group.setgName(config.getIpGroup().getGroupName());
+					groups.add(group);
+					UserMessage user = new UserMessage();
+					user.setuId(config.getIpUser().getUserId());
+					user.setScName(config.getIpUser().getUserScreenName());
+					users.add(user);
+				}
+				function.setGroupList(groups);
+				function.setUserList(users);
+				ret.add(function);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
+	@Path("/func/get/{id}")
+	@Produces("application/json")
+	public FunctionMessage getFunctionById(@PathParam("id") Long id) {
+		FunctionMessage function = new FunctionMessage();
+		try {
+			IpFunction ipFunction = ipFunctionDAO.findById(id);
+			function.setFuncId(ipFunction.getFuncId());
+			function.setFuncName(ipFunction.getFuncName());
+			List<UserMessage> users = new ArrayList<UserMessage>();
+			List<GroupMessage> groups = new ArrayList<GroupMessage>();
+			for (Object obj : ipFunction.getIpFunctionConfigs()) {
+				IpFunctionConfig config = (IpFunctionConfig) obj;
+				GroupMessage group = new GroupMessage();
+				group.setgId(config.getIpGroup().getGroupId());
+				group.setgName(config.getIpGroup().getGroupName());
+				groups.add(group);
+				UserMessage user = new UserMessage();
+				user.setuId(config.getIpUser().getUserId());
+				user.setScName(config.getIpUser().getUserScreenName());
+				users.add(user);
+			}
+			function.setGroupList(groups);
+			function.setUserList(users);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return function;
+	}
+
+	@GET
 	@Path("/group/get/{id}")
 	@Produces("application/json")
 	public GroupMessage getGroup(@PathParam("id") Long id) {
@@ -164,6 +236,41 @@ public class AdminService {
 				ipUserDAO.delete(ipUser);
 				throw new RuntimeException("Cannot create user :: " + e.getMessage());
 			}
+			return Response.ok().build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@POST
+	@Path("/func/add")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public Response createFunction(FunctionMessage function) {
+		try {
+			IpFunction ipFunction = new IpFunction();
+			ipFunction.setFuncId(function.getFuncId());
+			ipFunction.setFuncName(function.getFuncName());
+			List<IpGroup> grps = new ArrayList<IpGroup>();
+			for (Long grpId : function.getGroupIdList())
+				grps.add(ipGroupDAO.findById(grpId));
+			List<IpUser> usrs = new ArrayList<IpUser>();
+			for (Long usrId : function.getUserIdList())
+				usrs.add(ipUserDAO.findById(usrId));
+			return Response.ok().build();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@PUT
+	@Path("/func/modify")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public Response updateFunction(FunctionMessage function) {
+		try {
 			return Response.ok().build();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -353,5 +460,21 @@ public class AdminService {
 
 	public void setIpLoginDAO(IpLoginDAO ipLoginDAO) {
 		this.ipLoginDAO = ipLoginDAO;
+	}
+
+	public IpFunctionDAO getIpFunctionDAO() {
+		return ipFunctionDAO;
+	}
+
+	public void setIpFunctionDAO(IpFunctionDAO ipFunctionDAO) {
+		this.ipFunctionDAO = ipFunctionDAO;
+	}
+
+	public IpFunctionConfigDAO getIpFunctionConfigDAO() {
+		return ipFunctionConfigDAO;
+	}
+
+	public void setIpFunctionConfigDAO(IpFunctionConfigDAO ipFunctionConfigDAO) {
+		this.ipFunctionConfigDAO = ipFunctionConfigDAO;
 	}
 }

@@ -8,31 +8,31 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import za.co.idea.ip.orm.bean.IpFunction;
+import za.co.idea.ip.orm.bean.IpFunctionConfig;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * IpFunction entities. Transaction control of the save(), update() and delete()
- * operations can directly support Spring container-managed transactions or they
- * can be augmented to handle user-managed Spring transactions. Each of these
- * methods provides additional information for how to configure it for the
- * desired type of transaction control.
+ * IpFunctionConfig entities. Transaction control of the save(), update() and
+ * delete() operations can directly support Spring container-managed
+ * transactions or they can be augmented to handle user-managed Spring
+ * transactions. Each of these methods provides additional information for how
+ * to configure it for the desired type of transaction control.
  * 
- * @see za.co.idea.ip.orm.bean.IpFunction
+ * @see za.co.idea.ip.orm.bean.IpFunctionConfig
  * @author MyEclipse Persistence Tools
  */
 @SuppressWarnings("rawtypes")
-public class IpFunctionDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory.getLogger(IpFunctionDAO.class);
+public class IpFunctionConfigDAO extends HibernateDaoSupport {
+	private static final Logger log = LoggerFactory.getLogger(IpFunctionConfigDAO.class);
+
 	// property constants
-	public static final String FUNC_NAME = "funcName";
 
 	protected void initDao() {
 		// do nothing
 	}
 
-	public void save(IpFunction transientInstance) {
-		log.debug("saving IpFunction instance");
+	public void save(IpFunctionConfig transientInstance) {
+		log.debug("saving IpFunctionConfig instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
@@ -42,8 +42,8 @@ public class IpFunctionDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void delete(IpFunction persistentInstance) {
-		log.debug("deleting IpFunction instance");
+	public void delete(IpFunctionConfig persistentInstance) {
+		log.debug("deleting IpFunctionConfig instance");
 		try {
 			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
@@ -53,10 +53,10 @@ public class IpFunctionDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public IpFunction findById(java.lang.Long id) {
-		log.debug("getting IpFunction instance with id: " + id);
+	public IpFunctionConfig findById(java.lang.Long id) {
+		log.debug("getting IpFunctionConfig instance with id: " + id);
 		try {
-			IpFunction instance = (IpFunction) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpFunction", id);
+			IpFunctionConfig instance = (IpFunctionConfig) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpFunctionConfig", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -64,8 +64,8 @@ public class IpFunctionDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(IpFunction instance) {
-		log.debug("finding IpFunction instance by example");
+	public List findByExample(IpFunctionConfig instance) {
+		log.debug("finding IpFunctionConfig instance by example");
 		try {
 			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: " + results.size());
@@ -77,9 +77,9 @@ public class IpFunctionDAO extends HibernateDaoSupport {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding IpFunction instance with property: " + propertyName + ", value: " + value);
+		log.debug("finding IpFunctionConfig instance with property: " + propertyName + ", value: " + value);
 		try {
-			String queryString = "from IpFunction as model where model." + propertyName + "= ?";
+			String queryString = "from IpFunctionConfig as model where model." + propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -87,14 +87,10 @@ public class IpFunctionDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByFuncName(Object funcName) {
-		return findByProperty(FUNC_NAME, funcName);
-	}
-
 	public List findAll() {
-		log.debug("finding all IpFunction instances");
+		log.debug("finding all IpFunctionConfig instances");
 		try {
-			String queryString = "from IpFunction";
+			String queryString = "from IpFunctionConfig";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -102,10 +98,10 @@ public class IpFunctionDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public IpFunction merge(IpFunction detachedInstance) {
-		log.debug("merging IpFunction instance");
+	public IpFunctionConfig merge(IpFunctionConfig detachedInstance) {
+		log.debug("merging IpFunctionConfig instance");
 		try {
-			IpFunction result = (IpFunction) getHibernateTemplate().merge(detachedInstance);
+			IpFunctionConfig result = (IpFunctionConfig) getHibernateTemplate().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -114,8 +110,8 @@ public class IpFunctionDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachDirty(IpFunction instance) {
-		log.debug("attaching dirty IpFunction instance");
+	public void attachDirty(IpFunctionConfig instance) {
+		log.debug("attaching dirty IpFunctionConfig instance");
 		try {
 			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -125,8 +121,8 @@ public class IpFunctionDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachClean(IpFunction instance) {
-		log.debug("attaching clean IpFunction instance");
+	public void attachClean(IpFunctionConfig instance) {
+		log.debug("attaching clean IpFunctionConfig instance");
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -136,7 +132,7 @@ public class IpFunctionDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static IpFunctionDAO getFromApplicationContext(ApplicationContext ctx) {
-		return (IpFunctionDAO) ctx.getBean("IpFunctionDAO");
+	public static IpFunctionConfigDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (IpFunctionConfigDAO) ctx.getBean("IpFunctionConfigDAO");
 	}
 }

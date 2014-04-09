@@ -29,6 +29,7 @@
 				<value>za/co/idea/ip/orm/hbm/IpClaimStatus.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpConfig.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpFunction.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpFunctionConfig.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpGroup.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpIdea.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpIdeaCat.hbm.xml</value>
@@ -120,6 +121,11 @@
 		</property>
 	</bean>
 	<bean id="IpFunctionDAO" class="za.co.idea.ip.orm.dao.IpFunctionDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpFunctionConfigDAO" class="za.co.idea.ip.orm.dao.IpFunctionConfigDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

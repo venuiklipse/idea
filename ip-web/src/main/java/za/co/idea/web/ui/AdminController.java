@@ -15,8 +15,10 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
+import za.co.idea.web.ui.bean.FunctionBean;
 import za.co.idea.web.ui.bean.GroupBean;
 import za.co.idea.web.ui.bean.UserBean;
 
@@ -24,17 +26,12 @@ import za.co.idea.web.ui.bean.UserBean;
 public class AdminController implements Serializable {
 	private static final long serialVersionUID = 1441325880500732566L;
 
-	/**
-	 * Create and Edit Beans
-	 */
 	private UserBean userBean;
 	private GroupBean groupBean;
+	private FunctionBean functionBean;
+	private List<FunctionBean> functions;
 	private List<GroupBean> pGrps;
 	private List<UserBean> admUsers;
-
-	/**
-	 * View Beans
-	 */
 	private List<UserBean> viewUsers;
 	private List<GroupBean> viewGroups;
 	private boolean available;
@@ -105,6 +102,81 @@ public class AdminController implements Serializable {
 		try {
 			userBean = new UserBean();
 			return "admcu";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showViewGroups() {
+		try {
+			viewGroups = fetchAllGroups();
+			pGrps = fetchAllGroups();
+			admUsers = fetchAllUsers();
+			return "admvg";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showEditGroup() {
+		try {
+			pGrps = fetchAllGroups();
+			admUsers = fetchAllUsers();
+			return "admeg";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showCreateGroup() {
+		try {
+			groupBean = new GroupBean();
+			pGrps = fetchAllGroups();
+			admUsers = fetchAllUsers();
+			return "admcg";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showCreateFunction() {
+		try {
+			admUsers = fetchAllUsers();
+			pGrps = fetchAllGroups();
+			return "admcf";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showViewFunction() {
+		try {
+			functions = fetchAllFunctions();
+			admUsers = fetchAllUsers();
+			pGrps = fetchAllGroups();
+			return "admvf";
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showEditFunction() {
+		try {
+			admUsers = fetchAllUsers();
+			pGrps = fetchAllGroups();
+			return "admef";
 		} catch (Exception e) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -202,44 +274,6 @@ public class AdminController implements Serializable {
 			else {
 				return "";
 			}
-		} catch (Exception e) {
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
-		}
-	}
-
-	public String showViewGroups() {
-		try {
-			viewGroups = fetchAllGroups();
-			pGrps = fetchAllGroups();
-			admUsers = fetchAllUsers();
-			return "admvg";
-		} catch (Exception e) {
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
-		}
-	}
-
-	public String showEditGroup() {
-		try {
-			pGrps = fetchAllGroups();
-			admUsers = fetchAllUsers();
-			return "admeg";
-		} catch (Exception e) {
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
-		}
-	}
-
-	public String showCreateGroup() {
-		try {
-			groupBean = new GroupBean();
-			pGrps = fetchAllGroups();
-			admUsers = fetchAllUsers();
-			return "admcg";
 		} catch (Exception e) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -348,6 +382,37 @@ public class AdminController implements Serializable {
 			bean.setIsActive(groupMessage.getIsActive());
 			bean.setSelAdmUser(groupMessage.getAdmUserId());
 			bean.setSelPGrp(groupMessage.getpGrpId());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<FunctionBean> fetchAllFunctions() {
+		List<FunctionBean> ret = new ArrayList<FunctionBean>();
+		List providers = new ArrayList();
+		providers.add(new JacksonJsonProvider(new ObjectMapper()));
+		WebClient viewFunctionsClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/as/func/list", providers);
+		viewFunctionsClient.header("Content-Type", "application/json");
+		viewFunctionsClient.header("Accept", "application/json");
+		List<FunctionMessage> functions = new ArrayList<FunctionMessage>(viewFunctionsClient.accept(MediaType.APPLICATION_JSON).getCollection(FunctionMessage.class));
+		for (FunctionMessage functionMessage : functions) {
+			FunctionBean bean = new FunctionBean();
+			bean.setFuncId(functionMessage.getFuncId());
+			bean.setFuncName(functionMessage.getFuncName());
+			bean.getGroupList().clear();
+			for (GroupMessage msg : functionMessage.getGroupList()) {
+				GroupBean gBean = new GroupBean();
+				gBean.setgId(msg.getgId());
+				gBean.setgName(msg.getgName());
+				bean.getGroupList().add(gBean);
+			}
+			bean.getUserList().clear();
+			for (UserMessage msg : functionMessage.getUserList()) {
+				UserBean uBean = new UserBean();
+				uBean.setuId(msg.getuId());
+				uBean.setScName(msg.getScName());
+				bean.getUserList().add(uBean);
+			}
 			ret.add(bean);
 		}
 		return ret;
@@ -463,6 +528,26 @@ public class AdminController implements Serializable {
 
 	public void setAvailable(boolean available) {
 		this.available = available;
+	}
+
+	public FunctionBean getFunctionBean() {
+		if (functionBean == null)
+			functionBean = new FunctionBean();
+		return functionBean;
+	}
+
+	public void setFunctionBean(FunctionBean functionBean) {
+		this.functionBean = functionBean;
+	}
+
+	public List<FunctionBean> getFunctions() {
+		if (functions == null)
+			functions = new ArrayList<FunctionBean>();
+		return functions;
+	}
+
+	public void setFunctions(List<FunctionBean> functions) {
+		this.functions = functions;
 	}
 
 }
