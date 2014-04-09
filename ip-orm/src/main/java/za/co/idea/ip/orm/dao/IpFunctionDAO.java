@@ -2,13 +2,17 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpFunction;
+import za.co.idea.ip.orm.bean.IpFunctionConfig;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -136,7 +140,50 @@ public class IpFunctionDAO extends HibernateDaoSupport {
 		}
 	}
 
+	public List getFunctionByQuery() {
+		log.debug("Fetching Functions by Query :: getAllFunction");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getAllFunction");
+			List ret = query.list();
+			for (Object object : ret) {
+				IpFunction function = (IpFunction) object;
+				Hibernate.initialize(function.getIpFunctionConfigs());
+				for (Object obj : function.getIpFunctionConfigs()) {
+					IpFunctionConfig config = (IpFunctionConfig) obj;
+					Hibernate.initialize(config.getIpUser());
+					Hibernate.initialize(config.getIpGroup());
+				}
+			}
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public IpFunction getFunctionById(Long id) {
+		log.debug("Fetching Functions by Query :: getFunctionById");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getFunctionById");
+			query.setLong("id", id);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpFunction function = (IpFunction) object;
+				Hibernate.initialize(function.getIpFunctionConfigs());
+			}
+			session.close();
+			return (IpFunction) ret.get(0);
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
 	public static IpFunctionDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpFunctionDAO) ctx.getBean("IpFunctionDAO");
 	}
+
 }

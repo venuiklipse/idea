@@ -1,9 +1,7 @@
 package za.co.idea.ip.ws;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -120,7 +118,7 @@ public class AdminService {
 	public List<FunctionMessage> listFunction() {
 		List<FunctionMessage> ret = new ArrayList<FunctionMessage>();
 		try {
-			List functions = ipFunctionDAO.findAll();
+			List functions = ipFunctionDAO.getFunctionByQuery();
 			for (Object object : functions) {
 				IpFunction ipFunction = (IpFunction) object;
 				FunctionMessage function = new FunctionMessage();
@@ -159,7 +157,7 @@ public class AdminService {
 	public FunctionMessage getFunctionById(@PathParam("id") Long id) {
 		FunctionMessage function = new FunctionMessage();
 		try {
-			IpFunction ipFunction = ipFunctionDAO.findById(id);
+			IpFunction ipFunction = ipFunctionDAO.getFunctionById(id);
 			function.setFuncId(ipFunction.getFuncId());
 			function.setFuncName(ipFunction.getFuncName());
 			List<UserMessage> users = new ArrayList<UserMessage>();
@@ -258,23 +256,21 @@ public class AdminService {
 			IpFunction ipFunction = new IpFunction();
 			ipFunction.setFuncId(function.getFuncId());
 			ipFunction.setFuncName(function.getFuncName());
-			Set<IpFunctionConfig> configs = new HashSet<IpFunctionConfig>();
+			ipFunctionDAO.save(ipFunction);
 			for (Long grpId : function.getGroupIdList()) {
 				IpFunctionConfig config = new IpFunctionConfig();
 				config.setFcId(UUID.randomUUID().toString());
 				config.setIpFunction(ipFunction);
 				config.setIpGroup(ipGroupDAO.findById(grpId));
-				configs.add(config);
+				ipFunctionConfigDAO.save(config);
 			}
 			for (Long usrId : function.getUserIdList()) {
 				IpFunctionConfig config = new IpFunctionConfig();
 				config.setFcId(UUID.randomUUID().toString());
 				config.setIpFunction(ipFunction);
 				config.setIpUser(ipUserDAO.findById(usrId));
-				configs.add(config);
+				ipFunctionConfigDAO.save(config);
 			}
-			ipFunction.setIpFunctionConfigs(configs);
-			ipFunctionDAO.save(ipFunction);
 			return ResponseMessage.createSuccess();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -292,22 +288,20 @@ public class AdminService {
 			IpFunction ipFunction = new IpFunction();
 			ipFunction.setFuncId(function.getFuncId());
 			ipFunction.setFuncName(function.getFuncName());
-			Set<IpFunctionConfig> configs = new HashSet<IpFunctionConfig>();
 			for (Long grpId : function.getGroupIdList()) {
 				IpFunctionConfig config = new IpFunctionConfig();
 				config.setFcId(UUID.randomUUID().toString());
 				config.setIpFunction(ipFunction);
 				config.setIpGroup(ipGroupDAO.findById(grpId));
-				configs.add(config);
+				ipFunctionConfigDAO.save(config);
 			}
 			for (Long usrId : function.getUserIdList()) {
 				IpFunctionConfig config = new IpFunctionConfig();
 				config.setFcId(UUID.randomUUID().toString());
 				config.setIpFunction(ipFunction);
 				config.setIpUser(ipUserDAO.findById(usrId));
-				configs.add(config);
+				ipFunctionConfigDAO.save(config);
 			}
-			ipFunction.setIpFunctionConfigs(configs);
 			ipFunctionDAO.merge(ipFunction);
 			return ResponseMessage.createSuccess();
 		} catch (Exception e) {

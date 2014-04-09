@@ -5,6 +5,8 @@
 		<property name="ipGroupDAO" ref="IpGroupDAO" />
 		<property name="ipUserDAO" ref="IpUserDAO" />
 		<property name="ipLoginDAO" ref="IpLoginDAO" />
+		<property name="ipFunctionConfigDAO" ref="IpFunctionConfigDAO" />
+		<property name="ipFunctionDAO" ref="IpFunctionDAO" />
 	</bean>
 	<bean id="ideaService" class="za.co.idea.ip.ws.IdeaService">
 		<property name="ipIdeaCatDAO" ref="IpIdeaCatDAO" />

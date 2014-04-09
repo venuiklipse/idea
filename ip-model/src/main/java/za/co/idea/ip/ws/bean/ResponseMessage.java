@@ -2,7 +2,7 @@ package za.co.idea.ip.ws.bean;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "response")
+@XmlRootElement(name = "responseMessage")
 public class ResponseMessage {
 	private Integer statusCode;
 	private String statusDesc;
