@@ -81,6 +81,38 @@
 			<from-outcome>ideasi</from-outcome>
 			<to-view-id>/pages/idea/summary.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>chalcc</from-outcome>
+			<to-view-id>/pages/challenge/create.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chalec</from-outcome>
+			<to-view-id>/pages/challenge/edit.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chalvc</from-outcome>
+			<to-view-id>/pages/challenge/view.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>chalsc</from-outcome>
+			<to-view-id>/pages/challenge/summary.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>solcs</from-outcome>
+			<to-view-id>/pages/challenge/create.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>soles</from-outcome>
+			<to-view-id>/pages/challenge/edit.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>solvs</from-outcome>
+			<to-view-id>/pages/challenge/view.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>solss</from-outcome>
+			<to-view-id>/pages/challenge/summary.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<lifecycle>
 		<phase-listener>za.co.idea.web.util.SessionPhaseListener</phase-listener>

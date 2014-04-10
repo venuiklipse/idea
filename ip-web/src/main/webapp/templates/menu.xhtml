@@ -17,6 +17,12 @@
 				<p:menuitem value="Create Random Idea" action="#{ideaBean.showCreateIdea}" />
 				<p:menuitem value="View Random Idea" action="#{ideaBean.showViewIdeas}" />
 			</p:submenu>
+			<p:submenu label="Challenge">
+				<p:menuitem value="Create Challenge" action="#{challengeBean.showCreateChallenge}" />
+				<p:menuitem value="View Challenge" action="#{challengeBean.showViewChallenge}" />
+				<p:menuitem value="Submit Solution" action="#{challengeBean.showCreateSolution}" />
+				<p:menuitem value="View Solution" action="#{challengeBean.showViewSolution}" />
+			</p:submenu>
 			<p:menuitem value="Logout" action="#{adminBean.logout}" />
 		</p:menubar>
 	</ui:composition>
