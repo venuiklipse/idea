@@ -30,11 +30,11 @@ import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.TagMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
-import za.co.idea.ip.ws.util.NumericCounter;
 import za.co.idea.web.ui.bean.IdeaBean;
 import za.co.idea.web.ui.bean.ListSelectorBean;
 import za.co.idea.web.ui.bean.TagBean;
 import za.co.idea.web.ui.bean.UserBean;
+import za.co.idea.web.util.IdNumberGen;
 
 public class IdeaController implements Serializable {
 
@@ -58,7 +58,7 @@ public class IdeaController implements Serializable {
 	private String likeCnt;
 	private String commentCnt;
 	private String buildOnCnt;
-	private static final NumericCounter COUNTER = new NumericCounter();
+	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private WebClient createCustomClient(String url) {
@@ -141,7 +141,7 @@ public class IdeaController implements Serializable {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
-		message.setTagId(COUNTER.nextLong());
+		message.setTagId(COUNTER.getNextId("ip_tag"));
 		message.setTeId(1);
 		message.setTtId(1);
 		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
@@ -162,7 +162,7 @@ public class IdeaController implements Serializable {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
-		message.setTagId(COUNTER.nextLong());
+		message.setTagId(COUNTER.getNextId("ip_tag"));
 		message.setTagText(commentText);
 		message.setTeId(1);
 		message.setTtId(2);
@@ -185,7 +185,7 @@ public class IdeaController implements Serializable {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
-		message.setTagId(COUNTER.nextLong());
+		message.setTagId(COUNTER.getNextId("ip_tag"));
 		message.setTagText(buildOnText);
 		message.setTeId(1);
 		message.setTtId(3);
@@ -234,7 +234,7 @@ public class IdeaController implements Serializable {
 			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
 			ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
 			ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
-			ideaMessage.setIdeaId(COUNTER.nextLong());
+			ideaMessage.setIdeaId(COUNTER.getNextId("ip_idea"));
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setFileName(ideaBean.getFileName());

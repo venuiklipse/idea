@@ -9,8 +9,6 @@ public class FunctionBean implements Serializable {
 	private static final long serialVersionUID = -5754104006986083662L;
 	private Long funcId;
 	private String funcName;
-	private List<UserBean> userList;
-	private List<GroupBean> groupList;
 	private List<Long> userIdList;
 	private List<Long> groupIdList;
 
@@ -30,27 +28,9 @@ public class FunctionBean implements Serializable {
 		this.funcName = funcName;
 	}
 
-	public List<UserBean> getUserList() {
-		if (userList == null)
-			userList = new ArrayList<UserBean>();
-		return userList;
-	}
-
-	public void setUserList(List<UserBean> userList) {
-		this.userList = userList;
-	}
-
-	public List<GroupBean> getGroupList() {
-		if (groupList == null)
-			groupList = new ArrayList<GroupBean>();
-		return groupList;
-	}
-
-	public void setGroupList(List<GroupBean> groupList) {
-		this.groupList = groupList;
-	}
-
 	public List<Long> getUserIdList() {
+		if (userIdList == null)
+			userIdList = new ArrayList<Long>();
 		return userIdList;
 	}
 
@@ -59,6 +39,8 @@ public class FunctionBean implements Serializable {
 	}
 
 	public List<Long> getGroupIdList() {
+		if (groupIdList == null)
+			groupIdList = new ArrayList<Long>();
 		return groupIdList;
 	}
 

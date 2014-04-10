@@ -34,6 +34,7 @@
 				<value>za/co/idea/ip/orm/hbm/IpIdea.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpIdeaCat.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpIdeaStatus.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpKeys.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpLogin.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpPoints.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpRewards.hbm.xml</value>
@@ -181,6 +182,11 @@
 		</property>
 	</bean>
 	<bean id="IpRewardsGroupDAO" class="za.co.idea.ip.orm.dao.IpRewardsGroupDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="IpKeysDAO" class="za.co.idea.ip.orm.dao.IpKeysDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

@@ -20,10 +20,10 @@ import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
-import za.co.idea.ip.ws.util.NumericCounter;
 import za.co.idea.web.ui.bean.FunctionBean;
 import za.co.idea.web.ui.bean.GroupBean;
 import za.co.idea.web.ui.bean.UserBean;
+import za.co.idea.web.util.IdNumberGen;
 
 public class AdminController implements Serializable {
 	private static final long serialVersionUID = 1441325880500732566L;
@@ -37,7 +37,7 @@ public class AdminController implements Serializable {
 	private List<UserBean> viewUsers;
 	private List<GroupBean> viewGroups;
 	private boolean available;
-	private static final NumericCounter COUNTER = new NumericCounter();
+	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	private WebClient createCustomClient(String url) {
 		WebClient client = WebClient.create(url, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
@@ -237,7 +237,7 @@ public class AdminController implements Serializable {
 			bean.setSkills(userBean.getSkills());
 			bean.setTwHandle(userBean.getTwHandle());
 			bean.setIsActive(true);
-			bean.setuId(COUNTER.nextLong());
+			bean.setuId(COUNTER.getNextId("ip_user"));
 			ResponseMessage response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean, ResponseMessage.class);
 			if (response.getStatusCode() == 0)
 				return "home";
@@ -292,7 +292,7 @@ public class AdminController implements Serializable {
 			GroupMessage groupMessage = new GroupMessage();
 			groupMessage.setAdmUserId(groupBean.getSelAdmUser());
 			groupMessage.setGeMail(groupBean.getGeMail());
-			groupMessage.setgId(COUNTER.nextLong());
+			groupMessage.setgId(COUNTER.getNextId("ip_group"));
 			groupMessage.setgName(groupBean.getgName());
 			groupMessage.setIsActive(true);
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
@@ -314,10 +314,10 @@ public class AdminController implements Serializable {
 		try {
 			WebClient addFunctionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/func/add");
 			FunctionMessage functionMessage = new FunctionMessage();
-			functionMessage.setFuncId(COUNTER.nextLong());
+			functionMessage.setFuncId(COUNTER.getNextId("ip_function"));
 			functionMessage.setFuncName(functionBean.getFuncName());
-			functionMessage.setGroupIdList(functionBean.getGroupIdList());
-			functionMessage.setUserIdList(functionBean.getUserIdList());
+			functionMessage.setGroupIdList(toIdArray(functionBean.getGroupIdList()));
+			functionMessage.setUserIdList(toIdArray(functionBean.getUserIdList()));
 			ResponseMessage response = addFunctionClient.accept(MediaType.APPLICATION_JSON).post(functionMessage, ResponseMessage.class);
 			if (response.getStatusCode() == 0)
 				return "home";
@@ -362,8 +362,8 @@ public class AdminController implements Serializable {
 			FunctionMessage functionMessage = new FunctionMessage();
 			functionMessage.setFuncId(functionBean.getFuncId());
 			functionMessage.setFuncName(functionBean.getFuncName());
-			functionMessage.setGroupIdList(functionBean.getGroupIdList());
-			functionMessage.setUserIdList(functionBean.getUserIdList());
+			functionMessage.setGroupIdList(toIdArray(functionBean.getGroupIdList()));
+			functionMessage.setUserIdList(toIdArray(functionBean.getUserIdList()));
 			ResponseMessage response = updateFunctionClient.accept(MediaType.APPLICATION_JSON).put(functionMessage, ResponseMessage.class);
 			if (response.getStatusCode() == 0)
 				return "home";
@@ -376,6 +376,15 @@ public class AdminController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
+	}
+
+	private Long[] toIdArray(List<Long> ids) {
+		Long[] ret = new Long[ids.size()];
+		for (int i = 0; i < ids.size(); i++) {
+			Object obj = ids.get(i);
+			ret[i] = new Long(obj.toString());
+		}
+		return ret;
 	}
 
 	private List<UserBean> fetchAllUsers() {
@@ -430,20 +439,14 @@ public class AdminController implements Serializable {
 			FunctionBean bean = new FunctionBean();
 			bean.setFuncId(functionMessage.getFuncId());
 			bean.setFuncName(functionMessage.getFuncName());
-			bean.getGroupList().clear();
-			for (GroupMessage msg : functionMessage.getGroupList()) {
-				GroupBean gBean = new GroupBean();
-				gBean.setgId(msg.getgId());
-				gBean.setgName(msg.getgName());
-				bean.getGroupList().add(gBean);
-			}
-			bean.getUserList().clear();
-			for (UserMessage msg : functionMessage.getUserList()) {
-				UserBean uBean = new UserBean();
-				uBean.setuId(msg.getuId());
-				uBean.setScName(msg.getScName());
-				bean.getUserList().add(uBean);
-			}
+			bean.getGroupIdList().clear();
+			for (Long id : functionMessage.getGroupIdList())
+				if (id != null)
+					bean.getGroupIdList().add(id);
+			bean.getUserIdList().clear();
+			for (Long id : functionMessage.getUserIdList())
+				if (id != null)
+					bean.getUserIdList().add(id);
 			ret.add(bean);
 		}
 		return ret;

@@ -1,23 +1,13 @@
 package za.co.idea.ip.ws.bean;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeInfo.As;
-import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
-
-@JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "class")
 @XmlRootElement(name = "functionMessage")
 public class FunctionMessage {
 	private Long funcId;
 	private String funcName;
-	private List<UserMessage> userList;
-	private List<GroupMessage> groupList;
-	private List<Long> userIdList;
-	private List<Long> groupIdList;
+	private Long[] userIdList;
+	private Long[] groupIdList;
 
 	public Long getFuncId() {
 		return funcId;
@@ -35,39 +25,23 @@ public class FunctionMessage {
 		this.funcName = funcName;
 	}
 
-	public List<UserMessage> getUserList() {
-		if (userList == null)
-			userList = new ArrayList<UserMessage>();
-		return userList;
-	}
-
-	public void setUserList(List<UserMessage> userList) {
-		this.userList = userList;
-	}
-
-	public List<GroupMessage> getGroupList() {
-		if (groupList == null)
-			groupList = new ArrayList<GroupMessage>();
-		return groupList;
-	}
-
-	public void setGroupList(List<GroupMessage> groupList) {
-		this.groupList = groupList;
-	}
-
-	public List<Long> getUserIdList() {
+	public Long[] getUserIdList() {
+		if (userIdList == null)
+			userIdList = new Long[] {};
 		return userIdList;
 	}
 
-	public void setUserIdList(List<Long> userIdList) {
+	public void setUserIdList(Long[] userIdList) {
 		this.userIdList = userIdList;
 	}
 
-	public List<Long> getGroupIdList() {
+	public Long[] getGroupIdList() {
+		if (groupIdList == null)
+			groupIdList = new Long[] {};
 		return groupIdList;
 	}
 
-	public void setGroupIdList(List<Long> groupIdList) {
+	public void setGroupIdList(Long[] groupIdList) {
 		this.groupIdList = groupIdList;
 	}
 

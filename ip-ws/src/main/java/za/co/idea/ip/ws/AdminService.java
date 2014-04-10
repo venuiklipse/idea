@@ -18,11 +18,13 @@ import org.apache.commons.codec.digest.DigestUtils;
 import za.co.idea.ip.orm.bean.IpFunction;
 import za.co.idea.ip.orm.bean.IpFunctionConfig;
 import za.co.idea.ip.orm.bean.IpGroup;
+import za.co.idea.ip.orm.bean.IpKeys;
 import za.co.idea.ip.orm.bean.IpLogin;
 import za.co.idea.ip.orm.bean.IpUser;
 import za.co.idea.ip.orm.dao.IpFunctionConfigDAO;
 import za.co.idea.ip.orm.dao.IpFunctionDAO;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
+import za.co.idea.ip.orm.dao.IpKeysDAO;
 import za.co.idea.ip.orm.dao.IpLoginDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.FunctionMessage;
@@ -38,6 +40,7 @@ public class AdminService {
 	private IpLoginDAO ipLoginDAO;
 	private IpFunctionDAO ipFunctionDAO;
 	private IpFunctionConfigDAO ipFunctionConfigDAO;
+	private IpKeysDAO ipKeysDAO;
 
 	@POST
 	@Path("/group/add")
@@ -135,25 +138,22 @@ public class AdminService {
 				FunctionMessage function = new FunctionMessage();
 				function.setFuncId(ipFunction.getFuncId());
 				function.setFuncName(ipFunction.getFuncName());
-				List<UserMessage> users = new ArrayList<UserMessage>();
-				List<GroupMessage> groups = new ArrayList<GroupMessage>();
+				Long[] users = new Long[ipFunction.getIpFunctionConfigs().size()];
+				Long[] groups = new Long[ipFunction.getIpFunctionConfigs().size()];
+				int i = 0, j = 0;
 				for (Object obj : ipFunction.getIpFunctionConfigs()) {
 					IpFunctionConfig config = (IpFunctionConfig) obj;
 					if (config.getIpGroup() != null && config.getIpGroup().getGroupId() != null) {
-						GroupMessage group = new GroupMessage();
-						group.setgId(config.getIpGroup().getGroupId());
-						group.setgName(config.getIpGroup().getGroupName());
-						groups.add(group);
+						groups[i] = config.getIpGroup().getGroupId();
+						i++;
 					}
 					if (config.getIpUser() != null && config.getIpUser().getUserId() != null) {
-						UserMessage user = new UserMessage();
-						user.setuId(config.getIpUser().getUserId());
-						user.setScName(config.getIpUser().getUserScreenName());
-						users.add(user);
+						users[j] = config.getIpUser().getUserId();
+						j++;
 					}
 				}
-				function.setGroupList(groups);
-				function.setUserList(users);
+				function.setGroupIdList(groups);
+				function.setUserIdList(users);
 				ret.add((T) function);
 			}
 		} catch (Exception e) {
@@ -171,21 +171,26 @@ public class AdminService {
 			IpFunction ipFunction = ipFunctionDAO.getFunctionById(id);
 			function.setFuncId(ipFunction.getFuncId());
 			function.setFuncName(ipFunction.getFuncName());
-			List<UserMessage> users = new ArrayList<UserMessage>();
-			List<GroupMessage> groups = new ArrayList<GroupMessage>();
+			UserMessage[] users = new UserMessage[ipFunction.getIpFunctionConfigs().size()];
+			GroupMessage[] groups = new GroupMessage[ipFunction.getIpFunctionConfigs().size()];
+			int i = 0, j = 0;
 			for (Object obj : ipFunction.getIpFunctionConfigs()) {
 				IpFunctionConfig config = (IpFunctionConfig) obj;
-				GroupMessage group = new GroupMessage();
-				group.setgId(config.getIpGroup().getGroupId());
-				group.setgName(config.getIpGroup().getGroupName());
-				groups.add(group);
-				UserMessage user = new UserMessage();
-				user.setuId(config.getIpUser().getUserId());
-				user.setScName(config.getIpUser().getUserScreenName());
-				users.add(user);
+				if (config.getIpGroup() != null && config.getIpGroup().getGroupId() != null) {
+					GroupMessage group = new GroupMessage();
+					group.setgId(config.getIpGroup().getGroupId());
+					group.setgName(config.getIpGroup().getGroupName());
+					groups[i] = group;
+					i++;
+				}
+				if (config.getIpUser() != null && config.getIpUser().getUserId() != null) {
+					UserMessage user = new UserMessage();
+					user.setuId(config.getIpUser().getUserId());
+					user.setScName(config.getIpUser().getUserScreenName());
+					users[j] = user;
+					j++;
+				}
 			}
-			function.setGroupList(groups);
-			function.setUserList(users);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -468,6 +473,21 @@ public class AdminService {
 	}
 
 	@GET
+	@Path("/gen/{table}")
+	@Produces("application/json")
+	public Long getNextId(@PathParam("table") String table) {
+		List nextId = ipKeysDAO.findByTable(table);
+		Long ret = -1l;
+		if (nextId != null && nextId.size() > 0) {
+			IpKeys ipKeys = (IpKeys) nextId.get(0);
+			ret = ipKeys.getVal();
+			ipKeys.setVal(ret + 1);
+			ipKeysDAO.merge(ipKeys);
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/user/login/{login}/{pwd}")
 	@Produces("application/json")
 	public UserMessage login(@PathParam("login") String login, @PathParam("pwd") String pwd) {
@@ -543,5 +563,13 @@ public class AdminService {
 
 	public void setIpFunctionConfigDAO(IpFunctionConfigDAO ipFunctionConfigDAO) {
 		this.ipFunctionConfigDAO = ipFunctionConfigDAO;
+	}
+
+	public IpKeysDAO getIpKeysDAO() {
+		return ipKeysDAO;
+	}
+
+	public void setIpKeysDAO(IpKeysDAO ipKeysDAO) {
+		this.ipKeysDAO = ipKeysDAO;
 	}
 }
