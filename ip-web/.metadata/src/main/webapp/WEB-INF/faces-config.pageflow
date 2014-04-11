@@ -17,9 +17,9 @@
   <nodes xsi:type="pageflow:PFPage" name="pages/admin/editFunction.xhtml" x="338" y="5170" id="pf139714518402012" referenceLink="//@navigationRule.0/@navigationCase.9/@toViewId|" inlinks="pf13971451840191" path="/pages/admin/editFunction.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/admin/viewFunction.xhtml" x="338" y="5554" id="pf139714518402013" referenceLink="//@navigationRule.0/@navigationCase.10/@toViewId|" inlinks="pf13971451840192" path="/pages/admin/viewFunction.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/challenge/create.xhtml" id="pf139714523796622" referenceLink="//@navigationRule.0/@navigationCase.19/@toViewId|" inlinks="pf139714523796514 pf139714523796518" path="/pages/challenge/create.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/challenge/edit.xhtml" id="pf139714523796623" referenceLink="//@navigationRule.0/@navigationCase.20/@toViewId|" inlinks="pf139714523796515 pf139714523796519" path="/pages/challenge/edit.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/challenge/view.xhtml" id="pf139714523796624" referenceLink="//@navigationRule.0/@navigationCase.21/@toViewId|" inlinks="pf139714523796516 pf139714523796520" path="/pages/challenge/view.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/challenge/summary.xhtml" id="pf139714523796625" referenceLink="//@navigationRule.0/@navigationCase.22/@toViewId|" inlinks="pf139714523796517 pf139714523796521" path="/pages/challenge/summary.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/challenge/edit.xhtml" x="732" y="84" id="pf139714523796623" referenceLink="//@navigationRule.0/@navigationCase.20/@toViewId|" inlinks="pf139714523796515 pf139714523796519" path="/pages/challenge/edit.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/challenge/view.xhtml" x="486" y="84" id="pf139714523796624" referenceLink="//@navigationRule.0/@navigationCase.21/@toViewId|" inlinks="pf139714523796516 pf139714523796520" path="/pages/challenge/view.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/challenge/summary.xhtml" x="204" y="12" id="pf139714523796625" referenceLink="//@navigationRule.0/@navigationCase.22/@toViewId|" inlinks="pf139714523796517 pf139714523796521" path="/pages/challenge/summary.xhtml"/>
   <links id="pf13968781933350" target="pf139687819333610" source="pf13961154269341" outcome="home"/>
   <links id="pf13968781933351" target="pf139687819333611" source="pf13961154269341" outcome="admcu"/>
   <links id="pf13968781933352" target="pf139687819333612" source="pf13961154269341" outcome="admeu"/>
