@@ -159,4 +159,12 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 	public static IpChallengeDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpChallengeDAO) ctx.getBean("IpChallengeDAO");
 	}
+
+	public List findByUserId(Long id) {
+		return null;
+	}
+
+	public List findByStatusId() {
+		return null;
+	}
 }

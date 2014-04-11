@@ -154,4 +154,12 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	public static IpSolutionDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpSolutionDAO) ctx.getBean("IpSolutionDAO");
 	}
+
+	public List findByUserId(Long id) {
+		return null;
+	}
+
+	public List findByStatusId() {
+		return null;
+	}
 }

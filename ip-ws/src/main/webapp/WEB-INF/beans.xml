@@ -11,6 +11,8 @@
 			<ref bean="adminService" />
 			<ref bean="ideaService" />
 			<ref bean="tagService" />
+			<ref bean="challengeService" />
+			<ref bean="solutionService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">

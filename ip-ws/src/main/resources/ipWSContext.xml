@@ -24,6 +24,18 @@
 		<property name="ipTagTypeDAO" ref="IpTagTypeDAO" />
 		<property name="ipUserDAO" ref="IpUserDAO" />
 	</bean>
-	<bean id="challengeService" class="za.co.idea.ip.ws.ChallengeService"></bean>
+	<bean id="challengeService" class="za.co.idea.ip.ws.ChallengeService">
+		<property name="ipChallengeCatDAO" ref="IpChallengeCatDAO" />
+		<property name="ipChallengeStatusDAO" ref="IpChallengeStatusDAO" />
+		<property name="ipChallengeDAO" ref="IpChallengeDAO" />
+		<property name="ipUserDAO" ref="IpUserDAO" />
+	</bean>
+	<bean id="solutionService" class="za.co.idea.ip.ws.SolutionService">
+		<property name="ipSolutionCatDAO" ref="IpSolutionCatDAO" />
+		<property name="ipSolutionStatusDAO" ref="IpSolutionStatusDAO" />
+		<property name="ipSolutionDAO" ref="IpSolutionDAO" />
+		<property name="ipUserDAO" ref="IpUserDAO" />
+		<property name="ipChallengeDAO" ref="IpChallengeDAO" />
+	</bean>
 	<bean id="metaDataService" class="za.co.idea.ip.ws.MetaDataService"></bean>
 </beans>

@@ -1,12 +1,13 @@
 .menu {
 	position: absolute;
-	top: 50px;
+	top: 0px;
+	left: 0px;
 	width: 100%;
 }
 
 .content {
 	position: absolute;
-	top: 100px;
+	top: 50px;
 	left: 255px;
 }
 

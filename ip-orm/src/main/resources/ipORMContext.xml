@@ -161,7 +161,7 @@
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="IpChallehgeCatDAO" class="za.co.idea.ip.orm.dao.IpChallehgeCatDAO">
+	<bean id="IpChallengeCatDAO" class="za.co.idea.ip.orm.dao.IpChallengeCatDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

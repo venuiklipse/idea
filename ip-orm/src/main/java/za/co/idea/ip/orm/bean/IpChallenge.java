@@ -1,5 +1,6 @@
 package za.co.idea.ip.orm.bean;
 
+import java.sql.Blob;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,8 +28,10 @@ public class IpChallenge implements java.io.Serializable {
 	private Date chalLaunchDt;
 	private Date chalExpiryDt;
 	private String chalTags;
-	private String chalBlob;
+	private Blob chalBlob;
 	private Date chalCrtdDt;
+	private String chalFileName;
+	private String chalFileType;
 	private Set ipChallengeGroups = new HashSet(0);
 	private Set ipSolutions = new HashSet(0);
 
@@ -39,7 +42,7 @@ public class IpChallenge implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpChallenge(Long chalId, IpChallengeStatus ipChallengeStatus, IpChallengeCat ipChallengeCat, IpUser ipUser, String chalTitle, String chalDesc, Date chalLaunchDt, Date chalExpiryDt, Date chalCrtdDt) {
+	public IpChallenge(Long chalId, IpChallengeStatus ipChallengeStatus, IpChallengeCat ipChallengeCat, IpUser ipUser, String chalTitle, String chalDesc, Date chalLaunchDt, Date chalExpiryDt, Date chalCrtdDt, String chalFileName, String chalFileType) {
 		this.chalId = chalId;
 		this.ipChallengeStatus = ipChallengeStatus;
 		this.ipChallengeCat = ipChallengeCat;
@@ -49,10 +52,12 @@ public class IpChallenge implements java.io.Serializable {
 		this.chalLaunchDt = chalLaunchDt;
 		this.chalExpiryDt = chalExpiryDt;
 		this.chalCrtdDt = chalCrtdDt;
+		this.chalFileName = chalFileName;
+		this.chalFileType = chalFileType;
 	}
 
 	/** full constructor */
-	public IpChallenge(Long chalId, IpChallengeStatus ipChallengeStatus, IpChallengeCat ipChallengeCat, IpUser ipUser, String chalTitle, String chalDesc, String chalHoverTxt, Date chalLaunchDt, Date chalExpiryDt, String chalTags, String chalBlob, Date chalCrtdDt, Set ipChallengeGroups, Set ipSolutions) {
+	public IpChallenge(Long chalId, IpChallengeStatus ipChallengeStatus, IpChallengeCat ipChallengeCat, IpUser ipUser, String chalTitle, String chalDesc, String chalHoverTxt, Date chalLaunchDt, Date chalExpiryDt, String chalTags, Blob chalBlob, Date chalCrtdDt, String chalFileName, String chalFileType, Set ipChallengeGroups, Set ipSolutions) {
 		this.chalId = chalId;
 		this.ipChallengeStatus = ipChallengeStatus;
 		this.ipChallengeCat = ipChallengeCat;
@@ -65,6 +70,8 @@ public class IpChallenge implements java.io.Serializable {
 		this.chalTags = chalTags;
 		this.chalBlob = chalBlob;
 		this.chalCrtdDt = chalCrtdDt;
+		this.chalFileName = chalFileName;
+		this.chalFileType = chalFileType;
 		this.ipChallengeGroups = ipChallengeGroups;
 		this.ipSolutions = ipSolutions;
 	}
@@ -151,11 +158,11 @@ public class IpChallenge implements java.io.Serializable {
 		this.chalTags = chalTags;
 	}
 
-	public String getChalBlob() {
+	public Blob getChalBlob() {
 		return this.chalBlob;
 	}
 
-	public void setChalBlob(String chalBlob) {
+	public void setChalBlob(Blob chalBlob) {
 		this.chalBlob = chalBlob;
 	}
 
@@ -165,6 +172,22 @@ public class IpChallenge implements java.io.Serializable {
 
 	public void setChalCrtdDt(Date chalCrtdDt) {
 		this.chalCrtdDt = chalCrtdDt;
+	}
+
+	public String getChalFileName() {
+		return chalFileName;
+	}
+
+	public void setChalFileName(String chalFileName) {
+		this.chalFileName = chalFileName;
+	}
+
+	public String getChalFileType() {
+		return chalFileType;
+	}
+
+	public void setChalFileType(String chalFileType) {
+		this.chalFileType = chalFileType;
 	}
 
 	public Set getIpChallengeGroups() {
