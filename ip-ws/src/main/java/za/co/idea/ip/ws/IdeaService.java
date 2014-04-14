@@ -194,7 +194,7 @@ public class IdeaService {
 				idea.setIdeaId(ipIdea.getIdeaId());
 				idea.setIdeaBa(ipIdea.getIdeaBa());
 				if (ipIdea.getIdeaBlob() != null && ipIdea.getIdeaBlob().length() > 0)
-					idea.setFileUpload(Base64.encodeBase64String(ipIdea.getIdeaBlob().getBytes(1l, (int) ipIdea.getIdeaBlob().length())));
+					idea.setFileUpload(new String(Base64.encodeBase64URLSafe(ipIdea.getIdeaBlob().getBytes(1l, (int) ipIdea.getIdeaBlob().length()))));
 				else
 					idea.setFileUpload(null);
 				idea.setCrtdDate(ipIdea.getIdeaDate());

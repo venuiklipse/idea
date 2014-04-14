@@ -70,6 +70,8 @@
 			<from-outcome>admvf</from-outcome>
 			<to-view-id>/pages/admin/viewFunction.xhtml</to-view-id>
 		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
 		<navigation-case>
 			<from-outcome>ideaci</from-outcome>
 			<to-view-id>/pages/idea/create.xhtml</to-view-id>
@@ -86,6 +88,8 @@
 			<from-outcome>ideasi</from-outcome>
 			<to-view-id>/pages/idea/summary.xhtml</to-view-id>
 		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
 		<navigation-case>
 			<from-outcome>chalcc</from-outcome>
 			<to-view-id>/pages/challenge/create.xhtml</to-view-id>
@@ -102,6 +106,8 @@
 			<from-outcome>chalsc</from-outcome>
 			<to-view-id>/pages/challenge/summary.xhtml</to-view-id>
 		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
 		<navigation-case>
 			<from-outcome>solcs</from-outcome>
 			<to-view-id>/pages/solution/create.xhtml</to-view-id>

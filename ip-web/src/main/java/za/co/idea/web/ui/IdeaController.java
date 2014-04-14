@@ -228,7 +228,7 @@ public class IdeaController implements Serializable {
 			ideaMessage.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			ideaMessage.setCrtdDate(new Date());
 			if (ideaBean.getFileUpload() != null && ideaBean.getFileUpload().length() > 0)
-				ideaMessage.setFileUpload(Base64.encodeBase64String(ideaBean.getFileUpload().getBytes()));
+				ideaMessage.setFileUpload(new String(Base64.encodeBase64URLSafe(ideaBean.getFileUpload().getBytes())));
 			else
 				ideaMessage.setFileUpload(null);
 			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
@@ -264,7 +264,7 @@ public class IdeaController implements Serializable {
 			ideaMessage.setCrtdById(ideaBean.getCrtdById());
 			ideaMessage.setCrtdDate(new Date());
 			if (ideaBean.getFileUpload() != null && ideaBean.getFileUpload().length() > 0)
-				ideaMessage.setFileUpload(Base64.encodeBase64String(ideaBean.getFileUpload().getBytes()));
+				ideaMessage.setFileUpload(new String(Base64.encodeBase64URLSafe(ideaBean.getFileUpload().getBytes())));
 			else
 				ideaMessage.setFileUpload(null);
 			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
