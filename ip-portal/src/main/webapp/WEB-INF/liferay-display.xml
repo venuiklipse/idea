@@ -5,4 +5,7 @@
 	<category name="category.sample">
 		<portlet id="ip-portal" />
 	</category>
+	<category name="category.admin">
+		<portlet id="user"></portlet>
+	</category>
 </display>
