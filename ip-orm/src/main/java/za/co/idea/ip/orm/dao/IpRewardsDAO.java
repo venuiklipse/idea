@@ -169,4 +169,12 @@ public class IpRewardsDAO extends HibernateDaoSupport {
 	public static IpRewardsDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpRewardsDAO) ctx.getBean("IpRewardsDAO");
 	}
+
+	public List findByStatusId(Integer id) {
+		return null;
+	}
+
+	public List findByUserId(Long id) {
+		return null;
+	}
 }

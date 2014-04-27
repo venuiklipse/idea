@@ -37,5 +37,17 @@
 		<property name="ipUserDAO" ref="IpUserDAO" />
 		<property name="ipChallengeDAO" ref="IpChallengeDAO" />
 	</bean>
+	<bean id="rewardsService" class="za.co.idea.ip.ws.RewardsService">
+		<property name="ipUserDAO" ref="IpUserDAO" />
+		<property name="ipRewardsCatDAO" ref="IpRewardsCatDAO" />
+		<property name="ipRewardsDAO" ref="IpRewardsDAO" />
+		<property name="ipRewardsStatusDAO" ref="IpRewardsStatusDAO" />
+		<property name="ipRewardsGroupDAO" ref="IpRewardsGroupDAO" />
+	</bean>
+	<bean id="claimService" class="za.co.idea.ip.ws.ClaimService">
+		<property name="ipUserDAO" ref="IpUserDAO" />
+		<property name="ipClaimDAO" ref="IpClaimDAO" />
+		<property name="ipClaimStatusDAO" ref="IpClaimStatusDAO" />
+	</bean>
 	<bean id="metaDataService" class="za.co.idea.ip.ws.MetaDataService"></bean>
 </beans>

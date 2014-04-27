@@ -13,6 +13,8 @@
 			<ref bean="tagService" />
 			<ref bean="challengeService" />
 			<ref bean="solutionService" />
+			<ref bean="claimService" />
+			<ref bean="rewardsService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">
