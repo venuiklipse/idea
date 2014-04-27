@@ -16,6 +16,8 @@ public class SolutionBean implements Serializable {
 	private String blob;
 	private Date crtdDt;
 	private Long crtdById;
+	private String contentType;
+	private String fileName;
 
 	public Long getId() {
 		return id;
@@ -95,6 +97,22 @@ public class SolutionBean implements Serializable {
 
 	public void setCrtdById(Long crtdById) {
 		this.crtdById = crtdById;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }
