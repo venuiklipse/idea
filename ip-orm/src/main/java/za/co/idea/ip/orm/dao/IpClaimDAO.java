@@ -139,4 +139,12 @@ public class IpClaimDAO extends HibernateDaoSupport {
 	public static IpClaimDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpClaimDAO) ctx.getBean("IpClaimDAO");
 	}
+
+	public List findByStatusId(Integer id) {
+		return null;
+	}
+
+	public List findByUserId(Long id) {
+		return null;
+	}
 }

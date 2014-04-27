@@ -48,6 +48,7 @@
 		<property name="ipUserDAO" ref="IpUserDAO" />
 		<property name="ipClaimDAO" ref="IpClaimDAO" />
 		<property name="ipClaimStatusDAO" ref="IpClaimStatusDAO" />
+		<property name="ipRewardsDAO" ref="IpRewardsDAO" />
 	</bean>
 	<bean id="metaDataService" class="za.co.idea.ip.ws.MetaDataService"></bean>
 </beans>

@@ -53,6 +53,7 @@ public class RewardsService {
 			ipRewards.setRwTag(rewards.getRwTag());
 			ipRewards.setRwTitle(rewards.getRwTitle());
 			ipRewards.setRwValue(rewards.getRwValue());
+			ipRewardsDAO.save(ipRewards);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
@@ -88,6 +89,7 @@ public class RewardsService {
 			ipRewards.setRwTag(rewards.getRwTag());
 			ipRewards.setRwTitle(rewards.getRwTitle());
 			ipRewards.setRwValue(rewards.getRwValue());
+			ipRewardsDAO.merge(ipRewards);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
 			message.setStatusDesc("Success");
