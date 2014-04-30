@@ -169,10 +169,10 @@ public class ChallengeService {
 	@GET
 	@Path("/challenge/list/status/{id}")
 	@Produces("application/json")
-	public <T extends ChallengeMessage> List<T> listChallengeByStatus(@PathParam("id") Long id) {
+	public <T extends ChallengeMessage> List<T> listChallengeByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
 		try {
-			List challenges = ipChallengeDAO.findByStatusId();
+			List challenges = ipChallengeDAO.findByStatusId(id);
 			for (Object object : challenges) {
 				IpChallenge ipChallenge = (IpChallenge) object;
 				ChallengeMessage challenge = new ChallengeMessage();

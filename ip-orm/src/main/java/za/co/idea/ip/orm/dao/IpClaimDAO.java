@@ -2,7 +2,10 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -141,10 +144,44 @@ public class IpClaimDAO extends HibernateDaoSupport {
 	}
 
 	public List findByStatusId(Integer id) {
-		return null;
+		log.debug("Fetching Challenge by Query :: getClaimByStatus");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getClaimByStatus");
+			query.setLong("id", id);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpClaim clm = (IpClaim) object;
+				Hibernate.initialize(clm.getIpClaimStatus());
+				Hibernate.initialize(clm.getIpRewards());
+				Hibernate.initialize(clm.getIpUser());
+			}
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
 	}
 
 	public List findByUserId(Long id) {
-		return null;
+		log.debug("Fetching Challenge by Query :: getClaimByUser");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getClaimByUser");
+			query.setLong("id", id);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpClaim clm = (IpClaim) object;
+				Hibernate.initialize(clm.getIpClaimStatus());
+				Hibernate.initialize(clm.getIpRewards());
+				Hibernate.initialize(clm.getIpUser());
+			}
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
 	}
 }

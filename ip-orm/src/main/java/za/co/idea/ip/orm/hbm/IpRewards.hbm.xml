@@ -63,4 +63,12 @@
 			<one-to-many class="za.co.idea.ip.orm.bean.IpClaim" />
 		</set>
 	</class>
+	<sql-query name="getRewardsByUser">
+		select rw.* from ip_rewards rw where rw.rw_status=:id
+		<return alias="clm" class="za.co.idea.ip.orm.bean.IpRewards" />
+	</sql-query>
+	<sql-query name="getRewardsByStatus">
+		select rw.* from ip_rewards rw where rw.rw_status=:id
+		<return alias="chal" class="za.co.idea.ip.orm.bean.IpRewards" />
+	</sql-query>
 </hibernate-mapping>

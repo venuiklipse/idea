@@ -60,4 +60,12 @@
 			<one-to-many class="za.co.idea.ip.orm.bean.IpSolution" />
 		</set>
 	</class>
+	<sql-query name="getChallengeByUser">
+		select chal.* from ip_challenge chal where chal.chal_crtd_by=:id
+		<return alias="chal" class="za.co.idea.ip.orm.bean.IpChallenge" />
+	</sql-query>
+	<sql-query name="getChallengeByStatus">
+		select chal.* from ip_challenge chal where chal.chal_status=:id
+		<return alias="chal" class="za.co.idea.ip.orm.bean.IpChallenge" />
+	</sql-query>
 </hibernate-mapping>

@@ -163,10 +163,10 @@ public class SolutionService {
 	@GET
 	@Path("/solution/list/status/{id}")
 	@Produces("application/json")
-	public <T extends SolutionMessage> List<T> listSolutionByStatus(@PathParam("id") Long id) {
+	public <T extends SolutionMessage> List<T> listSolutionByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
 		try {
-			List solutions = ipSolutionDAO.findByStatusId();
+			List solutions = ipSolutionDAO.findByStatusId(id);
 			for (Object object : solutions) {
 				IpSolution ipSolution = (IpSolution) object;
 				SolutionMessage solution = new SolutionMessage();

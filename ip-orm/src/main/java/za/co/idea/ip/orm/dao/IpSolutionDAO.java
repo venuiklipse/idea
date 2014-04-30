@@ -2,7 +2,10 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -156,10 +159,46 @@ public class IpSolutionDAO extends HibernateDaoSupport {
 	}
 
 	public List findByUserId(Long id) {
-		return null;
+		log.debug("Fetching Challenge by Query :: getSolutionByUser");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getSolutionByUser");
+			query.setLong("id", id);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpSolution sol = (IpSolution) object;
+				Hibernate.initialize(sol.getIpChallenge());
+				Hibernate.initialize(sol.getIpSolutionCat());
+				Hibernate.initialize(sol.getIpSolutionStatus());
+				Hibernate.initialize(sol.getIpUser());
+			}
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
 	}
 
-	public List findByStatusId() {
-		return null;
+	public List findByStatusId(Integer id) {
+		log.debug("Fetching Challenge by Query :: getSolutionByStatus");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getSolutionByUser");
+			query.setLong("id", id);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpSolution sol = (IpSolution) object;
+				Hibernate.initialize(sol.getIpChallenge());
+				Hibernate.initialize(sol.getIpSolutionCat());
+				Hibernate.initialize(sol.getIpSolutionStatus());
+				Hibernate.initialize(sol.getIpUser());
+			}
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
 	}
 }
