@@ -138,7 +138,7 @@ public class IdeaController implements Serializable {
 	}
 
 	public String likeIdea() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
 		message.setTagId(COUNTER.getNextId("ip_tag"));
@@ -159,7 +159,7 @@ public class IdeaController implements Serializable {
 	}
 
 	public String commentIdea() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
 		message.setTagId(COUNTER.getNextId("ip_tag"));
@@ -182,7 +182,7 @@ public class IdeaController implements Serializable {
 	}
 
 	public String buildOnIdea() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
 		message.setTagId(COUNTER.getNextId("ip_tag"));
@@ -222,7 +222,7 @@ public class IdeaController implements Serializable {
 
 	public String saveIdea() {
 		try {
-			WebClient addIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/add");
+			WebClient addIdeaClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/add");
 			IdeaMessage ideaMessage = new IdeaMessage();
 			ideaMessage.setContentType(ideaBean.getContentType());
 			ideaMessage.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
@@ -258,7 +258,7 @@ public class IdeaController implements Serializable {
 
 	public String updateIdea() {
 		try {
-			WebClient updateIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/modify");
+			WebClient updateIdeaClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/modify");
 			IdeaMessage ideaMessage = new IdeaMessage();
 			ideaMessage.setContentType(ideaBean.getContentType());
 			ideaMessage.setCrtdById(ideaBean.getCrtdById());
@@ -294,7 +294,7 @@ public class IdeaController implements Serializable {
 
 	private TagCloudModel fetchAllLikes() {
 		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchIdeaLikesClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/1");
+		WebClient fetchIdeaLikesClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/1");
 		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchIdeaLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		for (TagMessage tagMessage : likeList)
 			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
@@ -303,7 +303,7 @@ public class IdeaController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllComments() {
-		WebClient fetchIdeaCommentsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/2");
+		WebClient fetchIdeaCommentsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/2");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchIdeaCommentsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
@@ -317,7 +317,7 @@ public class IdeaController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllBuildOns() {
-		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/3");
+		WebClient fetchIdeaBuildOnsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/3");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchIdeaBuildOnsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchIdeaBuildOnsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
@@ -332,7 +332,7 @@ public class IdeaController implements Serializable {
 
 	private List<IdeaBean> fetchAllIdeas() {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
-		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/list");
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/list");
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = new IdeaBean();
@@ -359,7 +359,7 @@ public class IdeaController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllIdeaStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/status/list");
+		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
@@ -373,7 +373,7 @@ public class IdeaController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllIdeaCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/is/idea/cat/list");
+		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
@@ -400,7 +400,7 @@ public class IdeaController implements Serializable {
 
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list");
+		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/list");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		for (UserMessage userMessage : users) {
 			UserBean bean = new UserBean();
