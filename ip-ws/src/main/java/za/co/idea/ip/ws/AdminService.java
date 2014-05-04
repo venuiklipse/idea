@@ -1,5 +1,6 @@
 package za.co.idea.ip.ws;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -518,6 +519,9 @@ public class AdminService {
 					user.setmName(ipUser.getUserMName());
 				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
 					user.setTwHandle(ipUser.getUserTwHandle());
+				user.setLastLoginDt(ipLogin.getLoginLastDt());
+				ipLogin.setLoginLastDt(new Timestamp(System.currentTimeMillis()));
+				ipLoginDAO.merge(ipLogin);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

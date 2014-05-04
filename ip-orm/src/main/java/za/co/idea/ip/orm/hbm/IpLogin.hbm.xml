@@ -17,7 +17,10 @@
 		<property name="loginPwd" type="java.lang.String">
 			<column name="login_pwd" length="450" not-null="true" />
 		</property>
-	</class>
+		<property name="loginLastDt" type="java.sql.Timestamp">
+			<column name="login_last_dt" length="19" not-null="true" />
+		</property>
+			</class>
 	<sql-query name="verifyLogin">
 		select login.* from ip_login login where login.login_name=:login and login.login_pwd=:pwd
 		<return alias="login" class="za.co.idea.ip.orm.bean.IpLogin" />

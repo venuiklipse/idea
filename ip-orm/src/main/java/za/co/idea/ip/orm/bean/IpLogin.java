@@ -1,5 +1,7 @@
 package za.co.idea.ip.orm.bean;
 
+import java.sql.Timestamp;
+
 /**
  * IpLogin entity. @author MyEclipse Persistence Tools
  */
@@ -13,6 +15,7 @@ public class IpLogin implements java.io.Serializable {
 	private IpUser ipUser;
 	private String loginName;
 	private String loginPwd;
+	private Timestamp loginLastDt;
 
 	// Constructors
 
@@ -21,11 +24,13 @@ public class IpLogin implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpLogin(Long loginId, IpUser ipUser, String loginName, String loginPwd) {
+	public IpLogin(Long loginId, IpUser ipUser, String loginName,
+			String loginPwd, Timestamp loginLastDt) {
 		this.loginId = loginId;
 		this.ipUser = ipUser;
 		this.loginName = loginName;
 		this.loginPwd = loginPwd;
+		this.loginLastDt = loginLastDt;
 	}
 
 	// Property accessors
@@ -60,6 +65,14 @@ public class IpLogin implements java.io.Serializable {
 
 	public void setLoginPwd(String loginPwd) {
 		this.loginPwd = loginPwd;
+	}
+
+	public Timestamp getLoginLastDt() {
+		return loginLastDt;
+	}
+
+	public void setLoginLastDt(Timestamp loginLastDt) {
+		this.loginLastDt = loginLastDt;
 	}
 
 }

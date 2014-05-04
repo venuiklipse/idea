@@ -1,5 +1,7 @@
 package za.co.idea.ip.ws.bean;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "userMessage")
@@ -19,6 +21,7 @@ public class UserMessage {
 	private String pwd;
 	private String avatar;
 	private Boolean isActive;
+	private Date lastLoginDt;
 
 	public Long getuId() {
 		return uId;
@@ -138,6 +141,14 @@ public class UserMessage {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Date getLastLoginDt() {
+		return lastLoginDt;
+	}
+
+	public void setLastLoginDt(Date lastLoginDt) {
+		this.lastLoginDt = lastLoginDt;
 	}
 
 }
