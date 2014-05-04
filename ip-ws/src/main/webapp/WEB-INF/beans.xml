@@ -28,7 +28,6 @@
 			<entry key="en" value="en-gb" />
 		</jaxrs:languageMappings>
 		<jaxrs:features>
-			<cxf:logging />
 		</jaxrs:features>
 	</jaxrs:server>
 

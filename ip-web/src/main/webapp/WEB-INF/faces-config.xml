@@ -3,27 +3,27 @@
 	<managed-bean>
 		<managed-bean-name>menuListener</managed-bean-name>
 		<managed-bean-class>za.co.idea.web.util.MenuListener</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>adminBean</managed-bean-name>
 		<managed-bean-class>za.co.idea.web.ui.AdminController</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>ideaBean</managed-bean-name>
 		<managed-bean-class>za.co.idea.web.ui.IdeaController</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>imageBean</managed-bean-name>
 		<managed-bean-class>za.co.idea.web.ui.ImageController</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>challengeBean</managed-bean-name>
 		<managed-bean-class>za.co.idea.web.ui.ChallengeController</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<navigation-rule>
 		<navigation-case>

@@ -31,6 +31,7 @@ import za.co.idea.ip.ws.bean.UserMessage;
 import za.co.idea.ip.ws.util.CustomObjectMapper;
 import za.co.idea.web.ui.bean.ChallengeBean;
 import za.co.idea.web.ui.bean.ListSelectorBean;
+import za.co.idea.web.ui.bean.SolutionBean;
 import za.co.idea.web.ui.bean.TagBean;
 import za.co.idea.web.ui.bean.UserBean;
 import za.co.idea.web.util.IdNumberGen;
@@ -40,10 +41,14 @@ public class ChallengeController implements Serializable {
 	private static final long serialVersionUID = -6939719926402016671L;
 	private static final Log LOG = LogFactory.getLog(IdeaController.class);
 	private ChallengeBean challengeBean;
+	private SolutionBean solutionBean;
 	private List<ChallengeBean> viewChallenges;
+	private List<SolutionBean> viewSolutions;
 	private List<UserBean> admUsers;
 	private List<ListSelectorBean> challengeCats;
 	private List<ListSelectorBean> challengeStatuses;
+	private List<ListSelectorBean> solutionCats;
+	private List<ListSelectorBean> solutionStatuses;
 	private StreamedContent fileContent;
 	private TagCloudModel likes;
 	private List<TagBean> comments;
@@ -53,6 +58,8 @@ public class ChallengeController implements Serializable {
 	private boolean showChallengeLikes;
 	private String likeCnt;
 	private String commentCnt;
+	private boolean showSolutionComments;
+	private boolean showSolutionLikes;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -129,22 +136,6 @@ public class ChallengeController implements Serializable {
 		return "chalsc";
 	}
 
-	public String showCreateSolution() {
-		return "";
-	}
-
-	public String showViewSolution() {
-		return "";
-	}
-
-	public String showEditSolution() {
-		return "";
-	}
-
-	public String showSummarySolution() {
-		return "";
-	}
-
 	public String saveChallenge() {
 		try {
 			WebClient addIdeaClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/add");
@@ -213,6 +204,80 @@ public class ChallengeController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
+	}
+
+	public String commentChallenge() {
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
+		TagMessage message = new TagMessage();
+		message.setEntityId(challengeBean.getId());
+		message.setTagId(COUNTER.getNextId("ip_tag"));
+		message.setTagText(commentText);
+		message.setTeId(2);
+		message.setTtId(2);
+		message.setDuplicate(true);
+		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		if (response.getStatusCode() != 0)
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
+		comments = fetchAllComments();
+		commentCnt = "(" + comments.size() + ")";
+		commentText = "";
+		showChallengeComments = true;
+		showChallengeLikes = false;
+		addTagClient.close();
+		return "";
+	}
+
+	public String likeChallenge() {
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
+		TagMessage message = new TagMessage();
+		message.setEntityId(challengeBean.getId());
+		message.setTagId(COUNTER.getNextId("ip_tag"));
+		message.setTeId(2);
+		message.setTtId(1);
+		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
+		message.setDuplicate(false);
+		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
+		likes = fetchAllLikes();
+		likeCnt = "(" + likes.getTags().size() + ")";
+		showChallengeComments = false;
+		showChallengeLikes = true;
+		addTagClient.close();
+		return "";
+	}
+
+	public String showCreateSolution() {
+		return "solcs";
+	}
+
+	public String showViewSolution() {
+		return "";
+	}
+
+	public String showEditSolution() {
+		return "";
+	}
+
+	public String showSummarySolution() {
+		return "";
+	}
+
+	public String saveSolution() {
+		return "";
+	}
+
+	public String updateSolution() {
+		return "";
+	}
+
+	public String likeSolution() {
+		return "";
+	}
+
+	public String commentSolution() {
+		return "";
 	}
 
 	private List<ChallengeBean> fetchAllChallenges() {
@@ -311,48 +376,6 @@ public class ChallengeController implements Serializable {
 		}
 		viewChallengeSelectClient.close();
 		return ret;
-	}
-
-	public String commentChallenge() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
-		TagMessage message = new TagMessage();
-		message.setEntityId(challengeBean.getId());
-		message.setTagId(COUNTER.getNextId("ip_tag"));
-		message.setTagText(commentText);
-		message.setTeId(2);
-		message.setTtId(2);
-		message.setDuplicate(true);
-		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
-		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
-		if (response.getStatusCode() != 0)
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
-		comments = fetchAllComments();
-		commentCnt = "(" + comments.size() + ")";
-		commentText = "";
-		showChallengeComments = true;
-		showChallengeLikes = false;
-		addTagClient.close();
-		return "";
-	}
-
-	public String likeChallenge() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
-		TagMessage message = new TagMessage();
-		message.setEntityId(challengeBean.getId());
-		message.setTagId(COUNTER.getNextId("ip_tag"));
-		message.setTeId(2);
-		message.setTtId(1);
-		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
-		message.setDuplicate(false);
-		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
-		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
-		likes = fetchAllLikes();
-		likeCnt = "(" + likes.getTags().size() + ")";
-		showChallengeComments = false;
-		showChallengeLikes = true;
-		addTagClient.close();
-		return "";
 	}
 
 	private List<UserBean> fetchAllUsers() {
@@ -505,6 +528,74 @@ public class ChallengeController implements Serializable {
 
 	public void setFileContent(StreamedContent fileContent) {
 		this.fileContent = fileContent;
+	}
+
+	public SolutionBean getSolutionBean() {
+		if (solutionBean == null)
+			solutionBean = new SolutionBean();
+		return solutionBean;
+	}
+
+	public void setSolutionBean(SolutionBean solutionBean) {
+		this.solutionBean = solutionBean;
+	}
+
+	public List<SolutionBean> getViewSolutions() {
+		if (viewSolutions == null)
+			viewSolutions = new ArrayList<SolutionBean>();
+		return viewSolutions;
+	}
+
+	public void setViewSolutions(List<SolutionBean> viewSolutions) {
+		this.viewSolutions = viewSolutions;
+	}
+
+	public List<ListSelectorBean> getSolutionCats() {
+		if (solutionCats == null)
+			solutionCats = new ArrayList<ListSelectorBean>();
+		return solutionCats;
+	}
+
+	public void setSolutionCats(List<ListSelectorBean> solutionCats) {
+		this.solutionCats = solutionCats;
+	}
+
+	public List<ListSelectorBean> getSolutionStatuses() {
+		if (solutionStatuses == null)
+			solutionStatuses = new ArrayList<ListSelectorBean>();
+		return solutionStatuses;
+	}
+
+	public void setSolutionStatuses(List<ListSelectorBean> solutionStatuses) {
+		this.solutionStatuses = solutionStatuses;
+	}
+
+	public boolean isShowSolutionComments() {
+		return showSolutionComments;
+	}
+
+	public void setShowSolutionComments(boolean showSolutionComments) {
+		this.showSolutionComments = showSolutionComments;
+	}
+
+	public boolean isShowSolutionLikes() {
+		return showSolutionLikes;
+	}
+
+	public void setShowSolutionLikes(boolean showSolutionLikes) {
+		this.showSolutionLikes = showSolutionLikes;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public static Log getLog() {
+		return LOG;
+	}
+
+	public static IdNumberGen getCounter() {
+		return COUNTER;
 	}
 
 }
