@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
 <h:body>
 	<ui:composition template="/templates/layout.xhtml">
-		<ui:define name="title">View Challenges</ui:define>
+		<ui:define name="title">My Challenges</ui:define>
 		<ui:define name="body">
 			<p:dataTable id="dtViewChallenges" value="#{challengeBean.viewChallenges}" var="challenge" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Challenges Found">
 				<p:column filterBy="#{challenge.id}" filterMatchMode="contains">

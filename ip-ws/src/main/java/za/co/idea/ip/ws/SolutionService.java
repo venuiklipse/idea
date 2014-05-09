@@ -131,7 +131,7 @@ public class SolutionService {
 	}
 
 	@GET
-	@Path("/solution/list/user/{id}")
+	@Path("/solution/list/{id}")
 	@Produces("application/json")
 	public <T extends SolutionMessage> List<T> listSolutionByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();

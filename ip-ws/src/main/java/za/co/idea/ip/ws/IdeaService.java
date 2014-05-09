@@ -218,6 +218,42 @@ public class IdeaService {
 	}
 
 	@GET
+	@Path("/idea/list/{id}")
+	@Produces("application/json")
+	public <T extends IdeaMessage> List<T> listIdeaByUser(@PathParam("id") Long id) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List ideas = ipIdeaDAO.findByUserId(id);
+			for (Object object : ideas) {
+				IpIdea ipIdea = (IpIdea) object;
+				IdeaMessage idea = new IdeaMessage();
+				idea.setIdeaId(ipIdea.getIdeaId());
+				idea.setIdeaBa(ipIdea.getIdeaBa());
+				if (ipIdea.getIdeaBlob() != null && ipIdea.getIdeaBlob().length() > 0)
+					idea.setFileUpload(new String(Base64.encodeBase64URLSafe(ipIdea.getIdeaBlob().getBytes(1l, (int) ipIdea.getIdeaBlob().length()))));
+				else
+					idea.setFileUpload(null);
+				idea.setCrtdDate(ipIdea.getIdeaDate());
+				idea.setIdeaDesc(ipIdea.getIdeaDesc());
+				idea.setIdeaTag(ipIdea.getIdeaTag());
+				idea.setIdeaTitle(ipIdea.getIdeaTitle());
+				idea.setContentType(ipIdea.getIdeaFileType());
+				idea.setFileName(ipIdea.getIdeaFileName());
+				if (ipIdea.getIpIdeaCat() != null)
+					idea.setSelCatId(ipIdea.getIpIdeaCat().getIcId().longValue());
+				if (ipIdea.getIpIdeaStatus() != null)
+					idea.setSetStatusId(ipIdea.getIpIdeaStatus().getIsId().longValue());
+				if (ipIdea.getIpUser() != null)
+					idea.setCrtdById(ipIdea.getIpUser().getUserId());
+				ret.add((T) idea);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/idea/get/{id}")
 	@Produces("application/json")
 	public IdeaMessage getIdea(@PathParam("id") Long id) {

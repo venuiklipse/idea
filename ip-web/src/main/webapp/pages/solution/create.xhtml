@@ -5,10 +5,46 @@
 		<ui:define name="body">
 			<p:panelGrid columns="2" id="pnlCrtSolution">
 				<p:column>
-					<p:outputLabel id="lblCTitle" value="Title : " />
+					<p:outputLabel id="lblSChal" value="Challenges : " />
 				</p:column>
 				<p:column>
-					<p:inputText id="txtCTitle" value="#{challengeBean.solutionBean.title}" />
+					<p:selectOneMenu id="somSChal" value="#{challengeBean.solutionBean.chalId}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{challengeBean.viewChallenges}" var="schal" itemLabel="#{schal.title}" itemValue="#{schal.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSTitle" value="Title : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="txtSTitle" value="#{challengeBean.solutionBean.title}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSCat" value="Category : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somSCat" value="#{challengeBean.solutionBean.catId}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{challengeBean.solutionCats}" var="scat" itemLabel="#{scat.desc}" itemValue="#{scat.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSDesc" value="Description : " />
+				</p:column>
+				<p:column>
+					<p:editor id="txtSDesc" value="#{challengeBean.solutionBean.desc}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSTag" value="Tags : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="txtSTag" value="#{challengeBean.solutionBean.tags}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSUpload" value="Upload File : " />
+				</p:column>
+				<p:column>
+					<p:fileUpload id="fuSUpload" fileUploadListener="#{challengeBean.solFileUploadHandle}" multiple="false" />
 				</p:column>
 				<p:row>
 					<p:column colspan="2">

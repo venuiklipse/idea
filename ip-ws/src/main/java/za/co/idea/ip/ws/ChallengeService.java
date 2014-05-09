@@ -135,7 +135,7 @@ public class ChallengeService {
 	}
 
 	@GET
-	@Path("/challenge/list/user/{id}")
+	@Path("/challenge/list/{id}")
 	@Produces("application/json")
 	public <T extends ChallengeMessage> List<T> listChallengeByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();

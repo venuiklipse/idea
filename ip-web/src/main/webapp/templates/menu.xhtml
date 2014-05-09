@@ -13,6 +13,13 @@
 				<p:menuitem value="Create Function" action="#{adminBean.showCreateFunction}" />
 				<p:menuitem value="View Functions" action="#{adminBean.showViewFunction}" />
 			</p:submenu>
+			<p:submenu label="User">
+				<p:menuitem value="My Ideas" action="#{ideaBean.showViewIdeasByUser}" />
+				<p:menuitem value="My Challenges" action="#{challengeBean.showViewChallengeByUser}" />
+				<p:menuitem value="My Solutions" action="#{challengeBean.showViewSolutionByUser}" />
+				<p:menuitem value="My Claims" action="#{challengeBean.showCreateSolution}" />
+				<p:menuitem value="Rewards Wishlist" action="#{challengeBean.showViewSolution}" />
+			</p:submenu>
 			<p:submenu label="Idea">
 				<p:menuitem value="Create Random Idea" action="#{ideaBean.showCreateIdea}" />
 				<p:menuitem value="View Random Idea" action="#{ideaBean.showViewIdeas}" />
@@ -22,6 +29,12 @@
 				<p:menuitem value="View Challenge" action="#{challengeBean.showViewChallenge}" />
 				<p:menuitem value="Submit Solution" action="#{challengeBean.showCreateSolution}" />
 				<p:menuitem value="View Solution" action="#{challengeBean.showViewSolution}" />
+			</p:submenu>
+			<p:submenu label="Rewards">
+				<p:menuitem value="Create Reward" action="#{rewardsBean.showCreateReward}" />
+				<p:menuitem value="Online Store" action="#{rewardsBean.showViewReward}" />
+				<p:menuitem value="Submit Claim" action="#{claimBean.showCreateClaim}" />
+				<p:menuitem value="View Claims" action="#{claimBean.showViewClaim}" />
 			</p:submenu>
 			<p:menuitem value="Logout" action="#{adminBean.logout}" />
 		</p:menubar>

@@ -1,0 +1,67 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+	<ui:composition template="/templates/layout.xhtml">
+		<ui:define name="title">Edit Solution</ui:define>
+		<ui:define name="body">
+			<p:panelGrid columns="2" id="pnlEditSolution">
+				<p:column>
+					<p:outputLabel id="lblSChal" value="Challenges : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somSChal" value="#{challengeBean.solutionBean.chalId}" disabled="true">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{challengeBean.viewChallenges}" var="schal" itemLabel="#{schal.title}" itemValue="#{schal.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSTitle" value="Title : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="txtSTitle" value="#{challengeBean.solutionBean.title}" disabled="true"/>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSCat" value="Category : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somSCat" value="#{challengeBean.solutionBean.catId}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{challengeBean.solutionCats}" var="scat" itemLabel="#{scat.desc}" itemValue="#{scat.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSStatus" value="Status : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somSStatus" value="#{challengeBean.solutionBean.statusId}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{challengeBean.solutionStatuses}" var="scat" itemLabel="#{scat.desc}" itemValue="#{scat.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSDesc" value="Description : " />
+				</p:column>
+				<p:column>
+					<p:editor id="txtSDesc" value="#{challengeBean.solutionBean.desc}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSTag" value="Tags : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="txtSTag" value="#{challengeBean.solutionBean.tags}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblSUpload" value="Upload File : " />
+				</p:column>
+				<p:column>
+					<p:fileUpload id="fuSUpload" fileUploadListener="#{challengeBean.solFileUploadHandle}" multiple="false" />
+				</p:column>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{challengeBean.updateSolution}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

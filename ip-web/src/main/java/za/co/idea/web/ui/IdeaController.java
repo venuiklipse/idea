@@ -86,6 +86,22 @@ public class IdeaController implements Serializable {
 		}
 	}
 
+	public String showViewIdeasByUser() {
+		try {
+			viewIdeas = fetchAllIdeasByUser();
+			ideaCats = fetchAllIdeaCat();
+			admUsers = fetchAllUsers();
+			ideaStatuses = fetchAllIdeaStatuses();
+			return "ideaui";
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOG.error(e, e);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
 	public String showEditIdea() {
 		try {
 			ideaCats = fetchAllIdeaCat();
@@ -333,6 +349,33 @@ public class IdeaController implements Serializable {
 	private List<IdeaBean> fetchAllIdeas() {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/list");
+		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		for (IdeaMessage ideaMessage : ideas) {
+			IdeaBean bean = new IdeaBean();
+			bean.setContentType(ideaMessage.getContentType());
+			bean.setCrtdById(ideaMessage.getCrtdById());
+			bean.setCrtdDate(ideaMessage.getCrtdDate());
+			if (ideaMessage.getFileUpload() != null && ideaMessage.getFileUpload().length() > 0)
+				bean.setFileUpload(new String(Base64.decodeBase64(ideaMessage.getFileUpload().getBytes())));
+			else
+				bean.setFileUpload(null);
+			bean.setIdeaBa(ideaMessage.getIdeaBa());
+			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
+			bean.setIdeaTag(ideaMessage.getIdeaTag());
+			bean.setIdeaId(ideaMessage.getIdeaId());
+			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
+			bean.setSelCatId(ideaMessage.getSelCatId());
+			bean.setSetStatusId(ideaMessage.getSetStatusId());
+			bean.setFileName(ideaMessage.getFileName());
+			ret.add(bean);
+		}
+		fetchIdeaClient.close();
+		return ret;
+	}
+
+	private List<IdeaBean> fetchAllIdeasByUser() {
+		List<IdeaBean> ret = new ArrayList<IdeaBean>();
+		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = new IdeaBean();

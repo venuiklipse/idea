@@ -3,27 +3,37 @@
 	<managed-bean>
 		<managed-bean-name>menuListener</managed-bean-name>
 		<managed-bean-class>za.co.idea.web.util.MenuListener</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>adminBean</managed-bean-name>
 		<managed-bean-class>za.co.idea.web.ui.AdminController</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>ideaBean</managed-bean-name>
 		<managed-bean-class>za.co.idea.web.ui.IdeaController</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>imageBean</managed-bean-name>
 		<managed-bean-class>za.co.idea.web.ui.ImageController</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>challengeBean</managed-bean-name>
 		<managed-bean-class>za.co.idea.web.ui.ChallengeController</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>rewardsBean</managed-bean-name>
+		<managed-bean-class>za.co.idea.web.ui.RewardsController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>claimBean</managed-bean-name>
+		<managed-bean-class>za.co.idea.web.ui.ClaimController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<navigation-rule>
 		<navigation-case>
@@ -88,6 +98,10 @@
 			<from-outcome>ideasi</from-outcome>
 			<to-view-id>/pages/idea/summary.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>ideaui</from-outcome>
+			<to-view-id>/pages/user/ideas.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<navigation-case>
@@ -106,6 +120,10 @@
 			<from-outcome>chalsc</from-outcome>
 			<to-view-id>/pages/challenge/summary.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-outcome>chaluc</from-outcome>
+			<to-view-id>/pages/user/challenges.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<navigation-case>
@@ -123,6 +141,10 @@
 		<navigation-case>
 			<from-outcome>solss</from-outcome>
 			<to-view-id>/pages/solution/summary.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>solus</from-outcome>
+			<to-view-id>/pages/user/solutions.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<lifecycle>

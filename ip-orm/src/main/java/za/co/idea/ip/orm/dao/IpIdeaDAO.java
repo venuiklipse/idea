@@ -2,7 +2,10 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -168,5 +171,26 @@ public class IpIdeaDAO extends HibernateDaoSupport {
 
 	public static IpIdeaDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpIdeaDAO) ctx.getBean("IpIdeaDAO");
+	}
+
+	public List findByUserId(Long id) {
+		log.debug("finding IpIdea instances by user id :: " + id);
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("getIdeaByUser");
+			query.setLong("id", id);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpIdea idea = (IpIdea) object;
+				Hibernate.initialize(idea.getIpIdeaCat());
+				Hibernate.initialize(idea.getIpIdeaStatus());
+				Hibernate.initialize(idea.getIpUser());
+			}
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
 	}
 }

@@ -1,0 +1,63 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+	<ui:composition template="/templates/layout.xhtml">
+		<ui:define name="title">Solution Summary</ui:define>
+		<ui:define name="body">
+			<p:panelGrid columns="2" id="pnlSummarySolution">
+				<p:column>
+					<p:outputLabel id="lblITitle" value="Title : " />
+				</p:column>
+				<p:column>
+					<h:outputText id="txtITitle" value="#{challengeBean.solutionBean.title}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblIDesc" value="Description : " />
+				</p:column>
+				<p:column>
+					<h:outputText id="txtIDesc" value="#{challengeBean.solutionBean.desc}" escape="false" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblITag" value="Tags : " />
+				</p:column>
+				<p:column>
+					<h:outputText id="txtITag" value="#{challengeBean.solutionBean.tags}" escape="false" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblISocial" value="Social : " />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblLikeCnt" value="#{challengeBean.solLikeCnt}" style="height:25px; width:25px;" />
+					<p:commandLink id="clSolutionLike" action="#{challengeBean.likeSolution}" ajax="false" immediate="true">
+						<p:graphicImage id="giSolutionLike" name="like-128.png" library="images" height="25px" width="25px" />
+					</p:commandLink>
+					<p:outputLabel id="lblCommentCnt" value="#{challengeBean.solCommentCnt}" style="height:25px; width:25px;" />
+					<p:commandLink id="clSolutionComment" action="#{challengeBean.showCommentSolution}" ajax="false" immediate="true">
+						<p:graphicImage id="giSolutionComment" name="comment.jpg" library="images" height="25px" width="25px"/>
+					</p:commandLink>
+				</p:column>
+			</p:panelGrid>
+			<h:panelGrid id="pnlSolutionComment" rendered="#{challengeBean.showSolutionComments}">
+				<p:column>
+					<p:dataTable id="dtViewComments" widgetVar="dtViewComments" value="#{challengeBean.solComments}" var="comment" scrollable="true" scrollRows="5" emptyMessage="No Comments Found">
+						<p:column width="30%">
+							<p:outputLabel id="lblCommentBy" value="#{comment.usrScreenName}" />
+						</p:column>
+						<p:column width="70%">
+							<p:outputLabel id="lblCommentText" value="#{comment.tagText}" escape="false" />
+						</p:column>
+					</p:dataTable>
+				</p:column>
+				<p:column>
+					<p:editor id="edComment" value="#{challengeBean.commentText}" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnSubmitComment" value="Post" action="#{challengeBean.commentSolution}" ajax="false" />
+				</p:column>
+			</h:panelGrid>
+			<h:panelGrid id="pnlSolutionLikes" rendered="#{challengeBean.showSolutionLikes}">
+				<p:tagCloud id="tgLikes" model="#{challengeBean.solLikes}" />
+			</h:panelGrid>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
