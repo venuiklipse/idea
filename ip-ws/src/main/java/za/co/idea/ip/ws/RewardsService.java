@@ -11,15 +11,19 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import za.co.idea.ip.orm.bean.IpPoints;
 import za.co.idea.ip.orm.bean.IpRewards;
 import za.co.idea.ip.orm.bean.IpRewardsCat;
 import za.co.idea.ip.orm.bean.IpRewardsStatus;
+import za.co.idea.ip.orm.dao.IpAllocationDAO;
+import za.co.idea.ip.orm.dao.IpPointsDAO;
 import za.co.idea.ip.orm.dao.IpRewardsCatDAO;
 import za.co.idea.ip.orm.dao.IpRewardsDAO;
 import za.co.idea.ip.orm.dao.IpRewardsGroupDAO;
 import za.co.idea.ip.orm.dao.IpRewardsStatusDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
+import za.co.idea.ip.ws.bean.PointMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.RewardsMessage;
 
@@ -31,6 +35,8 @@ public class RewardsService {
 	private IpRewardsDAO ipRewardsDAO;
 	private IpRewardsStatusDAO ipRewardsStatusDAO;
 	private IpRewardsGroupDAO ipRewardsGroupDAO;
+	private IpAllocationDAO ipAllocationDAO;
+	private IpPointsDAO ipPointsDAO;
 
 	@POST
 	@Path("/rewards/add")
@@ -301,6 +307,76 @@ public class RewardsService {
 		return message;
 	}
 
+	@POST
+	@Path("/points/add")
+	@Produces("application/json")
+	@Consumes("application/json")
+	public ResponseMessage createPoint(PointMessage point) {
+		try {
+			IpPoints ipPoints = new IpPoints();
+			ipPoints.setIpAllocation(ipAllocationDAO.findById(point.getAllocId()));
+			ipPoints.setIpUser(ipUserDAO.findById(point.getUserId()));
+			ipPoints.setPointId(point.getPointId());
+			ipPoints.setPointValue(point.getPointValue());
+			ipPointsDAO.save(ipPoints);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
+		} catch (Exception e) {
+			e.printStackTrace();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
+		}
+
+	}
+
+	@PUT
+	@Path("/points/modify")
+	@Produces("application/json")
+	@Consumes("application/json")
+	public ResponseMessage updatePoint(PointMessage point) {
+		try {
+			IpPoints ipPoints = new IpPoints();
+			ipPoints.setIpAllocation(ipAllocationDAO.findById(point.getAllocId()));
+			ipPoints.setIpUser(ipUserDAO.findById(point.getUserId()));
+			ipPoints.setPointId(point.getPointId());
+			ipPoints.setPointValue(point.getPointValue());
+			ipPointsDAO.merge(ipPoints);
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
+		} catch (Exception e) {
+			e.printStackTrace();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
+		}
+
+	}
+
+	@PUT
+	@Path("/points/get/{id}")
+	@Produces("application/json")
+	@Consumes("application/json")
+	public PointMessage getPointsById(@PathParam("id") Long id) {
+		PointMessage message = new PointMessage();
+		try {
+			IpPoints ipPoints = ipPointsDAO.findById(id);
+			message.setAllocId(ipPoints.getIpAllocation().getAllocId());
+			message.setPointId(ipPoints.getPointId());
+			message.setPointValue(ipPoints.getPointValue());
+			message.setUserId(ipPoints.getIpUser().getUserId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return message;
+	}
+
 	public IpUserDAO getIpUserDAO() {
 		return ipUserDAO;
 	}
@@ -339,6 +415,22 @@ public class RewardsService {
 
 	public void setIpRewardsGroupDAO(IpRewardsGroupDAO ipRewardsGroupDAO) {
 		this.ipRewardsGroupDAO = ipRewardsGroupDAO;
+	}
+
+	public IpAllocationDAO getIpAllocationDAO() {
+		return ipAllocationDAO;
+	}
+
+	public void setIpAllocationDAO(IpAllocationDAO ipAllocationDAO) {
+		this.ipAllocationDAO = ipAllocationDAO;
+	}
+
+	public IpPointsDAO getIpPointsDAO() {
+		return ipPointsDAO;
+	}
+
+	public void setIpPointsDAO(IpPointsDAO ipPointsDAO) {
+		this.ipPointsDAO = ipPointsDAO;
 	}
 
 }
