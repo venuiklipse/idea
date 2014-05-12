@@ -147,6 +147,42 @@
 			<to-view-id>/pages/user/solutions.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>rwcr</from-outcome>
+			<to-view-id>/pages/rewards/create.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rwer</from-outcome>
+			<to-view-id>/pages/rewards/edit.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rwvr</from-outcome>
+			<to-view-id>/pages/rewards/store.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rwur</from-outcome>
+			<to-view-id>/pages/user/wishlist.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>clmcc</from-outcome>
+			<to-view-id>/pages/claim/create.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>clmec</from-outcome>
+			<to-view-id>/pages/claim/edit.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>clmvc</from-outcome>
+			<to-view-id>/pages/claim/view.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>clmuc</from-outcome>
+			<to-view-id>/pages/user/claims.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 	<lifecycle>
 		<phase-listener>za.co.idea.web.util.SessionPhaseListener</phase-listener>
 	</lifecycle>

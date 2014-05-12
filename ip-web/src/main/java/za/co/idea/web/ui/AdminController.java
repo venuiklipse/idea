@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -238,6 +239,7 @@ public class AdminController implements Serializable {
 			bean.setTwHandle(userBean.getTwHandle());
 			bean.setIsActive(true);
 			bean.setuId(COUNTER.getNextId("ip_user"));
+			bean.setLastLoginDt(new Date());
 			ResponseMessage response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean, ResponseMessage.class);
 			if (response.getStatusCode() == 0)
 				return "home";
@@ -272,6 +274,7 @@ public class AdminController implements Serializable {
 			bean.setTwHandle(userBean.getTwHandle());
 			bean.setIsActive(userBean.getIsActive());
 			bean.setuId(userBean.getuId());
+			bean.setLastLoginDt(userBean.getLastLoginDt());
 			ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 			if (response.getStatusCode() == 0)
 				return "home";

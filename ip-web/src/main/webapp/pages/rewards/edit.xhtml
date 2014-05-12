@@ -1,0 +1,85 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+	<ui:composition template="/templates/layout.xhtml">
+		<ui:define name="title">Edit Rewards</ui:define>
+		<ui:define name="body">
+			<p:panelGrid columns="2" id="pnlEditRewards">
+				<p:column>
+					<p:outputLabel id="lblRTitle" value="Title : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="txtRTitle" value="#{rewardsBean.rewardsBean.rwTitle}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblRCat" value="Category : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somRCat" value="#{rewardsBean.rewardsBean.rCatId}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{rewardsBean.rewardsCat}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblRStatus" value="Status : " />
+				</p:column>
+				<p:column>
+					<p:selectOneMenu id="somRStatus" value="#{rewardsBean.rewardsBean.rStatusId}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{rewardsBean.rewardsStatus}" var="ccat" itemLabel="#{ccat.desc}" itemValue="#{ccat.id}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblRDesc" value="Description : " />
+				</p:column>
+				<p:column>
+					<p:editor id="txtRDesc" value="#{rewardsBean.rewardsBean.rwDesc}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblRPoint" value="Point Value : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="txtRPoint" value="#{rewardsBean.rewardsBean.rwValue}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblRHoverText" value="Hover Text : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="txtRHoverText" value="#{rewardsBean.rewardsBean.rwHoverText}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblRLaunchDt" value="Launch Date : " />
+				</p:column>
+				<p:column>
+					<p:calendar id="txtRLaunchDt" value="#{rewardsBean.rewardsBean.rwLaunchDt}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblRExpiryDt" value="Expiry Date : " />
+				</p:column>
+				<p:column>
+					<p:calendar id="txtRExpiryDt" value="#{rewardsBean.rewardsBean.rwExpiryDt}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblRTag" value="Tags : " />
+				</p:column>
+				<p:column>
+					<p:inputText id="txtRTag" value="#{rewardsBean.rewardsBean.rwTag}" />
+				</p:column>
+				<p:column>
+					<p:outputLabel id="lblRUpload" value="Upload File : " />
+				</p:column>
+				<p:column>
+					<p:fileUpload id="fuCUpload" fileUploadListener="#{rewardsBean.rwFileUploadHandle}" multiple="false" />
+				</p:column>
+				<p:row>
+					<p:column colspan="2">
+						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{rewardsBean.saveRewards}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:commandButton id="btnWish" value="Add To Wishlist" ajax="false" action="#{rewardsBean.addToWishlist}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

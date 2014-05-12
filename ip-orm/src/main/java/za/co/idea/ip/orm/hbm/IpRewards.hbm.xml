@@ -64,11 +64,11 @@
 		</set>
 	</class>
 	<sql-query name="getRewardsByUser">
-		select rw.* from ip_rewards rw where rw.rw_status=:id
-		<return alias="clm" class="za.co.idea.ip.orm.bean.IpRewards" />
+		select rw.* from ip_rewards rw, ip_tag t where t.tag_entity_id=rw.rw_id and t.tag_user_id=:id and t.tag_entity_type=4 and t.tag_type=4
+		<return alias="rw" class="za.co.idea.ip.orm.bean.IpRewards" />
 	</sql-query>
 	<sql-query name="getRewardsByStatus">
 		select rw.* from ip_rewards rw where rw.rw_status=:id
-		<return alias="chal" class="za.co.idea.ip.orm.bean.IpRewards" />
+		<return alias="rw" class="za.co.idea.ip.orm.bean.IpRewards" />
 	</sql-query>
 </hibernate-mapping>

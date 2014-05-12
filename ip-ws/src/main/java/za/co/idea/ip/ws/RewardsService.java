@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -32,10 +33,10 @@ public class RewardsService {
 	private IpRewardsGroupDAO ipRewardsGroupDAO;
 
 	@POST
-	@Path("/reward/add")
+	@Path("/rewards/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	private ResponseMessage createReward(RewardsMessage rewards) {
+	public ResponseMessage createReward(RewardsMessage rewards) {
 		try {
 			IpRewards ipRewards = new IpRewards();
 			ipRewards.setIpRewardsCat(ipRewardsCatDAO.findById(rewards.getrCatId()));
@@ -67,11 +68,11 @@ public class RewardsService {
 		}
 	}
 
-	@POST
-	@Path("/reward/modify")
+	@PUT
+	@Path("/rewards/modify")
 	@Consumes("application/json")
 	@Produces("application/json")
-	private ResponseMessage updateReward(RewardsMessage rewards) {
+	public ResponseMessage updateReward(RewardsMessage rewards) {
 		try {
 			IpRewards ipRewards = new IpRewards();
 			ipRewards.setIpRewardsCat(ipRewardsCatDAO.findById(rewards.getrCatId()));

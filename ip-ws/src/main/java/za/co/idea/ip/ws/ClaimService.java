@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -32,7 +33,7 @@ public class ClaimService {
 	@Path("/claim/add")
 	@Consumes("application/json")
 	@Produces("application/json")
-	private ResponseMessage createClaim(ClaimMessage claim) {
+	public ResponseMessage createClaim(ClaimMessage claim) {
 		try {
 			IpClaim ipClaim = new IpClaim();
 			ipClaim.setClaimCrtdDt(claim.getClaimCrtdDt());
@@ -55,11 +56,11 @@ public class ClaimService {
 		}
 	}
 
-	@POST
+	@PUT
 	@Path("/claim/modify")
 	@Consumes("application/json")
 	@Produces("application/json")
-	private ResponseMessage updateClaim(ClaimMessage claim) {
+	public ResponseMessage updateClaim(ClaimMessage claim) {
 		try {
 			IpClaim ipClaim = new IpClaim();
 			ipClaim.setClaimCrtdDt(claim.getClaimCrtdDt());

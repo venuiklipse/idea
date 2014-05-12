@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13961153349350" configfile="/ip-web/src/main/webapp/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="*" x="122" y="4978" id="pf13961154269341" outlinks="pf13968781933350 pf13968781933351 pf13968781933352 pf13968781933353 pf13968781933354 pf13968781933355 pf13968781933356 pf139687836234220 pf139687836234221 pf139687836234222 pf139687836234223 pf13969634437690 pf13971451840190 pf13971451840191 pf13971451840192 pf139714523796514 pf139714523796515 pf139714523796516 pf139714523796517 pf13990532400600 pf13990532400601 pf13990532400602 pf13990532400603 pf13996144908870 pf13996144908871 pf13996144908872" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="*" x="122" y="4978" id="pf13961154269341" outlinks="pf13968781933350 pf13968781933351 pf13968781933352 pf13968781933353 pf13968781933354 pf13968781933355 pf13968781933356 pf139687836234220 pf139687836234221 pf139687836234222 pf139687836234223 pf13969634437690 pf13971451840190 pf13971451840191 pf13971451840192 pf139714523796514 pf139714523796515 pf139714523796516 pf139714523796517 pf13990532400600 pf13990532400601 pf13990532400602 pf13990532400603 pf13996144908870 pf13996144908871 pf13996144908872 pf139961490942511 pf139961490942512 pf139961490942514 pf139961491843219 pf139961496638221 pf139961496638222 pf139961496638223 pf139961496638224" path="*"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/home.xhtml" x="338" y="178" id="pf139687819333610" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf13968781933350" path="/pages/home.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/admin/createUser.xhtml" x="338" y="562" id="pf139687819333611" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" inlinks="pf13968781933351" path="/pages/admin/createUser.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/admin/editUser.xhtml" x="338" y="946" id="pf139687819333612" referenceLink="//@navigationRule.0/@navigationCase.3/@toViewId|" inlinks="pf13968781933352" path="/pages/admin/editUser.xhtml"/>
@@ -27,6 +27,14 @@
   <nodes xsi:type="pageflow:PFPage" name="pages/user/ideas.xhtml" x="338" y="9010" id="pf13996144908883" referenceLink="//@navigationRule.1/@navigationCase.4/@toViewId|" inlinks="pf13996144908870" path="/pages/user/ideas.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/user/challenges.xhtml" x="338" y="9394" id="pf13996144908884" referenceLink="//@navigationRule.2/@navigationCase.4/@toViewId|" inlinks="pf13996144908871" path="/pages/user/challenges.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/user/solutions.xhtml" x="338" y="9778" id="pf13996144908885" referenceLink="//@navigationRule.3/@navigationCase.4/@toViewId|" inlinks="pf13996144908872" path="/pages/user/solutions.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/rewards/create.xhtml" id="pf139961490942715" referenceLink="//@navigationRule.4/@navigationCase.0/@toViewId|" inlinks="pf139961490942511" path="/pages/rewards/create.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/rewards/edit.xhtml" id="pf139961490942816" referenceLink="//@navigationRule.4/@navigationCase.1/@toViewId|" inlinks="pf139961490942512" path="/pages/rewards/edit.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/user/wishlist.xhtml" id="pf139961490942818" referenceLink="//@navigationRule.4/@navigationCase.3/@toViewId|" inlinks="pf139961490942514" path="/pages/user/wishlist.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/rewards/store.xhtml" id="pf139961491843320" referenceLink="//@navigationRule.4/@navigationCase.2/@toViewId|" inlinks="pf139961491843219" path="/pages/rewards/store.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/claim/create.xhtml" id="pf139961496638325" referenceLink="//@navigationRule.5/@navigationCase.0/@toViewId|" inlinks="pf139961496638221" path="/pages/claim/create.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/claim/edit.xhtml" id="pf139961496638326" referenceLink="//@navigationRule.5/@navigationCase.1/@toViewId|" inlinks="pf139961496638222" path="/pages/claim/edit.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/claim/view.xhtml" id="pf139961496638327" referenceLink="//@navigationRule.5/@navigationCase.2/@toViewId|" inlinks="pf139961496638223" path="/pages/claim/view.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/user/claims.xhtml" id="pf139961496638328" referenceLink="//@navigationRule.5/@navigationCase.3/@toViewId|" inlinks="pf139961496638224" path="/pages/user/claims.xhtml"/>
   <links id="pf13968781933350" target="pf139687819333610" source="pf13961154269341" outcome="home"/>
   <links id="pf13968781933351" target="pf139687819333611" source="pf13961154269341" outcome="admcu"/>
   <links id="pf13968781933352" target="pf139687819333612" source="pf13961154269341" outcome="admeu"/>
@@ -53,4 +61,12 @@
   <links id="pf13996144908870" target="pf13996144908883" source="pf13961154269341" outcome="ideaui"/>
   <links id="pf13996144908871" target="pf13996144908884" source="pf13961154269341" outcome="chaluc"/>
   <links id="pf13996144908872" target="pf13996144908885" source="pf13961154269341" outcome="solus"/>
+  <links id="pf139961490942511" target="pf139961490942715" source="pf13961154269341" outcome="rwcr"/>
+  <links id="pf139961490942512" target="pf139961490942816" source="pf13961154269341" outcome="rwer"/>
+  <links id="pf139961490942514" target="pf139961490942818" source="pf13961154269341" outcome="rwur"/>
+  <links id="pf139961491843219" target="pf139961491843320" source="pf13961154269341" outcome="rwvr"/>
+  <links id="pf139961496638221" target="pf139961496638325" source="pf13961154269341" outcome="clmcc"/>
+  <links id="pf139961496638222" target="pf139961496638326" source="pf13961154269341" outcome="clmec"/>
+  <links id="pf139961496638223" target="pf139961496638327" source="pf13961154269341" outcome="clmvc"/>
+  <links id="pf139961496638224" target="pf139961496638328" source="pf13961154269341" outcome="clmuc"/>
 </pageflow:Pageflow>

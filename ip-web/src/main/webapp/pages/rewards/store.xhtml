@@ -1,0 +1,23 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+	<ui:composition template="/templates/layout.xhtml">
+		<ui:define name="title">Rewards Store</ui:define>
+		<ui:define name="body">
+			<p:dataGrid id="dgRewards" var="rewards" value="#{rewardsBean.viewRewardsBeans}" columns="3" rows="12" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="9,12,15">
+				<p:panel header="#{rewards.rwTitle}" style="text-align:center">
+					<h:panelGrid id="pnlReward" columns="1" style="width:100%">
+						<h:outputText id="txtStockCdNum" value="#{rewards.rwStockCodeNum}" />
+						<h:outputText id="txtValue" value="#{rewards.rwValue}" />
+						<h:outputText id="txtExpiry" value="#{rewards.rwExpiryDt}">
+							<f:convertDateTime pattern="dd.MM.yyyy" />
+						</h:outputText>
+						<p:commandButton id="viewButton" value="View" icon="ui-icon-search" ajax="false" immediate="true" action="#{rewardsBean.showEditReward}">
+							<f:setPropertyActionListener value="#{rewards}" target="#{rewardsBean.rewardsBean}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:panel>
+			</p:dataGrid>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

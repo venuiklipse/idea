@@ -1,6 +1,7 @@
 package za.co.idea.web.ui.bean;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class UserBean implements Serializable {
 
@@ -21,6 +22,7 @@ public class UserBean implements Serializable {
 	private String cPw;
 	private String avatar;
 	private Boolean isActive;
+	private Date lastLoginDt;
 
 	public Long getuId() {
 		return uId;
@@ -148,6 +150,14 @@ public class UserBean implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Date getLastLoginDt() {
+		return lastLoginDt;
+	}
+
+	public void setLastLoginDt(Date lastLoginDt) {
+		this.lastLoginDt = lastLoginDt;
 	}
 
 }

@@ -40,7 +40,7 @@ import za.co.idea.web.util.IdNumberGen;
 public class ChallengeController implements Serializable {
 
 	private static final long serialVersionUID = -6939719926402016671L;
-	private static final Log LOG = LogFactory.getLog(IdeaController.class);
+	private static final Log LOG = LogFactory.getLog(ChallengeController.class);
 	private ChallengeBean challengeBean;
 	private SolutionBean solutionBean;
 	private List<ChallengeBean> viewChallenges;
