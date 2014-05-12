@@ -16,5 +16,8 @@
         <many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select">
             <column name="user_id" />
         </many-to-one>
-    </class>
+        <property name="pointValue" type="java.lang.Integer">
+            <column name="point_value" />
+        </property>
+        </class>
 </hibernate-mapping>

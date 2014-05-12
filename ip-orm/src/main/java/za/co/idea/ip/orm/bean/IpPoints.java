@@ -15,6 +15,7 @@ public class IpPoints implements java.io.Serializable {
 	private Long pointId;
 	private IpAllocation ipAllocation;
 	private IpUser ipUser;
+	private Integer pointValue;
 
 	// Constructors
 
@@ -23,15 +24,17 @@ public class IpPoints implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpPoints(Long pointId) {
+	public IpPoints(Long pointId, Integer pointValue) {
 		this.pointId = pointId;
+		this.pointValue = pointValue;
 	}
 
 	/** full constructor */
-	public IpPoints(Long pointId, IpAllocation ipAllocation, IpUser ipUser) {
+	public IpPoints(Long pointId, IpAllocation ipAllocation, IpUser ipUser, Integer pointValue) {
 		this.pointId = pointId;
 		this.ipAllocation = ipAllocation;
 		this.ipUser = ipUser;
+		this.pointValue = pointValue;
 	}
 
 	// Property accessors
@@ -58,6 +61,14 @@ public class IpPoints implements java.io.Serializable {
 
 	public void setIpUser(IpUser ipUser) {
 		this.ipUser = ipUser;
+	}
+
+	public Integer getPointValue() {
+		return pointValue;
+	}
+
+	public void setPointValue(Integer pointValue) {
+		this.pointValue = pointValue;
 	}
 
 }
