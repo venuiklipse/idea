@@ -12,13 +12,13 @@
 			<column name="tag_user_id" />
 		</many-to-one>
 		<many-to-one class="za.co.idea.ip.orm.bean.IpTagEntityType" fetch="select" name="ipTagEntityType">
-			<column name="tag_entity_type" not-null="true" />
+			<column name="tag_entity_type" />
 		</many-to-one>
 		<many-to-one class="za.co.idea.ip.orm.bean.IpTagType" fetch="select" name="ipTagType">
-			<column name="tag_type" not-null="true" />
+			<column name="tag_type" />
 		</many-to-one>
 		<property generated="never" lazy="false" name="tagEntityId" type="java.lang.Long">
-			<column name="tag_entity_id" not-null="true" />
+			<column name="tag_entity_id" />
 		</property>
 		<property generated="never" lazy="false" name="tagText" type="java.lang.String">
 			<column length="1000" name="tag_text" />

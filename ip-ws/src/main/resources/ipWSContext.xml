@@ -52,5 +52,15 @@
 		<property name="ipClaimStatusDAO" ref="IpClaimStatusDAO" />
 		<property name="ipRewardsDAO" ref="IpRewardsDAO" />
 	</bean>
-	<bean id="metaDataService" class="za.co.idea.ip.ws.MetaDataService"></bean>
+	<bean id="metaDataService" class="za.co.idea.ip.ws.MetaDataService">
+		<property name="ipChallengeCatDAO" ref="IpChallengeCatDAO" />
+		<property name="ipChallengeStatusDAO" ref="IpChallengeStatusDAO" />
+		<property name="ipClaimStatusDAO" ref="IpClaimStatusDAO" />
+		<property name="ipIdeaCatDAO" ref="IpIdeaCatDAO" />
+		<property name="ipIdeaStatusDAO" ref="IpIdeaStatusDAO" />
+		<property name="ipRewardsCatDAO" ref="IpRewardsCatDAO" />
+		<property name="ipRewardsStatusDAO" ref="IpRewardsStatusDAO" />
+		<property name="ipSolutionCatDAO" ref="IpSolutionCatDAO" />
+		<property name="ipSolutionStatusDAO" ref="IpSolutionStatusDAO" />
+	</bean>
 </beans>

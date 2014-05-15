@@ -15,6 +15,7 @@
 			<ref bean="solutionService" />
 			<ref bean="claimService" />
 			<ref bean="rewardsService" />
+			<ref bean="metaDataService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">
@@ -28,6 +29,7 @@
 			<entry key="en" value="en-gb" />
 		</jaxrs:languageMappings>
 		<jaxrs:features>
+			<cxf:logging />
 		</jaxrs:features>
 	</jaxrs:server>
 

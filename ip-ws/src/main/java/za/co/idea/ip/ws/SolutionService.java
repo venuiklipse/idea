@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.commons.codec.binary.Base64;
 import org.hibernate.Hibernate;
 
 import za.co.idea.ip.orm.bean.IpSolution;
@@ -45,7 +46,8 @@ public class SolutionService {
 			ipSolution.setIpSolutionCat(ipSolutionCatDAO.findById(solution.getCatId()));
 			ipSolution.setIpSolutionStatus(ipSolutionStatusDAO.findById(solution.getStatusId()));
 			ipSolution.setIpUser(ipUserDAO.findById(solution.getCrtdById()));
-			ipSolution.setSolBlob(Hibernate.createBlob(solution.getBlob().getBytes()));
+			if (solution.getBlob() != null && solution.getBlob().length() > 0)
+				ipSolution.setSolBlob(Hibernate.createBlob(Base64.decodeBase64(solution.getBlob().getBytes())));
 			ipSolution.setSolCrtdDt(solution.getCrtdDt());
 			ipSolution.setSolDesc(solution.getDesc());
 			ipSolution.setSolFileName(solution.getFileName());
@@ -78,7 +80,8 @@ public class SolutionService {
 			ipSolution.setIpSolutionCat(ipSolutionCatDAO.findById(solution.getCatId()));
 			ipSolution.setIpSolutionStatus(ipSolutionStatusDAO.findById(solution.getStatusId()));
 			ipSolution.setIpUser(ipUserDAO.findById(solution.getCrtdById()));
-			ipSolution.setSolBlob(Hibernate.createBlob(solution.getBlob().getBytes()));
+			if (solution.getBlob() != null && solution.getBlob().length() > 0)
+				ipSolution.setSolBlob(Hibernate.createBlob(Base64.decodeBase64(solution.getBlob().getBytes())));
 			ipSolution.setSolCrtdDt(solution.getCrtdDt());
 			ipSolution.setSolDesc(solution.getDesc());
 			ipSolution.setSolFileName(solution.getFileName());
@@ -114,7 +117,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setBlob(new String(ipSolution.getSolBlob().getBytes(1, (int) ipSolution.getSolBlob().length())));
+				solution.setBlob(new String(Base64.encodeBase64URLSafe(ipSolution.getSolBlob().getBytes(1, (int) ipSolution.getSolBlob().length()))));
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setFileName(ipSolution.getSolFileName());
@@ -144,7 +147,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setBlob(new String(ipSolution.getSolBlob().getBytes(1, (int) ipSolution.getSolBlob().length())));
+				solution.setBlob(new String(Base64.encodeBase64URLSafe(ipSolution.getSolBlob().getBytes(1, (int) ipSolution.getSolBlob().length()))));
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setFileName(ipSolution.getSolFileName());
@@ -174,7 +177,7 @@ public class SolutionService {
 				solution.setCatId(ipSolution.getIpSolutionCat().getScId());
 				solution.setStatusId(ipSolution.getIpSolutionStatus().getSsId());
 				solution.setCrtdById(ipSolution.getIpUser().getUserId());
-				solution.setBlob(new String(ipSolution.getSolBlob().getBytes(1, (int) ipSolution.getSolBlob().length())));
+				solution.setBlob(new String(Base64.encodeBase64URLSafe(ipSolution.getSolBlob().getBytes(1, (int) ipSolution.getSolBlob().length()))));
 				solution.setCrtdDt(ipSolution.getSolCrtdDt());
 				solution.setDesc(ipSolution.getSolDesc());
 				solution.setFileName(ipSolution.getSolFileName());

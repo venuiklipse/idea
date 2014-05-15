@@ -11,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
@@ -161,7 +162,7 @@ public class ChallengeController implements Serializable {
 		try {
 			WebClient addChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/add");
 			ChallengeMessage message = new ChallengeMessage();
-			message.setBlob(challengeBean.getBlob());
+			message.setBlob(new String(Base64.encodeBase64URLSafe(challengeBean.getBlob().getBytes())));
 			message.setCatId(challengeBean.getCatId());
 			message.setContentType(challengeBean.getContentType());
 			message.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
@@ -196,7 +197,7 @@ public class ChallengeController implements Serializable {
 		try {
 			WebClient updateChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/modify");
 			ChallengeMessage message = new ChallengeMessage();
-			message.setBlob(challengeBean.getBlob());
+			message.setBlob(new String(Base64.encodeBase64URLSafe(challengeBean.getBlob().getBytes())));
 			message.setCatId(challengeBean.getCatId());
 			message.setContentType(challengeBean.getContentType());
 			message.setCrtdById(challengeBean.getId());
@@ -366,7 +367,7 @@ public class ChallengeController implements Serializable {
 		try {
 			WebClient addSolutionClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/add");
 			SolutionMessage message = new SolutionMessage();
-			message.setBlob(solutionBean.getBlob());
+			message.setBlob(new String(Base64.encodeBase64URLSafe(solutionBean.getBlob().getBytes())));
 			message.setFileName(solutionBean.getFileName());
 			message.setContentType(solutionBean.getContentType());
 			message.setCatId(solutionBean.getCatId());
@@ -398,7 +399,7 @@ public class ChallengeController implements Serializable {
 	public String updateSolution() {
 		WebClient updateSolutionClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/modify");
 		SolutionMessage message = new SolutionMessage();
-		message.setBlob(solutionBean.getBlob());
+		message.setBlob(new String(Base64.encodeBase64URLSafe(solutionBean.getBlob().getBytes())));
 		message.setFileName(solutionBean.getFileName());
 		message.setContentType(solutionBean.getContentType());
 		message.setCatId(solutionBean.getCatId());
@@ -475,7 +476,7 @@ public class ChallengeController implements Serializable {
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		for (ChallengeMessage challengeMessage : challenges) {
 			ChallengeBean bean = new ChallengeBean();
-			bean.setBlob(challengeMessage.getBlob());
+			bean.setBlob(new String(Base64.decodeBase64(challengeMessage.getBlob())));
 			bean.setCatId(challengeMessage.getCatId());
 			bean.setContentType(challengeMessage.getContentType());
 			bean.setCrtdById(challengeMessage.getId());
@@ -501,7 +502,7 @@ public class ChallengeController implements Serializable {
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		for (ChallengeMessage challengeMessage : challenges) {
 			ChallengeBean bean = new ChallengeBean();
-			bean.setBlob(challengeMessage.getBlob());
+			bean.setBlob(new String(Base64.decodeBase64(challengeMessage.getBlob())));
 			bean.setCatId(challengeMessage.getCatId());
 			bean.setContentType(challengeMessage.getContentType());
 			bean.setCrtdById(challengeMessage.getId());
@@ -528,7 +529,7 @@ public class ChallengeController implements Serializable {
 		for (SolutionMessage solutionMessage : solutions) {
 			SolutionBean bean = new SolutionBean();
 			bean.setChalId(solutionMessage.getChalId());
-			bean.setBlob(solutionMessage.getBlob());
+			bean.setBlob(new String(Base64.decodeBase64(solutionMessage.getBlob())));
 			bean.setCatId(solutionMessage.getCatId());
 			bean.setContentType(solutionMessage.getContentType());
 			bean.setCrtdById(solutionMessage.getId());
@@ -552,7 +553,7 @@ public class ChallengeController implements Serializable {
 		for (SolutionMessage solutionMessage : solutions) {
 			SolutionBean bean = new SolutionBean();
 			bean.setChalId(solutionMessage.getChalId());
-			bean.setBlob(solutionMessage.getBlob());
+			bean.setBlob(new String(Base64.decodeBase64(solutionMessage.getBlob())));
 			bean.setCatId(solutionMessage.getCatId());
 			bean.setContentType(solutionMessage.getContentType());
 			bean.setCrtdById(solutionMessage.getId());

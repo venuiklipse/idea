@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.commons.codec.binary.Base64;
 import org.hibernate.Hibernate;
 
 import za.co.idea.ip.orm.bean.IpChallenge;
@@ -39,7 +40,8 @@ public class ChallengeService {
 	public ResponseMessage createChallenge(ChallengeMessage challenge) {
 		IpChallenge ipChallenge = new IpChallenge();
 		try {
-			ipChallenge.setChalBlob(Hibernate.createBlob(challenge.getBlob().getBytes()));
+			if (challenge.getBlob() != null && challenge.getBlob().length() > 0)
+				ipChallenge.setChalBlob(Hibernate.createBlob(Base64.decodeBase64(challenge.getBlob().getBytes())));
 			ipChallenge.setChalCrtdDt(challenge.getCrtdDt());
 			ipChallenge.setChalDesc(challenge.getDesc());
 			ipChallenge.setChalExpiryDt(challenge.getExprDt());
@@ -74,7 +76,8 @@ public class ChallengeService {
 	public ResponseMessage updateChallenge(ChallengeMessage challenge) {
 		IpChallenge ipChallenge = new IpChallenge();
 		try {
-			ipChallenge.setChalBlob(Hibernate.createBlob(challenge.getBlob().getBytes()));
+			if (challenge.getBlob() != null && challenge.getBlob().length() > 0)
+				ipChallenge.setChalBlob(Hibernate.createBlob(Base64.decodeBase64(challenge.getBlob().getBytes())));
 			ipChallenge.setChalCrtdDt(challenge.getCrtdDt());
 			ipChallenge.setChalDesc(challenge.getDesc());
 			ipChallenge.setChalExpiryDt(challenge.getExprDt());
@@ -113,7 +116,7 @@ public class ChallengeService {
 				IpChallenge ipChallenge = (IpChallenge) object;
 				ChallengeMessage challenge = new ChallengeMessage();
 				challenge.setId(ipChallenge.getChalId());
-				challenge.setBlob(new String(ipChallenge.getChalBlob().getBytes(1, (int) ipChallenge.getChalBlob().length())));
+				challenge.setBlob(new String(Base64.encodeBase64URLSafe(ipChallenge.getChalBlob().getBytes(1, (int) ipChallenge.getChalBlob().length()))));
 				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
 				challenge.setCrtdById(ipChallenge.getIpUser().getUserId());
 				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
@@ -145,7 +148,7 @@ public class ChallengeService {
 				IpChallenge ipChallenge = (IpChallenge) object;
 				ChallengeMessage challenge = new ChallengeMessage();
 				challenge.setId(ipChallenge.getChalId());
-				challenge.setBlob(new String(ipChallenge.getChalBlob().getBytes(1, (int) ipChallenge.getChalBlob().length())));
+				challenge.setBlob(new String(Base64.encodeBase64URLSafe(ipChallenge.getChalBlob().getBytes(1, (int) ipChallenge.getChalBlob().length()))));
 				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
 				challenge.setCrtdById(ipChallenge.getIpUser().getUserId());
 				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
@@ -177,7 +180,7 @@ public class ChallengeService {
 				IpChallenge ipChallenge = (IpChallenge) object;
 				ChallengeMessage challenge = new ChallengeMessage();
 				challenge.setId(ipChallenge.getChalId());
-				challenge.setBlob(new String(ipChallenge.getChalBlob().getBytes(1, (int) ipChallenge.getChalBlob().length())));
+				challenge.setBlob(new String(Base64.encodeBase64URLSafe(ipChallenge.getChalBlob().getBytes(1, (int) ipChallenge.getChalBlob().length()))));
 				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
 				challenge.setCrtdById(ipChallenge.getIpUser().getUserId());
 				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());

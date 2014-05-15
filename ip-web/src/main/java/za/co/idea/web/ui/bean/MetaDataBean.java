@@ -1,10 +1,6 @@
-package za.co.idea.ip.ws.bean;
+package za.co.idea.web.ui.bean;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name = "metaDataMessage")
-public class MetaDataMessage {
-
+public class MetaDataBean {
 	private Integer id;
 	private String desc;
 	private String table;

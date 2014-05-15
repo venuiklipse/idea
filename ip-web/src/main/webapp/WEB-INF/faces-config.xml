@@ -35,6 +35,11 @@
 		<managed-bean-class>za.co.idea.web.ui.ClaimController</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>metaDataBean</managed-bean-name>
+		<managed-bean-class>za.co.idea.web.ui.MetaDataController</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
 	<navigation-rule>
 		<navigation-case>
 			<from-outcome>login</from-outcome>
@@ -80,8 +85,10 @@
 			<from-outcome>admvf</from-outcome>
 			<to-view-id>/pages/admin/viewFunction.xhtml</to-view-id>
 		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
+		<navigation-case>
+			<from-outcome>mdata</from-outcome>
+			<to-view-id>/pages/admin/maintainMetaData.xhtml</to-view-id>
+		</navigation-case>
 		<navigation-case>
 			<from-outcome>ideaci</from-outcome>
 			<to-view-id>/pages/idea/create.xhtml</to-view-id>
@@ -102,8 +109,6 @@
 			<from-outcome>ideaui</from-outcome>
 			<to-view-id>/pages/user/ideas.xhtml</to-view-id>
 		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
 		<navigation-case>
 			<from-outcome>chalcc</from-outcome>
 			<to-view-id>/pages/challenge/create.xhtml</to-view-id>
@@ -124,8 +129,6 @@
 			<from-outcome>chaluc</from-outcome>
 			<to-view-id>/pages/user/challenges.xhtml</to-view-id>
 		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
 		<navigation-case>
 			<from-outcome>solcs</from-outcome>
 			<to-view-id>/pages/solution/create.xhtml</to-view-id>
@@ -146,8 +149,6 @@
 			<from-outcome>solus</from-outcome>
 			<to-view-id>/pages/user/solutions.xhtml</to-view-id>
 		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
 		<navigation-case>
 			<from-outcome>rwcr</from-outcome>
 			<to-view-id>/pages/rewards/create.xhtml</to-view-id>
@@ -164,8 +165,6 @@
 			<from-outcome>rwur</from-outcome>
 			<to-view-id>/pages/user/wishlist.xhtml</to-view-id>
 		</navigation-case>
-	</navigation-rule>
-	<navigation-rule>
 		<navigation-case>
 			<from-outcome>clmcc</from-outcome>
 			<to-view-id>/pages/claim/create.xhtml</to-view-id>

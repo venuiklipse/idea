@@ -38,7 +38,7 @@
 		<property name="rwTag" type="java.lang.String">
 			<column name="rw_tag" length="500" />
 		</property>
-		<property name="rwBlob" type="java.lang.String">
+		<property name="rwBlob" type="java.sql.Blob">
 			<column name="rw_blob" />
 		</property>
 		<property name="rwCrtdDt" type="java.sql.Timestamp">

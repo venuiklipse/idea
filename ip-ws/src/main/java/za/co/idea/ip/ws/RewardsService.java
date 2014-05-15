@@ -11,6 +11,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.commons.codec.binary.Base64;
+import org.hibernate.Hibernate;
+
 import za.co.idea.ip.orm.bean.IpPoints;
 import za.co.idea.ip.orm.bean.IpRewards;
 import za.co.idea.ip.orm.bean.IpRewardsCat;
@@ -45,11 +48,10 @@ public class RewardsService {
 	public ResponseMessage createReward(RewardsMessage rewards) {
 		try {
 			IpRewards ipRewards = new IpRewards();
-			ipRewards.setIpRewardsCat(ipRewardsCatDAO.findById(rewards
-					.getrCatId()));
-			ipRewards.setIpRewardsStatus(ipRewardsStatusDAO.findById(rewards
-					.getrStatusId()));
-			ipRewards.setRwBlob(rewards.getRwBlob());
+			ipRewards.setIpRewardsCat(ipRewardsCatDAO.findById(rewards.getrCatId()));
+			ipRewards.setIpRewardsStatus(ipRewardsStatusDAO.findById(rewards.getrStatusId()));
+			if (rewards.getRwBlob() != null && rewards.getRwBlob().length() > 0)
+				ipRewards.setRwBlob(Hibernate.createBlob(Base64.decodeBase64(rewards.getRwBlob())));
 			ipRewards.setRwCrtdDt(rewards.getRwCrtdDt());
 			ipRewards.setRwDesc(rewards.getRwDesc());
 			ipRewards.setRwExpiryDt(rewards.getRwExpiryDt());
@@ -83,11 +85,10 @@ public class RewardsService {
 	public ResponseMessage updateReward(RewardsMessage rewards) {
 		try {
 			IpRewards ipRewards = new IpRewards();
-			ipRewards.setIpRewardsCat(ipRewardsCatDAO.findById(rewards
-					.getrCatId()));
-			ipRewards.setIpRewardsStatus(ipRewardsStatusDAO.findById(rewards
-					.getrStatusId()));
-			ipRewards.setRwBlob(rewards.getRwBlob());
+			ipRewards.setIpRewardsCat(ipRewardsCatDAO.findById(rewards.getrCatId()));
+			ipRewards.setIpRewardsStatus(ipRewardsStatusDAO.findById(rewards.getrStatusId()));
+			if (rewards.getRwBlob() != null && rewards.getRwBlob().length() > 0)
+				ipRewards.setRwBlob(Hibernate.createBlob(Base64.decodeBase64(rewards.getRwBlob())));
 			ipRewards.setRwCrtdDt(rewards.getRwCrtdDt());
 			ipRewards.setRwDesc(rewards.getRwDesc());
 			ipRewards.setRwExpiryDt(rewards.getRwExpiryDt());
@@ -126,7 +127,7 @@ public class RewardsService {
 				RewardsMessage rewards = new RewardsMessage();
 				rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
 				rewards.setrStatusId(ipRewards.getIpRewardsStatus().getRsId());
-				rewards.setRwBlob(ipRewards.getRwBlob());
+				rewards.setRwBlob(new String(Base64.encodeBase64URLSafe(ipRewards.getRwBlob().getBytes(1, (int) ipRewards.getRwBlob().length()))));
 				rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
 				rewards.setRwDesc(ipRewards.getRwDesc());
 				rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
@@ -156,7 +157,7 @@ public class RewardsService {
 			IpRewards ipRewards = ipRewardsDAO.findById(id);
 			rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
 			rewards.setrStatusId(ipRewards.getIpRewardsStatus().getRsId());
-			rewards.setRwBlob(ipRewards.getRwBlob());
+			rewards.setRwBlob(new String(Base64.encodeBase64URLSafe(ipRewards.getRwBlob().getBytes(1, (int) ipRewards.getRwBlob().length()))));
 			rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
 			rewards.setRwDesc(ipRewards.getRwDesc());
 			rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
@@ -178,8 +179,7 @@ public class RewardsService {
 	@GET
 	@Path("/rewards/list/{id}")
 	@Produces("application/json")
-	public <T extends RewardsMessage> List<T> listRewardsByStatus(
-			@PathParam("id") Integer id) {
+	public <T extends RewardsMessage> List<T> listRewardsByStatus(@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List rewardList = ipRewardsDAO.findByStatusId(id);
@@ -188,7 +188,7 @@ public class RewardsService {
 				RewardsMessage rewards = new RewardsMessage();
 				rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
 				rewards.setrStatusId(ipRewards.getIpRewardsStatus().getRsId());
-				rewards.setRwBlob(ipRewards.getRwBlob());
+				rewards.setRwBlob(new String(Base64.encodeBase64URLSafe(ipRewards.getRwBlob().getBytes(1, (int) ipRewards.getRwBlob().length()))));
 				rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
 				rewards.setRwDesc(ipRewards.getRwDesc());
 				rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
@@ -212,8 +212,7 @@ public class RewardsService {
 	@GET
 	@Path("/rewards/list/{id}")
 	@Produces("application/json")
-	public <T extends RewardsMessage> List<T> listRewardsByUser(
-			@PathParam("id") Long id) {
+	public <T extends RewardsMessage> List<T> listRewardsByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List rewardList = ipRewardsDAO.findByUserId(id);
@@ -222,7 +221,7 @@ public class RewardsService {
 				RewardsMessage rewards = new RewardsMessage();
 				rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
 				rewards.setrStatusId(ipRewards.getIpRewardsStatus().getRsId());
-				rewards.setRwBlob(ipRewards.getRwBlob());
+				rewards.setRwBlob(new String(Base64.encodeBase64URLSafe(ipRewards.getRwBlob().getBytes(1, (int) ipRewards.getRwBlob().length()))));
 				rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
 				rewards.setRwDesc(ipRewards.getRwDesc());
 				rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
@@ -320,8 +319,7 @@ public class RewardsService {
 	public ResponseMessage createPoint(PointMessage point) {
 		try {
 			IpPoints ipPoints = new IpPoints();
-			ipPoints.setIpAllocation(ipAllocationDAO.findById(point
-					.getAllocId()));
+			ipPoints.setIpAllocation(ipAllocationDAO.findById(point.getAllocId()));
 			ipPoints.setIpUser(ipUserDAO.findById(point.getUserId()));
 			ipPoints.setPointId(point.getPointId());
 			ipPoints.setPointValue(point.getPointValue());
@@ -347,8 +345,7 @@ public class RewardsService {
 	public ResponseMessage updatePoint(PointMessage point) {
 		try {
 			IpPoints ipPoints = new IpPoints();
-			ipPoints.setIpAllocation(ipAllocationDAO.findById(point
-					.getAllocId()));
+			ipPoints.setIpAllocation(ipAllocationDAO.findById(point.getAllocId()));
 			ipPoints.setIpUser(ipUserDAO.findById(point.getUserId()));
 			ipPoints.setPointId(point.getPointId());
 			ipPoints.setPointValue(point.getPointValue());
@@ -389,8 +386,7 @@ public class RewardsService {
 	@Path("/points/get/{id}")
 	@Produces("application/json")
 	@Consumes("application/json")
-	public <T extends PointMessage> List<T> listPointsByUser(
-			@PathParam("id") Long id) {
+	public <T extends PointMessage> List<T> listPointsByUser(@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List points = ipPointsDAO.findByUser(id);

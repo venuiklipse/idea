@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
@@ -125,7 +126,7 @@ public class RewardsController implements Serializable {
 		try {
 			WebClient addRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/add");
 			RewardsMessage message = new RewardsMessage();
-			message.setRwBlob(rewardsBean.getRwBlob());
+			message.setRwBlob(new String(Base64.encodeBase64URLSafe(rewardsBean.getRwBlob().getBytes())));
 			message.setRwFileName(rewardsBean.getRwFileName());
 			message.setRwFileType(rewardsBean.getRwFileType());
 			message.setrCatId(rewardsBean.getrCatId());
@@ -161,7 +162,7 @@ public class RewardsController implements Serializable {
 		try {
 			WebClient updateRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/modify");
 			RewardsMessage message = new RewardsMessage();
-			message.setRwBlob(rewardsBean.getRwBlob());
+			message.setRwBlob(new String(Base64.encodeBase64URLSafe(rewardsBean.getRwBlob().getBytes())));
 			message.setRwFileName(rewardsBean.getRwFileName());
 			message.setRwFileType(rewardsBean.getRwFileType());
 			message.setrCatId(rewardsBean.getrCatId());
@@ -245,7 +246,7 @@ public class RewardsController implements Serializable {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
 			bean.setrStatusId(message.getrStatusId());
-			bean.setRwBlob(message.getRwBlob());
+			bean.setRwBlob(new String(Base64.decodeBase64(message.getRwBlob())));
 			bean.setRwCrtdDt(message.getRwCrtdDt());
 			bean.setRwDesc(message.getRwDesc());
 			bean.setRwExpiryDt(message.getRwExpiryDt());
@@ -265,13 +266,13 @@ public class RewardsController implements Serializable {
 
 	private List<RewardsBean> fetchAllRewardsByUser() {
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/list/" +((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		for (RewardsMessage message : rewards) {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
 			bean.setrStatusId(message.getrStatusId());
-			bean.setRwBlob(message.getRwBlob());
+			bean.setRwBlob(new String(Base64.decodeBase64(message.getRwBlob())));
 			bean.setRwCrtdDt(message.getRwCrtdDt());
 			bean.setRwDesc(message.getRwDesc());
 			bean.setRwExpiryDt(message.getRwExpiryDt());
