@@ -45,8 +45,10 @@ public class RewardsService {
 	public ResponseMessage createReward(RewardsMessage rewards) {
 		try {
 			IpRewards ipRewards = new IpRewards();
-			ipRewards.setIpRewardsCat(ipRewardsCatDAO.findById(rewards.getrCatId()));
-			ipRewards.setIpRewardsStatus(ipRewardsStatusDAO.findById(rewards.getrStatusId()));
+			ipRewards.setIpRewardsCat(ipRewardsCatDAO.findById(rewards
+					.getrCatId()));
+			ipRewards.setIpRewardsStatus(ipRewardsStatusDAO.findById(rewards
+					.getrStatusId()));
 			ipRewards.setRwBlob(rewards.getRwBlob());
 			ipRewards.setRwCrtdDt(rewards.getRwCrtdDt());
 			ipRewards.setRwDesc(rewards.getRwDesc());
@@ -81,8 +83,10 @@ public class RewardsService {
 	public ResponseMessage updateReward(RewardsMessage rewards) {
 		try {
 			IpRewards ipRewards = new IpRewards();
-			ipRewards.setIpRewardsCat(ipRewardsCatDAO.findById(rewards.getrCatId()));
-			ipRewards.setIpRewardsStatus(ipRewardsStatusDAO.findById(rewards.getrStatusId()));
+			ipRewards.setIpRewardsCat(ipRewardsCatDAO.findById(rewards
+					.getrCatId()));
+			ipRewards.setIpRewardsStatus(ipRewardsStatusDAO.findById(rewards
+					.getrStatusId()));
 			ipRewards.setRwBlob(rewards.getRwBlob());
 			ipRewards.setRwCrtdDt(rewards.getRwCrtdDt());
 			ipRewards.setRwDesc(rewards.getRwDesc());
@@ -174,7 +178,8 @@ public class RewardsService {
 	@GET
 	@Path("/rewards/list/{id}")
 	@Produces("application/json")
-	public <T extends RewardsMessage> List<T> listRewardsByStatus(@PathParam("id") Integer id) {
+	public <T extends RewardsMessage> List<T> listRewardsByStatus(
+			@PathParam("id") Integer id) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List rewardList = ipRewardsDAO.findByStatusId(id);
@@ -207,7 +212,8 @@ public class RewardsService {
 	@GET
 	@Path("/rewards/list/{id}")
 	@Produces("application/json")
-	public <T extends RewardsMessage> List<T> listRewardsByUser(@PathParam("id") Long id) {
+	public <T extends RewardsMessage> List<T> listRewardsByUser(
+			@PathParam("id") Long id) {
 		List<T> ret = new ArrayList<T>();
 		try {
 			List rewardList = ipRewardsDAO.findByUserId(id);
@@ -314,7 +320,8 @@ public class RewardsService {
 	public ResponseMessage createPoint(PointMessage point) {
 		try {
 			IpPoints ipPoints = new IpPoints();
-			ipPoints.setIpAllocation(ipAllocationDAO.findById(point.getAllocId()));
+			ipPoints.setIpAllocation(ipAllocationDAO.findById(point
+					.getAllocId()));
 			ipPoints.setIpUser(ipUserDAO.findById(point.getUserId()));
 			ipPoints.setPointId(point.getPointId());
 			ipPoints.setPointValue(point.getPointValue());
@@ -340,7 +347,8 @@ public class RewardsService {
 	public ResponseMessage updatePoint(PointMessage point) {
 		try {
 			IpPoints ipPoints = new IpPoints();
-			ipPoints.setIpAllocation(ipAllocationDAO.findById(point.getAllocId()));
+			ipPoints.setIpAllocation(ipAllocationDAO.findById(point
+					.getAllocId()));
 			ipPoints.setIpUser(ipUserDAO.findById(point.getUserId()));
 			ipPoints.setPointId(point.getPointId());
 			ipPoints.setPointValue(point.getPointValue());
@@ -375,6 +383,30 @@ public class RewardsService {
 			e.printStackTrace();
 		}
 		return message;
+	}
+
+	@PUT
+	@Path("/points/get/{id}")
+	@Produces("application/json")
+	@Consumes("application/json")
+	public <T extends PointMessage> List<T> listPointsByUser(
+			@PathParam("id") Long id) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List points = ipPointsDAO.findByUser(id);
+			for (Object object : points) {
+				IpPoints ipPoints = (IpPoints) object;
+				PointMessage message = new PointMessage();
+				message.setAllocId(ipPoints.getIpAllocation().getAllocId());
+				message.setPointId(ipPoints.getPointId());
+				message.setPointValue(ipPoints.getPointValue());
+				message.setUserId(ipPoints.getIpUser().getUserId());
+				ret.add((T) message);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 
 	public IpUserDAO getIpUserDAO() {

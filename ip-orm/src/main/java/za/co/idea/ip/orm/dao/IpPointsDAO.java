@@ -135,4 +135,9 @@ public class IpPointsDAO extends HibernateDaoSupport {
 	public static IpPointsDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpPointsDAO) ctx.getBean("IpPointsDAO");
 	}
+
+	public List findByUser(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

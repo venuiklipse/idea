@@ -20,4 +20,8 @@
             <column name="point_value" />
         </property>
         </class>
+	<sql-query name="getPointsByUser">
+		select pts.* from ip_points pts where pts.user_id=:id
+		<return alias="pts" class="za.co.idea.ip.orm.bean.IpPoints" />
+	</sql-query>
 </hibernate-mapping>
