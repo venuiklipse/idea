@@ -122,6 +122,10 @@ public class RewardsController implements Serializable {
 		}
 	}
 
+	public String showPointProfile() {
+		return "rwpp";
+	}
+
 	public String saveRewards() {
 		try {
 			WebClient addRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/add");

@@ -8,13 +8,13 @@
 					<p:outputLabel id="lblGName" value="Group Name : " />
 				</p:column>
 				<p:column>
-					<p:inputText id="txtGName" value="#{adminBean.groupBean.gName}" required="true" requiredMessage="Group Name is Required" />
+					<p:inputText autocomplete="false" id="txtGName" value="#{adminBean.groupBean.gName}" required="true" requiredMessage="Group Name is Required" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblEMail" value="EMail : " />
 				</p:column>
 				<p:column>
-					<p:inputText id="txtEMail" value="#{adminBean.groupBean.geMail}" required="true" requiredMessage="Group EMail is Required">
+					<p:inputText autocomplete="false" id="txtEMail" value="#{adminBean.groupBean.geMail}" required="true" requiredMessage="Group EMail is Required">
 						<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
 					</p:inputText>
 				</p:column>

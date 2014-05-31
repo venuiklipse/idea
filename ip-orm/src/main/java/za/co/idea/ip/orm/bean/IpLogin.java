@@ -10,12 +10,14 @@ public class IpLogin implements java.io.Serializable {
 
 	// Fields
 
-	private static final long serialVersionUID = -1321698455449836969L;
+	private static final long serialVersionUID = -8779292447681305257L;
 	private Long loginId;
 	private IpUser ipUser;
 	private String loginName;
 	private String loginPwd;
 	private Timestamp loginLastDt;
+	private String loginSecQ;
+	private String loginSecA;
 
 	// Constructors
 
@@ -23,14 +25,25 @@ public class IpLogin implements java.io.Serializable {
 	public IpLogin() {
 	}
 
+	/** minimal constructor */
+	public IpLogin(Long loginId, IpUser ipUser, String loginName, String loginPwd, String loginSecQ, String loginSecA) {
+		this.loginId = loginId;
+		this.ipUser = ipUser;
+		this.loginName = loginName;
+		this.loginPwd = loginPwd;
+		this.loginSecQ = loginSecQ;
+		this.loginSecA = loginSecA;
+	}
+
 	/** full constructor */
-	public IpLogin(Long loginId, IpUser ipUser, String loginName,
-			String loginPwd, Timestamp loginLastDt) {
+	public IpLogin(Long loginId, IpUser ipUser, String loginName, String loginPwd, Timestamp loginLastDt, String loginSecQ, String loginSecA) {
 		this.loginId = loginId;
 		this.ipUser = ipUser;
 		this.loginName = loginName;
 		this.loginPwd = loginPwd;
 		this.loginLastDt = loginLastDt;
+		this.loginSecQ = loginSecQ;
+		this.loginSecA = loginSecA;
 	}
 
 	// Property accessors
@@ -68,11 +81,27 @@ public class IpLogin implements java.io.Serializable {
 	}
 
 	public Timestamp getLoginLastDt() {
-		return loginLastDt;
+		return this.loginLastDt;
 	}
 
 	public void setLoginLastDt(Timestamp loginLastDt) {
 		this.loginLastDt = loginLastDt;
+	}
+
+	public String getLoginSecQ() {
+		return this.loginSecQ;
+	}
+
+	public void setLoginSecQ(String loginSecQ) {
+		this.loginSecQ = loginSecQ;
+	}
+
+	public String getLoginSecA() {
+		return this.loginSecA;
+	}
+
+	public void setLoginSecA(String loginSecA) {
+		this.loginSecA = loginSecA;
 	}
 
 }

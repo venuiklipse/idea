@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+<h:body>
+	<ui:composition>
+		<p:dialog id="dlgImgUpload" widgetVar="dlgImgUpload" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true" onHide="PF('imgAvatar').update();">
+			<p:panelGrid columns="1">
+				<p:column>
+					<p:fileUpload id="fuImg" widgetVar="fuImg" fileUploadListener="#{adminBean.fileImageUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="btnImgUpload" value="Update" action="#{adminBean.updateImage}" ajax="false" />
+				</p:column>
+			</p:panelGrid>
+		</p:dialog>
+		<p:dialog id="dlgSecUpdate" widgetVar="dlgSecUpdate" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true" onHide="PF('imgAvatar').update();">
+		update security qustion
+		</p:dialog>
+		<p:panelGrid id="pnlProfImg" columns="1">
+			<p:column>
+				<p:graphicImage style="float: right !important;" id="imgAvatar" value="#{adminBean.image}" alt="Upload Image" height="100px" width="100px" rendered="#{adminBean.show}" ondblclick="PF('dlgImgUpload').show()" />
+				<p:graphicImage style="float: right !important;" id="imgAvatarDefault" name="profile.jpg" library="images" height="100px" width="100px" rendered="#{adminBean.showDef}" ondblclick="PF('dlgImgUpload').show()" />
+			</p:column>
+			<p:column>
+				<p:outputLabel style="float: right !important;" id="lblLastLogin" value="#{user.lastLoginDt}">
+					<f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
+				</p:outputLabel>
+			</p:column>
+			<p:column>
+				<h:commandLink style="float: right !important;" id="lnkLogout" value="Logout" action="${adminBean.logout}" />
+			</p:column>
+			<p:column>
+				<h:commandLink style="float: right !important;" id="lnkResetSec" value="Update Security Question" onclick="PF('dlgSecUpdate').show()" />
+			</p:column>
+		</p:panelGrid>
+	</ui:composition>
+</h:body>
+</html>

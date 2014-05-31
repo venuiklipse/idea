@@ -26,7 +26,7 @@ public class SessionPhaseListener implements PhaseListener {
 		ResourceBundle bundle = ResourceBundle.getBundle("ip-web");
 		boolean bypassAuth = Boolean.valueOf(bundle.getString("bypass.auth"));
 		UserBean users = (UserBean) context.getExternalContext().getSessionMap().get("user");
-		if (!bypassAuth && !(context.getViewRoot() == null) && !(StringUtils.contains(((HttpServletRequest) context.getExternalContext().getRequest()).getRequestURL().toString(), "login"))) {
+		if (!bypassAuth && !(context.getViewRoot() == null) && !(StringUtils.contains(((HttpServletRequest) context.getExternalContext().getRequest()).getRequestURL().toString(), "login")) && !(StringUtils.contains(((HttpServletRequest) context.getExternalContext().getRequest()).getRequestURL().toString(), "rPwd"))) {
 			if (users == null) {
 				FacesMessage message = new FacesMessage();
 				message.setSeverity(FacesMessage.SEVERITY_ERROR);

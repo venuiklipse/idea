@@ -164,6 +164,56 @@ public class IpLoginDAO extends HibernateDaoSupport {
 		}
 	}
 
+	public List fetchLogin(String login) {
+		log.debug("Fetching Login By Query :: fetch Login");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("fetchLogin");
+			query.setString("login", login);
+			List ret = query.list();
+			for (Object object : ret) {
+				IpLogin loginObj = (IpLogin) object;
+				Hibernate.initialize(loginObj.getIpUser());
+			}
+			session.close();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public void updatePassword(String login, String pwd) {
+		log.debug("Updating password");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("updatePassword");
+			query.setString("login", login);
+			query.setString("pwd", pwd);
+			query.executeUpdate();
+			session.close();
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public void updateSecurity(String login, String secq, String seca) {
+		log.debug("Updating security");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("updateSecurity");
+			query.setString("login", login);
+			query.setString("secq", secq);
+			query.setString("seca", seca);
+			query.executeUpdate();
+			session.close();
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
 	public static IpLoginDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (IpLoginDAO) ctx.getBean("IpLoginDAO");
 	}

@@ -46,6 +46,10 @@
 			<to-view-id>/pages/admin/login.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>rpw</from-outcome>
+			<to-view-id>/pages/admin/rPwd.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>home</from-outcome>
 			<to-view-id>/pages/home.xhtml</to-view-id>
 		</navigation-case>
@@ -164,6 +168,10 @@
 		<navigation-case>
 			<from-outcome>rwur</from-outcome>
 			<to-view-id>/pages/user/wishlist.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>rwpp</from-outcome>
+			<to-view-id>/pages/user/points.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>clmcc</from-outcome>

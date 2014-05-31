@@ -2,7 +2,10 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -190,6 +193,21 @@ public class IpUserDAO extends HibernateDaoSupport {
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
+		} catch (RuntimeException re) {
+			log.error("attach failed", re);
+			throw re;
+		}
+	}
+
+	public void updateImage(String content, long userId) {
+		log.debug("Updating image");
+		Session session = getSession();
+		try {
+			Query query = session.getNamedQuery("updateImage");
+			query.setLong("id", userId);
+			query.setParameter("avatar", Hibernate.createBlob(content.getBytes()));
+			query.executeUpdate();
+			session.close();
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			throw re;

@@ -21,6 +21,8 @@ public class UserBean implements Serializable {
 	private String pwd;
 	private String cPw;
 	private String avatar;
+	private String secQ;
+	private String secA;
 	private Boolean isActive;
 	private Date lastLoginDt;
 
@@ -158,6 +160,22 @@ public class UserBean implements Serializable {
 
 	public void setLastLoginDt(Date lastLoginDt) {
 		this.lastLoginDt = lastLoginDt;
+	}
+
+	public String getSecQ() {
+		return secQ;
+	}
+
+	public void setSecQ(String secQ) {
+		this.secQ = secQ;
+	}
+
+	public String getSecA() {
+		return secA;
+	}
+
+	public void setSecA(String secA) {
+		this.secA = secA;
 	}
 
 }

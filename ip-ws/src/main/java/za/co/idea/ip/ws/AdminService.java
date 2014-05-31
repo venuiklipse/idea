@@ -15,6 +15,7 @@ import javax.ws.rs.Produces;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.hibernate.Hibernate;
 
 import za.co.idea.ip.orm.bean.IpFunction;
 import za.co.idea.ip.orm.bean.IpFunctionConfig;
@@ -238,7 +239,7 @@ public class AdminService {
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
 				ipUser.setUserFbHandle(user.getFbHandle());
 			if (user.getAvatar() != null && user.getAvatar().length() > 0)
-				ipUser.setUserAvatar(user.getAvatar());
+				ipUser.setUserAvatar(Hibernate.createBlob(Base64.decodeBase64(user.getAvatar())));
 			if (user.getBio() != null && user.getBio().length() > 0)
 				ipUser.setUserBio(user.getBio());
 			if (user.getmName() != null && user.getmName().length() > 0)
@@ -250,6 +251,8 @@ public class AdminService {
 			ipLogin.setIpUser(ipUser);
 			ipLogin.setLoginName(ipUser.getUserScreenName());
 			ipLogin.setLoginId(user.getuId());
+			ipLogin.setLoginSecQ(user.getSecQ());
+			ipLogin.setLoginSecA(Base64.encodeBase64URLSafeString(DigestUtils.md5(user.getSecA().getBytes())));
 			ipLogin.setLoginPwd(Base64.encodeBase64URLSafeString(DigestUtils.md5(user.getPwd().getBytes())));
 			try {
 				ipLoginDAO.save(ipLogin);
@@ -363,8 +366,6 @@ public class AdminService {
 			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
 				ipUser.setUserFbHandle(user.getFbHandle());
-			if (user.getAvatar() != null && user.getAvatar().length() > 0)
-				ipUser.setUserAvatar(user.getAvatar());
 			if (user.getBio() != null && user.getBio().length() > 0)
 				ipUser.setUserBio(user.getBio());
 			if (user.getmName() != null && user.getmName().length() > 0)
@@ -417,7 +418,7 @@ public class AdminService {
 				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());
 				if (ipUser.getUserAvatar() != null && ipUser.getUserAvatar().length() > 0)
-					user.setAvatar(ipUser.getUserAvatar());
+					user.setAvatar(new String(Base64.encodeBase64URLSafe(ipUser.getUserAvatar().getBytes(1, (int) ipUser.getUserAvatar().length()))));
 				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
 					user.setBio(ipUser.getUserBio());
 				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
@@ -451,7 +452,7 @@ public class AdminService {
 			if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 				user.setFbHandle(ipUser.getUserFbHandle());
 			if (ipUser.getUserAvatar() != null && ipUser.getUserAvatar().length() > 0)
-				user.setAvatar(ipUser.getUserAvatar());
+				user.setAvatar(new String(Base64.encodeBase64URLSafe(ipUser.getUserAvatar().getBytes(1, (int) ipUser.getUserAvatar().length()))));
 			if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
 				user.setBio(ipUser.getUserBio());
 			if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
@@ -462,6 +463,78 @@ public class AdminService {
 			e.printStackTrace();
 		}
 		return user;
+	}
+
+	@PUT
+	@Path("/user/rpw")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public ResponseMessage resetPassword(String[] param) {
+		try {
+			try {
+				ipLoginDAO.updatePassword(param[0], param[1]);
+			} catch (Exception e) {
+				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
+			}
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
+		} catch (Exception e) {
+			e.printStackTrace();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
+		}
+	}
+
+	@PUT
+	@Path("/user/rsec")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public ResponseMessage resetSecurity(String[] param) {
+		try {
+			try {
+				ipLoginDAO.updateSecurity(param[0], param[1], Base64.encodeBase64URLSafeString(DigestUtils.md5(param[2].getBytes())));
+			} catch (Exception e) {
+				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
+			}
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
+		} catch (Exception e) {
+			e.printStackTrace();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
+		}
+	}
+
+	@PUT
+	@Path("/user/imgupd")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public ResponseMessage updateImage(String[] param) {
+		try {
+			try {
+				ipUserDAO.updateImage(new String(Base64.decodeBase64(param[0])), Long.valueOf(param[1]));
+			} catch (Exception e) {
+				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
+			}
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(0);
+			message.setStatusDesc("Success");
+			return message;
+		} catch (Exception e) {
+			e.printStackTrace();
+			ResponseMessage message = new ResponseMessage();
+			message.setStatusCode(1);
+			message.setStatusDesc(e.getMessage());
+			return message;
+		}
 	}
 
 	@GET
@@ -512,7 +585,7 @@ public class AdminService {
 				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());
 				if (ipUser.getUserAvatar() != null && ipUser.getUserAvatar().length() > 0)
-					user.setAvatar(ipUser.getUserAvatar());
+					user.setAvatar(new String(Base64.encodeBase64URLSafe(ipUser.getUserAvatar().getBytes(1, (int) ipUser.getUserAvatar().length()))));
 				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
 					user.setBio(ipUser.getUserBio());
 				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
@@ -520,6 +593,39 @@ public class AdminService {
 				if (ipUser.getUserTwHandle() != null && ipUser.getUserTwHandle().length() > 0)
 					user.setTwHandle(ipUser.getUserTwHandle());
 				user.setLastLoginDt(ipLogin.getLoginLastDt());
+				ipLogin.setLoginLastDt(new Timestamp(System.currentTimeMillis()));
+				ipLoginDAO.merge(ipLogin);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return user;
+		}
+	}
+
+	@GET
+	@Path("/user/verify/{login}")
+	@Produces("application/json")
+	public UserMessage verify(@PathParam("login") String login) {
+		List logins = ipLoginDAO.fetchLogin(login);
+		if (logins.size() == 0)
+			return null;
+		else {
+			UserMessage user = new UserMessage();
+			try {
+				IpLogin ipLogin = (IpLogin) logins.get(0);
+				IpUser ipUser = ipLogin.getIpUser();
+				user.setuId(ipUser.getUserId());
+				user.setContact(ipUser.getUserContact());
+				user.seteMail(ipUser.getUserEmail());
+				user.setfName(ipUser.getUserFName());
+				user.setIdNum(ipUser.getUserIdNum());
+				user.setlName(ipUser.getUserLName());
+				user.setScName(ipUser.getUserScreenName());
+				user.setSkills(ipUser.getUserSkills());
+				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
+				user.setLastLoginDt(ipLogin.getLoginLastDt());
+				user.setSecA(ipLogin.getLoginSecA());
+				user.setSecQ(ipLogin.getLoginSecQ());
 				ipLogin.setLoginLastDt(new Timestamp(System.currentTimeMillis()));
 				ipLoginDAO.merge(ipLogin);
 			} catch (Exception e) {

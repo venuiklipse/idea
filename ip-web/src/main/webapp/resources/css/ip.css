@@ -1,14 +1,20 @@
 .menu {
 	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 100%;
+	top: 5%;
+	left: 15%;
+	width: 80%;
 }
 
 .content {
 	position: absolute;
-	top: 50px;
-	left: 255px;
+	top: 10%;
+	left: 15%%;
+}
+
+.profile {
+	position: absolute;
+	left: 30px;
+	top: 10%;
 }
 
 .ui-selectonemenu-label {
@@ -21,4 +27,22 @@
 
 .ui-button {
 	font-size: 12px !important;
+}
+
+.ui-panelgrid {
+	border: 2px !important;
+}
+
+.ui-panelgrid td {
+	border: 0px !important;
+}
+
+.ui-panelgrid tr {
+	border: 0px !important;
+}
+
+.ui-datatable.ui-widget {
+	width: auto !important;
+	overflow: auto !important;
+	display: inline-block;
 }
