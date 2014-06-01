@@ -3,6 +3,9 @@ package za.co.idea.ip.orm.dao;
 import java.util.List;
 
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -98,6 +101,23 @@ public class IpSolutionStatusDAO extends HibernateDaoSupport {
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
+			throw re;
+		}
+	}
+
+	public List findNext(Integer curr) {
+		log.debug("finding Next IpSolutionStatus instances");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Query query = session.getNamedQuery("getNextSolStatus");
+			query.setLong("curr", curr);
+			List ret = query.list();
+			transaction.commit();
+			return ret;
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}

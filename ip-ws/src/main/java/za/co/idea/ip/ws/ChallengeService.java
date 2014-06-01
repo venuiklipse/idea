@@ -222,6 +222,26 @@ public class ChallengeService {
 	}
 
 	@GET
+	@Path("/challenge/status/list/{curr}")
+	@Produces("application/json")
+	public <T extends MetaDataMessage> List<T> listNextChallengeStatus(@PathParam("curr") Integer curr) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List challengeStatuses = ipChallengeStatusDAO.findNext(curr);
+			for (Object object : challengeStatuses) {
+				IpChallengeStatus status = (IpChallengeStatus) object;
+				MetaDataMessage message = new MetaDataMessage();
+				message.setId(status.getCsId());
+				message.setDesc(status.getCsDesc());
+				ret.add((T) message);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/challenge/cat/get/{id}")
 	@Produces("application/json")
 	public MetaDataMessage getChallengeCatById(@PathParam("id") Integer id) {

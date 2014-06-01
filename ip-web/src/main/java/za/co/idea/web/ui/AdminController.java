@@ -102,8 +102,8 @@ public class AdminController implements Serializable {
 				rq.setEntityTableName("ip_user");
 				DocumentService service = new DocumentService();
 				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
-				if (rs.getFileContent() == null | rs.getFileContent().length == 0)
-					throw new Exception("Profile Image Not AVavilable");
+				if (rs.getFileContent() == null || rs.getFileContent().length == 0)
+					throw new Exception("Profile Image Not Avavilable");
 				this.image = new DefaultStreamedContent(new ByteArrayInputStream(rs.getFileContent()));
 				show = true;
 				showDef = false;

@@ -135,7 +135,7 @@ public class ChallengeController implements Serializable {
 		try {
 			challengeCats = fetchAllChallengeCat();
 			admUsers = fetchAllUsers();
-			challengeStatuses = fetchAllChallengeStatuses();
+			challengeStatuses = fetchNextChallengeStatuses();
 			try {
 				DocumentService service = new DocumentService();
 				DownloadDocumentRq rq = new DownloadDocumentRq();
@@ -384,7 +384,7 @@ public class ChallengeController implements Serializable {
 			admUsers = fetchAllUsers();
 			viewChallenges = fetchAllChallenges();
 			solutionCats = fetchAllSolutionCat();
-			solutionStatuses = fetchAllSolutionStatuses();
+			solutionStatuses = fetchNextSolutionStatuses();
 			try {
 				DocumentService service = new DocumentService();
 				DownloadDocumentRq rq = new DownloadDocumentRq();
@@ -741,6 +741,20 @@ public class ChallengeController implements Serializable {
 		return ret;
 	}
 
+	private List<ListSelectorBean> fetchNextChallengeStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/status/list/" + challengeBean.getStatusId());
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		viewChallengeSelectClient.close();
+		return ret;
+	}
+
 	private List<ListSelectorBean> fetchAllChallengeCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/cat/list");
@@ -758,6 +772,20 @@ public class ChallengeController implements Serializable {
 	private List<ListSelectorBean> fetchAllSolutionStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		viewSolutionSelectClient.close();
+		return ret;
+	}
+
+	private List<ListSelectorBean> fetchNextSolutionStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/status/list/" + solutionBean.getStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();

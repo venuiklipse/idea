@@ -44,10 +44,10 @@ public class DocumentPortImpl implements DocumentPort {
 			blob.setBlobEntityTblNm(param.getDocument().getEntityTableName());
 			blob.setBlobName(param.getDocument().getFileName());
 			if (id != -999) {
-				blob.setBlobId(getNextId());
+				blob.setBlobId(id);
 				ipBlobDAO.merge(blob);
 			} else {
-				blob.setBlobId(id);
+				blob.setBlobId(getNextId());
 				ipBlobDAO.save(blob);
 			}
 			_returnResponse.setRespCode("0");

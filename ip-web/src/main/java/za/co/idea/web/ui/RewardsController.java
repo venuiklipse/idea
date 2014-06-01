@@ -118,7 +118,7 @@ public class RewardsController implements Serializable {
 		try {
 			admUsers = fetchAllUsers();
 			rewardsCat = fetchAllRewardsCat();
-			rewardsStatus = fetchAllRewardsStatuses();
+			rewardsStatus = fetchNextRewardsStatuses();
 			try {
 				DocumentService service = new DocumentService();
 				DownloadDocumentRq rq = new DownloadDocumentRq();
@@ -394,6 +394,20 @@ public class RewardsController implements Serializable {
 	private List<ListSelectorBean> fetchAllRewardsStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewRewardsSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewRewardsSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		viewRewardsSelectClient.close();
+		return ret;
+	}
+
+	private List<ListSelectorBean> fetchNextRewardsStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewRewardsSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/status/list/" + rewardsBean.getrStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewRewardsSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();

@@ -71,6 +71,26 @@ public class IdeaService {
 	}
 
 	@GET
+	@Path("/idea/status/list/{curr}")
+	@Produces("application/json")
+	public <T extends MetaDataMessage> List<T> listNextIdeaStatus(@PathParam("curr") Integer curr) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List ideaStatuses = ipIdeaStatusDAO.findNext(curr);
+			for (Object object : ideaStatuses) {
+				IpIdeaStatus status = (IpIdeaStatus) object;
+				MetaDataMessage message = new MetaDataMessage();
+				message.setId(status.getIsId());
+				message.setDesc(status.getIsDesc());
+				ret.add((T) message);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/idea/cat/get/{id}")
 	@Produces("application/json")
 	public MetaDataMessage getIdeaCatById(@PathParam("id") Integer id) {
@@ -112,11 +132,11 @@ public class IdeaService {
 		ipIdea.setIdeaDesc(idea.getIdeaDesc());
 		ipIdea.setIdeaTag(idea.getIdeaTag());
 		ipIdea.setIdeaTitle(idea.getIdeaTitle());
-		if (idea.getSelCatId() != null && idea.getSelCatId().longValue() != 0)
+		if (idea.getSelCatId() != null && idea.getSelCatId().longValue() >= 0)
 			ipIdea.setIpIdeaCat(ipIdeaCatDAO.findById(idea.getSelCatId().intValue()));
-		if (idea.getSetStatusId() != null && idea.getSetStatusId().longValue() != 0)
+		if (idea.getSetStatusId() != null && idea.getSetStatusId().longValue() >= 0)
 			ipIdea.setIpIdeaStatus(ipIdeaStatusDAO.findById(idea.getSetStatusId().intValue()));
-		if (idea.getCrtdById() != null && idea.getCrtdById().longValue() != 0)
+		if (idea.getCrtdById() != null && idea.getCrtdById().longValue() >= 0)
 			ipIdea.setIpUser(ipUserDAO.findById(idea.getCrtdById()));
 		try {
 			ipIdeaDAO.save(ipIdea);
@@ -145,11 +165,11 @@ public class IdeaService {
 		ipIdea.setIdeaDesc(idea.getIdeaDesc());
 		ipIdea.setIdeaTag(idea.getIdeaTag());
 		ipIdea.setIdeaTitle(idea.getIdeaTitle());
-		if (idea.getSelCatId() != null && idea.getSelCatId().longValue() != 0)
+		if (idea.getSelCatId() != null && idea.getSelCatId().longValue() >= 0)
 			ipIdea.setIpIdeaCat(ipIdeaCatDAO.findById(idea.getSelCatId().intValue()));
-		if (idea.getSetStatusId() != null && idea.getSetStatusId().longValue() != 0)
+		if (idea.getSetStatusId() != null && idea.getSetStatusId().longValue() >= 0)
 			ipIdea.setIpIdeaStatus(ipIdeaStatusDAO.findById(idea.getSetStatusId().intValue()));
-		if (idea.getCrtdById() != null && idea.getCrtdById().longValue() != 0)
+		if (idea.getCrtdById() != null && idea.getCrtdById().longValue() >= 0)
 			ipIdea.setIpUser(ipUserDAO.findById(idea.getCrtdById()));
 		try {
 			ipIdeaDAO.merge(ipIdea);

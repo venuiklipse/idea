@@ -111,7 +111,7 @@ public class IdeaController implements Serializable {
 		try {
 			ideaCats = fetchAllIdeaCat();
 			admUsers = fetchAllUsers();
-			ideaStatuses = fetchAllIdeaStatuses();
+			ideaStatuses = fetchNextIdeaStatuses();
 			try {
 				DocumentService service = new DocumentService();
 				DownloadDocumentRq rq = new DownloadDocumentRq();
@@ -436,6 +436,20 @@ public class IdeaController implements Serializable {
 	private List<ListSelectorBean> fetchAllIdeaStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		viewIdeaSelectClient.close();
+		return ret;
+	}
+
+	private List<ListSelectorBean> fetchNextIdeaStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/status/list/" + ideaBean.getSetStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();

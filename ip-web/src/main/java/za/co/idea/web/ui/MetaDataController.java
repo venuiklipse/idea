@@ -133,14 +133,9 @@ public class MetaDataController {
 		if (metaList == null) {
 			metaList = new HashMap<String, String>();
 			metaList.put("Challenge Category", "ip_challenge_cat");
-			metaList.put("Challenge Status", "ip_challenge_status");
-			metaList.put("Claim Status", "ip_claim_status");
 			metaList.put("Idea Category", "ip_idea_cat");
-			metaList.put("Idea Status", "ip_idea_status");
 			metaList.put("Rewards Category", "ip_rewards_cat");
-			metaList.put("Rewards Status", "ip_rewards_status");
 			metaList.put("Solution Category", "ip_solution_cat");
-			metaList.put("Solution Status", "ip_solution_status");
 		}
 		return metaList;
 	}

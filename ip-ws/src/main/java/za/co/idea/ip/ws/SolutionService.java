@@ -214,6 +214,26 @@ public class SolutionService {
 	}
 
 	@GET
+	@Path("/solution/status/list/{curr}")
+	@Produces("application/json")
+	public <T extends MetaDataMessage> List<T> listNextSolutionStatus(@PathParam("curr") Integer curr) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List solutionStatuses = ipSolutionStatusDAO.findNext(curr);
+			for (Object object : solutionStatuses) {
+				IpSolutionStatus status = (IpSolutionStatus) object;
+				MetaDataMessage message = new MetaDataMessage();
+				message.setId(status.getSsId());
+				message.setDesc(status.getSsDesc());
+				ret.add((T) message);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/solution/cat/get/{id}")
 	@Produces("application/json")
 	public MetaDataMessage getSolutionCatById(@PathParam("id") Integer id) {

@@ -260,6 +260,26 @@ public class RewardsService {
 	}
 
 	@GET
+	@Path("/rewards/status/list/{curr}")
+	@Produces("application/json")
+	public <T extends MetaDataMessage> List<T> listNextRewardsStatus(@PathParam("curr") Integer curr) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List rewardsStatus = ipRewardsStatusDAO.findNext(curr);
+			for (Object object : rewardsStatus) {
+				IpRewardsStatus status = (IpRewardsStatus) object;
+				MetaDataMessage message = new MetaDataMessage();
+				message.setId(status.getRsId());
+				message.setDesc(status.getRsDesc());
+				ret.add((T) message);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/rewards/cat/get/{id}")
 	@Produces("application/json")
 	public MetaDataMessage getRewardsCatById(@PathParam("id") Integer id) {

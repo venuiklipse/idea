@@ -195,6 +195,26 @@ public class ClaimService {
 	}
 
 	@GET
+	@Path("/claim/status/list/{curr}")
+	@Produces("application/json")
+	public <T extends MetaDataMessage> List<T> listNextClaimStatus(@PathParam("curr") Integer curr) {
+		List<T> ret = new ArrayList<T>();
+		try {
+			List vals = ipClaimStatusDAO.findNext(curr);
+			for (Object object : vals) {
+				IpClaimStatus status = (IpClaimStatus) object;
+				MetaDataMessage message = new MetaDataMessage();
+				message.setId(status.getCsId());
+				message.setDesc(status.getCsDesc());
+				ret.add((T) message);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	@GET
 	@Path("/claim/status/get/{id}")
 	@Produces("application/json")
 	public MetaDataMessage getClaimStatusById(@PathParam("id") Integer id) {

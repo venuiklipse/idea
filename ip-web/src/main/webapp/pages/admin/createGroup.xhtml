@@ -10,13 +10,13 @@
 					<p:outputLabel id="lblGName" value="Group Name : " />
 				</p:column>
 				<p:column>
-					<p:inputText autocomplete="false" id="txtGName" value="#{adminBean.groupBean.gName}" required="true" requiredMessage="Group Name is Required" />
+					<p:inputText autocomplete="false" id="txtGName" value="#{adminBean.groupBean.gName}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblEMail" value="EMail : " />
 				</p:column>
 				<p:column>
-					<p:inputText autocomplete="false" id="txtEMail" value="#{adminBean.groupBean.geMail}" required="true" requiredMessage="Group EMail is Required">
+					<p:inputText autocomplete="false" id="txtEMail" value="#{adminBean.groupBean.geMail}">
 						<f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
 					</p:inputText>
 				</p:column>
@@ -33,7 +33,7 @@
 					<p:outputLabel id="lblAdmUser" value="Admin User : " />
 				</p:column>
 				<p:column>
-					<p:selectOneMenu id="somAdmUser" value="#{adminBean.groupBean.selAdmUser}" required="true" requiredMessage="Admin User is Required">
+					<p:selectOneMenu id="somAdmUser" value="#{adminBean.groupBean.selAdmUser}">
 						<f:selectItem itemLabel="Select One" itemValue="" />
 						<f:selectItems value="#{adminBean.admUsers}" var="a" itemLabel="#{a.scName}" itemValue="#{a.uId}" />
 					</p:selectOneMenu>

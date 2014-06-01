@@ -101,7 +101,7 @@ public class ClaimController implements Serializable {
 	public String showEditClaim() {
 		try {
 			admUsers = fetchAllUsers();
-			claimStatus = fetchAllClaimStatuses();
+			claimStatus = fetchNextClaimStatuses();
 			viewRewardsBeans = fetchAllRewards();
 			return "clmec";
 		} catch (Exception e) {
@@ -233,6 +233,20 @@ public class ClaimController implements Serializable {
 	private List<ListSelectorBean> fetchAllClaimStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewClaimSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cls/claim/status/list");
+		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewClaimSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		for (MetaDataMessage metaDataMessage : md) {
+			ListSelectorBean bean = new ListSelectorBean();
+			bean.setId(metaDataMessage.getId());
+			bean.setDesc(metaDataMessage.getDesc());
+			ret.add(bean);
+		}
+		viewClaimSelectClient.close();
+		return ret;
+	}
+
+	private List<ListSelectorBean> fetchNextClaimStatuses() {
+		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
+		WebClient viewClaimSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cls/claim/status/list/" + claimBean.getcStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewClaimSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();

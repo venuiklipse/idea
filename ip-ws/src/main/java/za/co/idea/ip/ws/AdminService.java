@@ -53,9 +53,9 @@ public class AdminService {
 		ipGroup.setGroupEmail(group.getGeMail());
 		ipGroup.setGroupName(group.getgName());
 		ipGroup.setGroupStatus(((group.getIsActive() != null && group.getIsActive()) ? "y" : "n"));
-		if (group.getpGrpId() != null && group.getpGrpId().longValue() != 0)
+		if (group.getpGrpId() != null && group.getpGrpId().longValue() >= 0)
 			ipGroup.setIpGroup(ipGroupDAO.findById(group.getpGrpId()));
-		if (group.getAdmUserId() != null && group.getAdmUserId().longValue() != 0)
+		if (group.getAdmUserId() != null && group.getAdmUserId().longValue() >= 0)
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.save(ipGroup);
@@ -82,9 +82,9 @@ public class AdminService {
 		ipGroup.setGroupEmail(group.getGeMail());
 		ipGroup.setGroupName(group.getgName());
 		ipGroup.setGroupStatus(((group.getIsActive() != null && group.getIsActive()) ? "y" : "n"));
-		if (group.getpGrpId() != null && group.getpGrpId().longValue() != 0)
+		if (group.getpGrpId() != null && group.getpGrpId().longValue() >= 0)
 			ipGroup.setIpGroup(ipGroupDAO.findById(group.getpGrpId()));
-		if (group.getAdmUserId() != null && group.getAdmUserId().longValue() != 0)
+		if (group.getAdmUserId() != null && group.getAdmUserId().longValue() >= 0)
 			ipGroup.setIpUser(ipUserDAO.findById(group.getAdmUserId()));
 		try {
 			ipGroupDAO.merge(ipGroup);
