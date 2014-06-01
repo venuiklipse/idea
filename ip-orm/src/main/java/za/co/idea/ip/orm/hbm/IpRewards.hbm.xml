@@ -38,17 +38,8 @@
 		<property name="rwTag" type="java.lang.String">
 			<column name="rw_tag" length="500" />
 		</property>
-		<property name="rwBlob" type="java.sql.Blob">
-			<column name="rw_blob" />
-		</property>
 		<property name="rwCrtdDt" type="java.sql.Timestamp">
 			<column name="rw_crtd_dt" length="19" not-null="true" />
-		</property>
-		<property name="rwFileName" type="java.lang.String">
-			<column name="rw_file_name" length="450" not-null="true" />
-		</property>
-		<property name="rwFileType" type="java.lang.String">
-			<column name="rw_file_type" length="150" not-null="true" />
 		</property>
 		<set name="ipRewardsGroups" inverse="true">
 			<key>

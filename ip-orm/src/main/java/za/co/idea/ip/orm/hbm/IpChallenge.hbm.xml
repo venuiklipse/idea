@@ -35,17 +35,8 @@
 		<property name="chalTags" type="java.lang.String">
 			<column name="chal_tags" length="500" />
 		</property>
-		<property name="chalBlob" type="java.sql.Blob">
-			<column name="chal_blob" />
-		</property>
 		<property name="chalCrtdDt" type="java.sql.Timestamp">
 			<column name="chal_crtd_dt" length="19" not-null="true" />
-		</property>
-		<property name="chalFileName" type="java.lang.String">
-			<column name="chal_file_name" length="450" not-null="true" />
-		</property>
-		<property name="chalFileType" type="java.lang.String">
-			<column name="chal_file_type" length="150" not-null="true" />
 		</property>
 		<set name="ipChallengeGroups" inverse="true">
 			<key>

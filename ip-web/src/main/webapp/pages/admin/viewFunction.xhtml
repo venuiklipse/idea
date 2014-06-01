@@ -1,8 +1,10 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-<h:body>
-	<ui:composition template="/templates/layout.xhtml">
-		<ui:define name="title">View Functions</ui:define>
-		<ui:define name="body">
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">View Functions</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrVWFunction">
+			<f:facet name="header">
+					View Function
+				</f:facet>
 			<p:dataTable id="dtViewFunctions" value="#{adminBean.functions}" var="func" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Functions Found">
 				<p:column filterBy="#{func.funcId}" filterMatchMode="contains">
 					<f:facet name="header">Function Id</f:facet>
@@ -18,7 +20,6 @@
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
-		</ui:define>
-	</ui:composition>
-</h:body>
-</html>
+		</p:panel>
+	</ui:define>
+</ui:composition>

@@ -1,8 +1,10 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-<h:body>
-	<ui:composition template="/templates/layout.xhtml">
-		<ui:define name="title">Maintain Metadata</ui:define>
-		<ui:define name="body">
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Maintain Metadata</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrMetaData">
+			<f:facet name="header">
+					Maintain Meta-Data
+				</f:facet>
 			<p:dataTable id="dtMetaData" widgetVar="dtMetaData" value="#{metaDataBean.beans}" var="bean" rows="5" paginator="true" paginatorPosition="bottom" emptyMessage="No MetaData Found">
 				<f:facet name="header">
 					<p:selectOneMenu id="somSelectMeta" value="#{metaDataBean.table}">
@@ -76,7 +78,6 @@
 					</p:column>
 				</p:row>
 			</p:panelGrid>
-		</ui:define>
-	</ui:composition>
-</h:body>
-</html>
+		</p:panel>
+	</ui:define>
+</ui:composition>

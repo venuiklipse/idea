@@ -1,8 +1,10 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-<h:body>
-	<ui:composition template="/templates/layout.xhtml">
-		<ui:define name="title">Edit Rewards</ui:define>
-		<ui:define name="body">
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Edit Rewards</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrEditRewards">
+			<f:facet name="header">
+					Edit Challenge
+				</f:facet>
 			<p:panelGrid columns="2" id="pnlEditRewards">
 				<p:column>
 					<p:outputLabel id="lblRTitle" value="Title : " />
@@ -68,7 +70,7 @@
 					<p:outputLabel id="lblRUpload" value="Upload File : " />
 				</p:column>
 				<p:column>
-					<p:fileUpload id="fuCUpload" fileUploadListener="#{rewardsBean.rwFileUploadHandle}" multiple="false" />
+					<p:fileUpload auto="true" id="fuCUpload" fileUploadListener="#{rewardsBean.rwFileUploadHandle}" multiple="false" />
 				</p:column>
 				<p:row>
 					<p:column colspan="2">
@@ -79,7 +81,6 @@
 					</p:column>
 				</p:row>
 			</p:panelGrid>
-		</ui:define>
-	</ui:composition>
-</h:body>
-</html>
+		</p:panel>
+	</ui:define>
+</ui:composition>

@@ -11,7 +11,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
@@ -24,6 +23,12 @@ import org.primefaces.model.tagcloud.DefaultTagCloudItem;
 import org.primefaces.model.tagcloud.DefaultTagCloudModel;
 import org.primefaces.model.tagcloud.TagCloudModel;
 
+import za.co.idea.ip.jaxws.document.Document;
+import za.co.idea.ip.jaxws.document.DocumentService;
+import za.co.idea.ip.jaxws.document.DownloadDocumentRq;
+import za.co.idea.ip.jaxws.document.DownloadDocumentRs;
+import za.co.idea.ip.jaxws.document.UploadDocumentRq;
+import za.co.idea.ip.jaxws.document.UploadDocumentRs;
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
@@ -107,11 +112,25 @@ public class IdeaController implements Serializable {
 			ideaCats = fetchAllIdeaCat();
 			admUsers = fetchAllUsers();
 			ideaStatuses = fetchAllIdeaStatuses();
-			if (ideaBean.getFileUpload() != null && ideaBean.getFileUpload().length() > 0) {
+			try {
+				DocumentService service = new DocumentService();
+				DownloadDocumentRq rq = new DownloadDocumentRq();
+				rq.setEntityId(ideaBean.getIdeaId().toString());
+				rq.setEntityTableName("ip_challenge");
+				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
+				if (Integer.parseInt(rs.getResponse().getRespCode()) == 0) {
+					fileAvail = true;
+					ideaBean.setFileName(rs.getFileName());
+					ideaBean.setContentType(rs.getContentType());
+					fileContent = new DefaultStreamedContent(new ByteArrayInputStream(rs.getFileContent()));
+				} else {
+					fileAvail = false;
+					fileContent = null;
+				}
+			} catch (Exception e) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = false;
-				fileContent = new DefaultStreamedContent(new ByteArrayInputStream(ideaBean.getFileUpload().getBytes()), ideaBean.getContentType(), ideaBean.getFileName());
-			} else {
-				fileAvail = true;
 				fileContent = null;
 			}
 			return "ideaei";
@@ -240,27 +259,40 @@ public class IdeaController implements Serializable {
 		try {
 			WebClient addIdeaClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/add");
 			IdeaMessage ideaMessage = new IdeaMessage();
-			ideaMessage.setContentType(ideaBean.getContentType());
 			ideaMessage.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			ideaMessage.setCrtdDate(new Date());
-			if (ideaBean.getFileUpload() != null && ideaBean.getFileUpload().length() > 0)
-				ideaMessage.setFileUpload(new String(Base64.encodeBase64URLSafe(ideaBean.getFileUpload().getBytes())));
-			else
-				ideaMessage.setFileUpload(null);
 			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
 			ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
 			ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
 			ideaMessage.setIdeaId(COUNTER.getNextId("ip_idea"));
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
-			ideaMessage.setFileName(ideaBean.getFileName());
 			ideaMessage.setSetStatusId(1l);
 			ResponseMessage response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage, ResponseMessage.class);
 			if (response.getStatusCode() == 0) {
-				addIdeaClient.close();
+				try {
+					Document document = new Document();
+					document.setContentType(ideaBean.getContentType());
+					document.setEntityId(ideaMessage.getIdeaId().toString());
+					document.setEntityTableName("ip_idea");
+					document.setFileContent(ideaBean.getFileUpload().getBytes());
+					document.setFileName(ideaBean.getFileName());
+					DocumentService service = new DocumentService();
+					UploadDocumentRq rq = new UploadDocumentRq();
+					rq.setDocument(document);
+					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+				} catch (Exception e) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
 				return "home";
 			} else {
-				addIdeaClient.close();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -276,13 +308,8 @@ public class IdeaController implements Serializable {
 		try {
 			WebClient updateIdeaClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/modify");
 			IdeaMessage ideaMessage = new IdeaMessage();
-			ideaMessage.setContentType(ideaBean.getContentType());
 			ideaMessage.setCrtdById(ideaBean.getCrtdById());
 			ideaMessage.setCrtdDate(new Date());
-			if (ideaBean.getFileUpload() != null && ideaBean.getFileUpload().length() > 0)
-				ideaMessage.setFileUpload(new String(Base64.encodeBase64URLSafe(ideaBean.getFileUpload().getBytes())));
-			else
-				ideaMessage.setFileUpload(null);
 			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
 			ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
 			ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
@@ -290,13 +317,31 @@ public class IdeaController implements Serializable {
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
-			ideaMessage.setFileName(ideaBean.getFileName());
 			ResponseMessage response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage, ResponseMessage.class);
 			if (response.getStatusCode() == 0) {
-				updateIdeaClient.close();
+				try {
+					Document document = new Document();
+					document.setContentType(ideaBean.getContentType());
+					document.setEntityId(ideaMessage.getIdeaId().toString());
+					document.setEntityTableName("ip_idea");
+					document.setFileContent(ideaBean.getFileUpload().getBytes());
+					document.setFileName(ideaBean.getFileName());
+					DocumentService service = new DocumentService();
+					UploadDocumentRq rq = new UploadDocumentRq();
+					rq.setDocument(document);
+					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+				} catch (Exception e) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
 				return "home";
 			} else {
-				updateIdeaClient.close();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -352,13 +397,8 @@ public class IdeaController implements Serializable {
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = new IdeaBean();
-			bean.setContentType(ideaMessage.getContentType());
 			bean.setCrtdById(ideaMessage.getCrtdById());
 			bean.setCrtdDate(ideaMessage.getCrtdDate());
-			if (ideaMessage.getFileUpload() != null && ideaMessage.getFileUpload().length() > 0)
-				bean.setFileUpload(new String(Base64.decodeBase64(ideaMessage.getFileUpload().getBytes())));
-			else
-				bean.setFileUpload(null);
 			bean.setIdeaBa(ideaMessage.getIdeaBa());
 			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
 			bean.setIdeaTag(ideaMessage.getIdeaTag());
@@ -366,7 +406,6 @@ public class IdeaController implements Serializable {
 			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
 			bean.setSelCatId(ideaMessage.getSelCatId());
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
-			bean.setFileName(ideaMessage.getFileName());
 			ret.add(bean);
 		}
 		fetchIdeaClient.close();
@@ -379,13 +418,8 @@ public class IdeaController implements Serializable {
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = new IdeaBean();
-			bean.setContentType(ideaMessage.getContentType());
 			bean.setCrtdById(ideaMessage.getCrtdById());
 			bean.setCrtdDate(ideaMessage.getCrtdDate());
-			if (ideaMessage.getFileUpload() != null && ideaMessage.getFileUpload().length() > 0)
-				bean.setFileUpload(new String(Base64.decodeBase64(ideaMessage.getFileUpload().getBytes())));
-			else
-				bean.setFileUpload(null);
 			bean.setIdeaBa(ideaMessage.getIdeaBa());
 			bean.setIdeaDesc(ideaMessage.getIdeaDesc());
 			bean.setIdeaTag(ideaMessage.getIdeaTag());
@@ -393,7 +427,6 @@ public class IdeaController implements Serializable {
 			bean.setIdeaTitle(ideaMessage.getIdeaTitle());
 			bean.setSelCatId(ideaMessage.getSelCatId());
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
-			bean.setFileName(ideaMessage.getFileName());
 			ret.add(bean);
 		}
 		fetchIdeaClient.close();
@@ -447,7 +480,6 @@ public class IdeaController implements Serializable {
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		for (UserMessage userMessage : users) {
 			UserBean bean = new UserBean();
-			bean.setAvatar(userMessage.getAvatar());
 			bean.setBio(userMessage.getBio());
 			bean.setContact(userMessage.getContact());
 			bean.seteMail(userMessage.geteMail());

@@ -11,9 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import org.apache.commons.codec.binary.Base64;
-import org.hibernate.Hibernate;
-
 import za.co.idea.ip.orm.bean.IpPoints;
 import za.co.idea.ip.orm.bean.IpRewards;
 import za.co.idea.ip.orm.bean.IpRewardsCat;
@@ -50,13 +47,9 @@ public class RewardsService {
 			IpRewards ipRewards = new IpRewards();
 			ipRewards.setIpRewardsCat(ipRewardsCatDAO.findById(rewards.getrCatId()));
 			ipRewards.setIpRewardsStatus(ipRewardsStatusDAO.findById(rewards.getrStatusId()));
-			if (rewards.getRwBlob() != null && rewards.getRwBlob().length() > 0)
-				ipRewards.setRwBlob(Hibernate.createBlob(Base64.decodeBase64(rewards.getRwBlob())));
 			ipRewards.setRwCrtdDt(rewards.getRwCrtdDt());
 			ipRewards.setRwDesc(rewards.getRwDesc());
 			ipRewards.setRwExpiryDt(rewards.getRwExpiryDt());
-			ipRewards.setRwFileName(rewards.getRwFileName());
-			ipRewards.setRwFileType(rewards.getRwFileType());
 			ipRewards.setRwHoverText(rewards.getRwHoverText());
 			ipRewards.setRwId(rewards.getRwId());
 			ipRewards.setRwLaunchDt(rewards.getRwLaunchDt());
@@ -87,13 +80,9 @@ public class RewardsService {
 			IpRewards ipRewards = new IpRewards();
 			ipRewards.setIpRewardsCat(ipRewardsCatDAO.findById(rewards.getrCatId()));
 			ipRewards.setIpRewardsStatus(ipRewardsStatusDAO.findById(rewards.getrStatusId()));
-			if (rewards.getRwBlob() != null && rewards.getRwBlob().length() > 0)
-				ipRewards.setRwBlob(Hibernate.createBlob(Base64.decodeBase64(rewards.getRwBlob())));
 			ipRewards.setRwCrtdDt(rewards.getRwCrtdDt());
 			ipRewards.setRwDesc(rewards.getRwDesc());
 			ipRewards.setRwExpiryDt(rewards.getRwExpiryDt());
-			ipRewards.setRwFileName(rewards.getRwFileName());
-			ipRewards.setRwFileType(rewards.getRwFileType());
 			ipRewards.setRwHoverText(rewards.getRwHoverText());
 			ipRewards.setRwId(rewards.getRwId());
 			ipRewards.setRwLaunchDt(rewards.getRwLaunchDt());
@@ -127,12 +116,9 @@ public class RewardsService {
 				RewardsMessage rewards = new RewardsMessage();
 				rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
 				rewards.setrStatusId(ipRewards.getIpRewardsStatus().getRsId());
-				rewards.setRwBlob(new String(Base64.encodeBase64URLSafe(ipRewards.getRwBlob().getBytes(1, (int) ipRewards.getRwBlob().length()))));
 				rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
 				rewards.setRwDesc(ipRewards.getRwDesc());
 				rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
-				rewards.setRwFileName(ipRewards.getRwFileName());
-				rewards.setRwFileType(ipRewards.getRwFileType());
 				rewards.setRwHoverText(ipRewards.getRwHoverText());
 				rewards.setRwId(ipRewards.getRwId());
 				rewards.setRwLaunchDt(ipRewards.getRwLaunchDt());
@@ -157,12 +143,9 @@ public class RewardsService {
 			IpRewards ipRewards = ipRewardsDAO.findById(id);
 			rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
 			rewards.setrStatusId(ipRewards.getIpRewardsStatus().getRsId());
-			rewards.setRwBlob(new String(Base64.encodeBase64URLSafe(ipRewards.getRwBlob().getBytes(1, (int) ipRewards.getRwBlob().length()))));
 			rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
 			rewards.setRwDesc(ipRewards.getRwDesc());
 			rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
-			rewards.setRwFileName(ipRewards.getRwFileName());
-			rewards.setRwFileType(ipRewards.getRwFileType());
 			rewards.setRwHoverText(ipRewards.getRwHoverText());
 			rewards.setRwId(ipRewards.getRwId());
 			rewards.setRwLaunchDt(ipRewards.getRwLaunchDt());
@@ -188,12 +171,9 @@ public class RewardsService {
 				RewardsMessage rewards = new RewardsMessage();
 				rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
 				rewards.setrStatusId(ipRewards.getIpRewardsStatus().getRsId());
-				rewards.setRwBlob(new String(Base64.encodeBase64URLSafe(ipRewards.getRwBlob().getBytes(1, (int) ipRewards.getRwBlob().length()))));
 				rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
 				rewards.setRwDesc(ipRewards.getRwDesc());
 				rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
-				rewards.setRwFileName(ipRewards.getRwFileName());
-				rewards.setRwFileType(ipRewards.getRwFileType());
 				rewards.setRwHoverText(ipRewards.getRwHoverText());
 				rewards.setRwId(ipRewards.getRwId());
 				rewards.setRwLaunchDt(ipRewards.getRwLaunchDt());
@@ -221,12 +201,9 @@ public class RewardsService {
 				RewardsMessage rewards = new RewardsMessage();
 				rewards.setrCatId(ipRewards.getIpRewardsCat().getRcId());
 				rewards.setrStatusId(ipRewards.getIpRewardsStatus().getRsId());
-				rewards.setRwBlob(new String(Base64.encodeBase64URLSafe(ipRewards.getRwBlob().getBytes(1, (int) ipRewards.getRwBlob().length()))));
 				rewards.setRwCrtdDt(ipRewards.getRwCrtdDt());
 				rewards.setRwDesc(ipRewards.getRwDesc());
 				rewards.setRwExpiryDt(ipRewards.getRwExpiryDt());
-				rewards.setRwFileName(ipRewards.getRwFileName());
-				rewards.setRwFileType(ipRewards.getRwFileType());
 				rewards.setRwHoverText(ipRewards.getRwHoverText());
 				rewards.setRwId(ipRewards.getRwId());
 				rewards.setRwLaunchDt(ipRewards.getRwLaunchDt());

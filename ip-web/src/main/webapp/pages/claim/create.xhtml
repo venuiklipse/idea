@@ -1,8 +1,10 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-<h:body>
-	<ui:composition template="/templates/layout.xhtml">
-		<ui:define name="title">Create Claim</ui:define>
-		<ui:define name="body">
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Create Claim</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrCrtClaim">
+			<f:facet name="header">
+					Create Claim
+				</f:facet>
 			<p:panelGrid columns="2" id="pnlCrtClaim">
 				<p:column>
 					<p:outputLabel id="lblCRw" value="Reward : " />
@@ -25,7 +27,6 @@
 					</p:column>
 				</p:row>
 			</p:panelGrid>
-		</ui:define>
-	</ui:composition>
-</h:body>
-</html>
+		</p:panel>
+	</ui:define>
+</ui:composition>

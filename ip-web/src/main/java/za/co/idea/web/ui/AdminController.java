@@ -1,7 +1,6 @@
 package za.co.idea.web.ui;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,11 +17,18 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import za.co.idea.ip.jaxws.document.Document;
+import za.co.idea.ip.jaxws.document.DocumentService;
+import za.co.idea.ip.jaxws.document.DownloadDocumentRq;
+import za.co.idea.ip.jaxws.document.DownloadDocumentRs;
+import za.co.idea.ip.jaxws.document.UploadDocumentRq;
+import za.co.idea.ip.jaxws.document.UploadDocumentRs;
 import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
@@ -46,7 +52,10 @@ public class AdminController implements Serializable {
 	private List<GroupBean> viewGroups;
 	private boolean available;
 	private String secA;
+	private String secQ;
 	private StreamedContent image;
+	private String fileName;
+	private String contentType;
 	private String uploadSrc;
 	private boolean show;
 	private boolean showDef;
@@ -88,9 +97,14 @@ public class AdminController implements Serializable {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", bean);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userId", bean.getuId());
 			try {
-				if (userMessage.getAvatar() == null || userMessage.getAvatar().length() == 0)
+				DownloadDocumentRq rq = new DownloadDocumentRq();
+				rq.setEntityId(userMessage.getuId().toString());
+				rq.setEntityTableName("ip_user");
+				DocumentService service = new DocumentService();
+				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
+				if (rs.getFileContent() == null | rs.getFileContent().length == 0)
 					throw new Exception("Profile Image Not AVavilable");
-				this.image = new DefaultStreamedContent(new ByteArrayInputStream(Base64.decodeBase64(userMessage.getAvatar())));
+				this.image = new DefaultStreamedContent(new ByteArrayInputStream(rs.getFileContent()));
 				show = true;
 				showDef = false;
 			} catch (Exception e) {
@@ -140,15 +154,29 @@ public class AdminController implements Serializable {
 	}
 
 	public String resetSecurity() {
-		WebClient loginClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/rsec");
-		ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), userBean.getSecQ(), userBean.getSecA() }, ResponseMessage.class);
-		if (response.getStatusCode() == 0)
-			return "login";
-		else {
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
-			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+		if (secQ == null || secQ.length() == 0) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Question is Mandatory", "Security Question is Mandatory");
+			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
+			RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
 			return "";
 		}
+		if (secA == null || secA.length() == 0) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Security Answer is Mandatory", "Security Answer is Mandatory");
+			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
+			RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
+			return "";
+		}
+		WebClient loginClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/rsec");
+		ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), secQ, secA }, ResponseMessage.class);
+		this.userBean.setSecA(secA);
+		this.userBean.setSecQ(secQ);
+		if (response.getStatusCode() != 0) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			RequestContext.getCurrentInstance().closeDialog("dlgSecUpdate");
+			return "";
+		}
+		return "";
 	}
 
 	public String logout() {
@@ -174,6 +202,19 @@ public class AdminController implements Serializable {
 
 	public String showEditUser() {
 		try {
+			userBean.setcPw(userBean.getPwd());
+			return "admeu";
+		} catch (Exception e) {
+			e.printStackTrace(System.out);
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
+		}
+	}
+
+	public String showEditProfile() {
+		try {
+			userBean = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
 			userBean.setcPw(userBean.getPwd());
 			return "admeu";
 		} catch (Exception e) {
@@ -278,6 +319,11 @@ public class AdminController implements Serializable {
 	}
 
 	public String checkAvailability() {
+		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Screen Name to Check Availability", "Enter Screen Name to Check Availability");
+			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
+			return "";
+		}
 		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/check/screenName/" + userBean.getScName());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 		available = avail.booleanValue();
@@ -300,7 +346,6 @@ public class AdminController implements Serializable {
 			}
 			WebClient addUserClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/add");
 			UserMessage bean = new UserMessage();
-			bean.setAvatar(Base64.encodeBase64URLSafeString(userBean.getAvatar().getBytes()));
 			bean.setBio(userBean.getBio());
 			bean.setContact(userBean.getContact());
 			bean.seteMail(userBean.geteMail());
@@ -320,9 +365,30 @@ public class AdminController implements Serializable {
 			bean.setSecQ(userBean.getSecQ());
 			bean.setSecA(userBean.getSecA());
 			ResponseMessage response = addUserClient.accept(MediaType.APPLICATION_JSON).post(bean, ResponseMessage.class);
-			if (response.getStatusCode() == 0)
+			if (response.getStatusCode() == 0) {
+				try {
+					Document document = new Document();
+					document.setContentType(contentType);
+					document.setEntityId(bean.getuId().toString());
+					document.setEntityTableName("ip_user");
+					document.setFileContent(IOUtils.toByteArray(image.getStream()));
+					document.setFileName(fileName);
+					DocumentService service = new DocumentService();
+					UploadDocumentRq rq = new UploadDocumentRq();
+					rq.setDocument(document);
+					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+				} catch (Exception e) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", e.getMessage());
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
 				return "home";
-			else {
+			} else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -337,7 +403,6 @@ public class AdminController implements Serializable {
 		try {
 			WebClient updateUserClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/modify");
 			UserMessage bean = new UserMessage();
-			bean.setAvatar(userBean.getAvatar());
 			bean.setBio(userBean.getBio());
 			bean.setContact(userBean.getContact());
 			bean.seteMail(userBean.geteMail());
@@ -356,10 +421,26 @@ public class AdminController implements Serializable {
 			bean.setLastLoginDt(userBean.getLastLoginDt());
 			ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 			if (response.getStatusCode() == 0)
-				return "home";
-			else {
-				return "";
-			}
+				try {
+					Document document = new Document();
+					document.setContentType(contentType);
+					document.setEntityId(bean.getuId().toString());
+					document.setEntityTableName("ip_user");
+					document.setFileContent(IOUtils.toByteArray(image.getStream()));
+					document.setFileName(fileName);
+					DocumentService service = new DocumentService();
+					UploadDocumentRq rq = new UploadDocumentRq();
+					rq.setDocument(document);
+					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+				} catch (Exception e) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", e.getMessage());
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+			return "home";
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
@@ -382,6 +463,8 @@ public class AdminController implements Serializable {
 			if (response.getStatusCode() == 0)
 				return "home";
 			else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -404,6 +487,8 @@ public class AdminController implements Serializable {
 			if (response.getStatusCode() == 0)
 				return "home";
 			else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -428,6 +513,8 @@ public class AdminController implements Serializable {
 			if (response.getStatusCode() == 0)
 				return "home";
 			else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -450,6 +537,8 @@ public class AdminController implements Serializable {
 			if (response.getStatusCode() == 0)
 				return "home";
 			else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -461,23 +550,26 @@ public class AdminController implements Serializable {
 	}
 
 	public String updateImage() {
-		WebClient loginClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/imgupd");
-		ResponseMessage response;
 		try {
-			System.out.println(image);
-			response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { new String(Base64.encodeBase64URLSafe(IOUtils.toString(image.getStream()).getBytes())), userBean.getuId().toString() }, ResponseMessage.class);
-			if (response.getStatusCode() == 0)
-				return "";
-			else {
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusCode() + " :: " + response.getStatusDesc(), response.getStatusCode() + " :: " + response.getStatusDesc());
+			Document document = new Document();
+			document.setContentType(contentType);
+			document.setEntityId(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId").toString());
+			document.setEntityTableName("ip_user");
+			document.setFileContent(IOUtils.toByteArray(image.getStream()));
+			document.setFileName(fileName);
+			DocumentService service = new DocumentService();
+			UploadDocumentRq rq = new UploadDocumentRq();
+			rq.setDocument(document);
+			UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+			if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				return "";
 			}
-		} catch (IOException e) {
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+		} catch (Exception e) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-			return "";
 		}
+		return "";
 	}
 
 	private Long[] toIdArray(List<Long> ids) {
@@ -495,7 +587,6 @@ public class AdminController implements Serializable {
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		for (UserMessage userMessage : users) {
 			UserBean bean = new UserBean();
-			bean.setAvatar(userMessage.getAvatar());
 			bean.setBio(userMessage.getBio());
 			bean.setContact(userMessage.getContact());
 			bean.seteMail(userMessage.geteMail());
@@ -571,7 +662,6 @@ public class AdminController implements Serializable {
 		UserBean bean = new UserBean();
 		WebClient userByIdClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/get/" + id);
 		UserMessage userMessage = userByIdClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
-		bean.setAvatar(userMessage.getAvatar());
 		bean.setBio(userMessage.getBio());
 		bean.setContact(userMessage.getContact());
 		bean.seteMail(userMessage.geteMail());
@@ -593,7 +683,9 @@ public class AdminController implements Serializable {
 	public void fileUploadHandle(FileUploadEvent e) {
 		try {
 			UploadedFile file = e.getFile();
-			this.userBean.setAvatar(new String(file.getContents()));
+			this.image = new DefaultStreamedContent(file.getInputstream());
+			this.fileName = file.getFileName();
+			this.contentType = file.getContentType();
 		} catch (Exception ex) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), ex.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -604,6 +696,8 @@ public class AdminController implements Serializable {
 		try {
 			UploadedFile file = e.getFile();
 			this.image = new DefaultStreamedContent(file.getInputstream());
+			this.fileName = file.getFileName();
+			this.contentType = file.getContentType();
 			enableUpload = true;
 		} catch (Exception ex) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), ex.getMessage());
@@ -746,6 +840,30 @@ public class AdminController implements Serializable {
 
 	public void setEnableUpload(boolean enableUpload) {
 		this.enableUpload = enableUpload;
+	}
+
+	public String getSecQ() {
+		return secQ;
+	}
+
+	public void setSecQ(String secQ) {
+		this.secQ = secQ;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 }

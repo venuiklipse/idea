@@ -1,6 +1,5 @@
 package za.co.idea.ip.orm.bean;
 
-import java.sql.Blob;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,10 +28,7 @@ public class IpRewards implements java.io.Serializable {
 	private Date rwLaunchDt;
 	private Date rwExpiryDt;
 	private String rwTag;
-	private Blob rwBlob;
 	private Date rwCrtdDt;
-	private String rwFileName;
-	private String rwFileType;
 	private Set ipRewardsGroups = new HashSet(0);
 	private Set ipClaims = new HashSet(0);
 
@@ -43,7 +39,7 @@ public class IpRewards implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, Integer rwStockCodeNum, Date rwLaunchDt, Date rwExpiryDt, Date rwCrtdDt, String rwFileName, String rwFileType) {
+	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, Integer rwStockCodeNum, Date rwLaunchDt, Date rwExpiryDt, Date rwCrtdDt) {
 		this.rwId = rwId;
 		this.ipRewardsCat = ipRewardsCat;
 		this.ipRewardsStatus = ipRewardsStatus;
@@ -54,12 +50,10 @@ public class IpRewards implements java.io.Serializable {
 		this.rwLaunchDt = rwLaunchDt;
 		this.rwExpiryDt = rwExpiryDt;
 		this.rwCrtdDt = rwCrtdDt;
-		this.rwFileName = rwFileName;
-		this.rwFileType = rwFileType;
 	}
 
 	/** full constructor */
-	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, Integer rwStockCodeNum, String rwHoverText, Date rwLaunchDt, Date rwExpiryDt, String rwTag, Blob rwBlob, Date rwCrtdDt, String rwFileName, String rwFileType, Set ipRewardsGroups, Set ipClaims) {
+	public IpRewards(Long rwId, IpRewardsCat ipRewardsCat, IpRewardsStatus ipRewardsStatus, String rwTitle, String rwDesc, Integer rwValue, Integer rwStockCodeNum, String rwHoverText, Date rwLaunchDt, Date rwExpiryDt, String rwTag, Date rwCrtdDt, Set ipRewardsGroups, Set ipClaims) {
 		this.rwId = rwId;
 		this.ipRewardsCat = ipRewardsCat;
 		this.ipRewardsStatus = ipRewardsStatus;
@@ -71,10 +65,7 @@ public class IpRewards implements java.io.Serializable {
 		this.rwLaunchDt = rwLaunchDt;
 		this.rwExpiryDt = rwExpiryDt;
 		this.rwTag = rwTag;
-		this.rwBlob = rwBlob;
 		this.rwCrtdDt = rwCrtdDt;
-		this.rwFileName = rwFileName;
-		this.rwFileType = rwFileType;
 		this.ipRewardsGroups = ipRewardsGroups;
 		this.ipClaims = ipClaims;
 	}
@@ -169,36 +160,12 @@ public class IpRewards implements java.io.Serializable {
 		this.rwTag = rwTag;
 	}
 
-	public Blob getRwBlob() {
-		return this.rwBlob;
-	}
-
-	public void setRwBlob(Blob rwBlob) {
-		this.rwBlob = rwBlob;
-	}
-
 	public Date getRwCrtdDt() {
 		return this.rwCrtdDt;
 	}
 
 	public void setRwCrtdDt(Date rwCrtdDt) {
 		this.rwCrtdDt = rwCrtdDt;
-	}
-
-	public String getRwFileName() {
-		return rwFileName;
-	}
-
-	public void setRwFileName(String rwFileName) {
-		this.rwFileName = rwFileName;
-	}
-
-	public String getRwFileType() {
-		return rwFileType;
-	}
-
-	public void setRwFileType(String rwFileType) {
-		this.rwFileType = rwFileType;
 	}
 
 	public Set getIpRewardsGroups() {

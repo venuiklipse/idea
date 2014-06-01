@@ -8,7 +8,7 @@
 	<h:outputStylesheet id="jquery_css_main" name="ip.css" library="css" />
 </h:head>
 <h:body>
-	<h:form id="ideaFrm" enctype="multipart/form-data" acceptcharset="UTF-8" >
+	<h:form id="ideaFrm" enctype="multipart/form-data" acceptcharset="UTF-8">
 		<div class="menu">
 			<ui:insert name="menu" />
 		</div>
@@ -16,7 +16,7 @@
 			<ui:insert name="profile" />
 		</div>
 		<div class="content">
-			<p:growl />
+			<p:growl showDetail="true" showSummary="true" />
 			<ui:insert name="body" />
 		</div>
 	</h:form>

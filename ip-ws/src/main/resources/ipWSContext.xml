@@ -63,4 +63,8 @@
 		<property name="ipSolutionCatDAO" ref="IpSolutionCatDAO" />
 		<property name="ipSolutionStatusDAO" ref="IpSolutionStatusDAO" />
 	</bean>
+	<bean id="documentPortImpl" class="za.co.idea.ip.jaxws.document.DocumentPortImpl">
+		<property name="ipKeysDAO" ref="IpKeysDAO" />
+		<property name="ipBlobDAO" ref="IpBlobDAO" />
+	</bean>
 </beans>

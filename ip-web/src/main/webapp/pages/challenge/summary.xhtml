@@ -1,26 +1,28 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-<h:body>
-	<ui:composition template="/templates/layout.xhtml">
-		<ui:define name="title">Challenge Summary</ui:define>
-		<ui:define name="body">
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Challenge Summary</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrSummaryChallenges">
+			<f:facet name="header">
+					Challenge Summary
+				</f:facet>
 			<p:panelGrid columns="2" id="pnlSummaryChallenge">
 				<p:column>
 					<p:outputLabel id="lblITitle" value="Title : " />
 				</p:column>
 				<p:column>
-					<h:outputText id="txtITitle" value="#{challengeBean.challengeBean.title}" />
+					<p:outputLabel id="txtITitle" value="#{challengeBean.challengeBean.title}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIDesc" value="Description : " />
 				</p:column>
 				<p:column>
-					<h:outputText id="txtIDesc" value="#{challengeBean.challengeBean.desc}" escape="false" />
+					<p:outputLabel id="txtIDesc" value="#{challengeBean.challengeBean.desc}" escape="false" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblITag" value="Tags : " />
 				</p:column>
 				<p:column>
-					<h:outputText id="txtITag" value="#{challengeBean.challengeBean.tag}" escape="false" />
+					<p:outputLabel id="txtITag" value="#{challengeBean.challengeBean.tag}" escape="false" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblISocial" value="Social : " />
@@ -32,11 +34,11 @@
 					</p:commandLink>
 					<p:outputLabel id="lblCommentCnt" value="#{challengeBean.chalCommentCnt}" style="height:25px; width:25px;" />
 					<p:commandLink id="clChallengeComment" action="#{challengeBean.showCommentChallenge}" ajax="false" immediate="true">
-						<p:graphicImage id="giChallengeComment" name="comment.jpg" library="images" height="25px" width="25px"/>
+						<p:graphicImage id="giChallengeComment" name="comment.jpg" library="images" height="25px" width="25px" />
 					</p:commandLink>
 				</p:column>
 			</p:panelGrid>
-			<h:panelGrid id="pnlChallengeComment" rendered="#{challengeBean.showChallengeComments}">
+			<p:panelGrid id="pnlChallengeComment" rendered="#{challengeBean.showChallengeComments}">
 				<p:column>
 					<p:dataTable id="dtViewComments" widgetVar="dtViewComments" value="#{challengeBean.chalComments}" var="comment" scrollable="true" scrollRows="5" emptyMessage="No Comments Found">
 						<p:column width="30%">
@@ -53,11 +55,10 @@
 				<p:column>
 					<p:commandButton id="btnSubmitComment" value="Post" action="#{challengeBean.commentChallenge}" ajax="false" />
 				</p:column>
-			</h:panelGrid>
-			<h:panelGrid id="pnlChallengeLikes" rendered="#{challengeBean.showChallengeLikes}">
+			</p:panelGrid>
+			<p:panelGrid id="pnlChallengeLikes" rendered="#{challengeBean.showChallengeLikes}">
 				<p:tagCloud id="tgLikes" model="#{challengeBean.chalLikes}" />
-			</h:panelGrid>
-		</ui:define>
-	</ui:composition>
-</h:body>
-</html>
+			</p:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

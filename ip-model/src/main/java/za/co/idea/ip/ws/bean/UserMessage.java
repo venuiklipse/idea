@@ -19,7 +19,6 @@ public class UserMessage {
 	private String twHandle;
 	private String scName;
 	private String pwd;
-	private String avatar;
 	private String secQ;
 	private String secA;
 	private Boolean isActive;
@@ -127,14 +126,6 @@ public class UserMessage {
 
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
-	}
-
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
 	}
 
 	public Boolean getIsActive() {

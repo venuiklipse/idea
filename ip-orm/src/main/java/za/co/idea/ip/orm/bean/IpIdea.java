@@ -1,6 +1,5 @@
 package za.co.idea.ip.orm.bean;
 
-import java.sql.Blob;
 import java.util.Date;
 
 /**
@@ -24,9 +23,6 @@ public class IpIdea implements java.io.Serializable {
 	private String ideaBa;
 	private Date ideaDate;
 	private String ideaTag;
-	private Blob ideaBlob;
-	private String ideaFileType;
-	private String ideaFileName;
 
 	// Constructors
 
@@ -34,7 +30,7 @@ public class IpIdea implements java.io.Serializable {
 	public IpIdea() {
 	}
 
-	/** minimal constructor */
+	/** full constructor */
 	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag) {
 		this.ideaId = ideaId;
 		this.ipIdeaStatus = ipIdeaStatus;
@@ -45,22 +41,6 @@ public class IpIdea implements java.io.Serializable {
 		this.ideaBa = ideaBa;
 		this.ideaDate = ideaDate;
 		this.ideaTag = ideaTag;
-	}
-
-	/** full constructor */
-	public IpIdea(Long ideaId, IpIdeaStatus ipIdeaStatus, IpUser ipUser, IpIdeaCat ipIdeaCat, String ideaTitle, String ideaDesc, String ideaBa, Date ideaDate, String ideaTag, Blob ideaBlob, String ideaFileType, String ideaFileName) {
-		this.ideaId = ideaId;
-		this.ipIdeaStatus = ipIdeaStatus;
-		this.ipUser = ipUser;
-		this.ipIdeaCat = ipIdeaCat;
-		this.ideaTitle = ideaTitle;
-		this.ideaDesc = ideaDesc;
-		this.ideaBa = ideaBa;
-		this.ideaDate = ideaDate;
-		this.ideaTag = ideaTag;
-		this.ideaBlob = ideaBlob;
-		this.ideaFileType = ideaFileType;
-		this.ideaFileName = ideaFileName;
 	}
 
 	// Property accessors
@@ -135,30 +115,6 @@ public class IpIdea implements java.io.Serializable {
 
 	public void setIdeaTag(String ideaTag) {
 		this.ideaTag = ideaTag;
-	}
-
-	public Blob getIdeaBlob() {
-		return this.ideaBlob;
-	}
-
-	public void setIdeaBlob(Blob ideaBlob) {
-		this.ideaBlob = ideaBlob;
-	}
-
-	public String getIdeaFileType() {
-		return this.ideaFileType;
-	}
-
-	public void setIdeaFileType(String ideaFileType) {
-		this.ideaFileType = ideaFileType;
-	}
-
-	public String getIdeaFileName() {
-		return this.ideaFileName;
-	}
-
-	public void setIdeaFileName(String ideaFileName) {
-		this.ideaFileName = ideaFileName;
 	}
 
 }

@@ -15,7 +15,6 @@
 				<prop key="hibernate.dialect">
 					org.hibernate.dialect.MySQLDialect
 				</prop>
-				<prop key="hibernate.show_sql">true</prop>
 			</props>
 		</property>
 		<property name="mappingResources">
@@ -48,7 +47,13 @@
 				<value>za/co/idea/ip/orm/hbm/IpTagEntityType.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpTagType.hbm.xml</value>
 				<value>za/co/idea/ip/orm/hbm/IpUser.hbm.xml</value>
+				<value>za/co/idea/ip/orm/hbm/IpBlob.hbm.xml</value>
 			</list>
+		</property>
+	</bean>
+	<bean id="IpBlobDAO" class="za.co.idea.ip.orm.dao.IpBlobDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
 	<bean id="IpChallengeStatusDAO" class="za.co.idea.ip.orm.dao.IpChallengeStatusDAO">

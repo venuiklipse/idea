@@ -14,11 +14,8 @@ public class IdeaMessage {
 	private Long setStatusId;
 	private String ideaBa;
 	private String ideaTag;
-	private String fileUpload;
-	private String contentType;
 	private Long crtdById;
 	private Date crtdDate;
-	private String fileName;
 
 	public Long getIdeaId() {
 		return ideaId;
@@ -76,22 +73,6 @@ public class IdeaMessage {
 		this.ideaTag = ideaTag;
 	}
 
-	public String getFileUpload() {
-		return fileUpload;
-	}
-
-	public void setFileUpload(String fileUpload) {
-		this.fileUpload = fileUpload;
-	}
-
-	public String getContentType() {
-		return contentType;
-	}
-
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-
 	public Long getCrtdById() {
 		return crtdById;
 	}
@@ -106,14 +87,6 @@ public class IdeaMessage {
 
 	public void setCrtdDate(Date crtdDate) {
 		this.crtdDate = crtdDate;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
 	}
 
 }

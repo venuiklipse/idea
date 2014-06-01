@@ -1,18 +1,20 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-<h:body>
-	<ui:composition template="/templates/layout.xhtml">
-		<ui:define name="title">Edit User</ui:define>
-		<ui:define name="body">
-			<p:dialog id="dlgFBHelp" widgetVar="dlgFB" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true">
-				<h:panelGrid columns="2" style="margin-bottom:10px">
-					<p:graphicImage id="giFBHandle" name="fb_help.jpg" library="images" />
-				</h:panelGrid>
-			</p:dialog>
-			<p:dialog id="dlgTWHelp" widgetVar="dlgTW" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true">
-				<h:panelGrid columns="2" style="margin-bottom:10px">
-					<p:graphicImage id="giTWHandle" name="tw_help.jpg" library="images" />
-				</h:panelGrid>
-			</p:dialog>
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Edit User</ui:define>
+	<ui:define name="body">
+		<p:dialog id="dlgFBHelp" widgetVar="dlgFB" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true">
+			<p:panelGrid columns="2" style="margin-bottom:10px">
+				<p:graphicImage id="giFBHandle" name="fb_help.jpg" library="images" />
+			</p:panelGrid>
+		</p:dialog>
+		<p:dialog id="dlgTWHelp" widgetVar="dlgTW" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true">
+			<p:panelGrid columns="2" style="margin-bottom:10px">
+				<p:graphicImage id="giTWHandle" name="tw_help.jpg" library="images" />
+			</p:panelGrid>
+		</p:dialog>
+		<p:panel id="ctrEditUser">
+			<f:facet name="header">
+					Edit User
+				</f:facet>
 			<p:panelGrid id="pnlEdtUser">
 				<p:row>
 					<p:column>
@@ -60,22 +62,6 @@
 				</p:row>
 				<p:row>
 					<p:column>
-						<p:outputLabel id="lblSkills" value="Skills : " />
-					</p:column>
-					<p:column colspan="3">
-						<p:editor id="txtSkills" value="#{adminBean.userBean.skills}" required="true" requiredMessage="Skills are Mandatory" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column>
-						<p:outputLabel id="lblBio" value="Bio : " />
-					</p:column>
-					<p:column colspan="3">
-						<p:editor id="txtBio" value="#{adminBean.userBean.bio}" required="true" requiredMessage="Bio is Mandatory" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column>
 						<p:outputLabel id="lblFBHandle" value="Facebook Handle : " />
 					</p:column>
 					<p:column>
@@ -115,12 +101,27 @@
 					</p:column>
 				</p:row>
 				<p:row>
+					<p:column>
+						<p:outputLabel id="lblSkills" value="Skills : " />
+					</p:column>
+					<p:column colspan="3">
+						<p:editor id="txtSkills" value="#{adminBean.userBean.skills}" required="true" requiredMessage="Skills are Mandatory" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel id="lblBio" value="Bio : " />
+					</p:column>
+					<p:column colspan="3">
+						<p:editor id="txtBio" value="#{adminBean.userBean.bio}" required="true" requiredMessage="Bio is Mandatory" />
+					</p:column>
+				</p:row>
+				<p:row>
 					<p:column colspan="4" style="align: center;">
 						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.updateUser}" />
 					</p:column>
 				</p:row>
 			</p:panelGrid>
-		</ui:define>
-	</ui:composition>
-</h:body>
-</html>
+		</p:panel>
+	</ui:define>
+</ui:composition>

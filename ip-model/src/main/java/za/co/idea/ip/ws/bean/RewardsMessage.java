@@ -17,10 +17,7 @@ public class RewardsMessage {
 	private Date rwLaunchDt;
 	private Date rwExpiryDt;
 	private String rwTag;
-	private String rwBlob;
 	private Date rwCrtdDt;
-	private String rwFileName;
-	private String rwFileType;
 
 	public Long getRwId() {
 		return rwId;
@@ -110,36 +107,12 @@ public class RewardsMessage {
 		this.rwTag = rwTag;
 	}
 
-	public String getRwBlob() {
-		return rwBlob;
-	}
-
-	public void setRwBlob(String rwBlob) {
-		this.rwBlob = rwBlob;
-	}
-
 	public Date getRwCrtdDt() {
 		return rwCrtdDt;
 	}
 
 	public void setRwCrtdDt(Date rwCrtdDt) {
 		this.rwCrtdDt = rwCrtdDt;
-	}
-
-	public String getRwFileName() {
-		return rwFileName;
-	}
-
-	public void setRwFileName(String rwFileName) {
-		this.rwFileName = rwFileName;
-	}
-
-	public String getRwFileType() {
-		return rwFileType;
-	}
-
-	public void setRwFileType(String rwFileType) {
-		this.rwFileType = rwFileType;
 	}
 
 }

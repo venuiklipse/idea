@@ -1,24 +1,41 @@
 .menu {
 	position: absolute;
-	top: 5%;
-	left: 15%;
-	width: 80%;
+	top: 5% !important;
+	width: 99% !important;
+	height: 10% !important;
 }
 
 .content {
 	position: absolute;
-	top: 10%;
-	left: 15%%;
+	top: 12% !important;
+	left: 20% !important;
 }
 
 .profile {
 	position: absolute;
-	left: 30px;
-	top: 10%;
+	float: right !important;
+	top: 12% !important;
+	width: 12% !important;
+}
+
+.ui-widget-content {
+	background: #ffffff !important;
+}
+
+.ui-panel .ui-panel-titlebar {
+	background: #55a616 !important;
+	color: #ffffff !important;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+	background: #55a616 !important;
+	color: #ffffff !important;
 }
 
 .ui-selectonemenu-label {
 	width: 100% !important;
+	overflow: visible !important;
+	text-align: left !important;
 }
 
 .ui-widget,.ui-widget .ui-widget {
@@ -29,16 +46,14 @@
 	font-size: 12px !important;
 }
 
-.ui-panelgrid {
-	border: 2px !important;
-}
-
 .ui-panelgrid td {
 	border: 0px !important;
+	background-color: transparent;
 }
 
 .ui-panelgrid tr {
 	border: 0px !important;
+	background-color: transparent;
 }
 
 .ui-datatable.ui-widget {

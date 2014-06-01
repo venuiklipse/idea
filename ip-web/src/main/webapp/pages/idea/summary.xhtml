@@ -1,32 +1,34 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-<h:body>
-	<ui:composition template="/templates/layout.xhtml">
-		<ui:define name="title">Idea Summary</ui:define>
-		<ui:define name="body">
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Idea Summary</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrSummaryIeas">
+			<f:facet name="header">
+					Idea Summary
+				</f:facet>
 			<p:panelGrid columns="2" id="pnlSummaryIdea">
 				<p:column>
 					<p:outputLabel id="lblITitle" value="Title : " />
 				</p:column>
 				<p:column>
-					<h:outputText id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" />
+					<p:outputLabel id="txtITitle" value="#{ideaBean.ideaBean.ideaTitle}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIDesc" value="Description : " />
 				</p:column>
 				<p:column>
-					<h:outputText id="txtIDesc" value="#{ideaBean.ideaBean.ideaDesc}" escape="false" />
+					<p:outputLabel id="txtIDesc" value="#{ideaBean.ideaBean.ideaDesc}" escape="false" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblIBa" value="Business Areas : " />
 				</p:column>
 				<p:column>
-					<h:outputText id="txtIBa" value="#{ideaBean.ideaBean.ideaBa}" escape="false" />
+					<p:outputLabel id="txtIBa" value="#{ideaBean.ideaBean.ideaBa}" escape="false" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblITag" value="Tags : " />
 				</p:column>
 				<p:column>
-					<h:outputText id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" escape="false" />
+					<p:outputLabel id="txtITag" value="#{ideaBean.ideaBean.ideaTag}" escape="false" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblISocial" value="Social : " />
@@ -46,7 +48,7 @@
 					</p:commandLink>
 				</p:column>
 			</p:panelGrid>
-			<h:panelGrid id="pnlIdeaComment" rendered="#{ideaBean.showIdeaComments}">
+			<p:panelGrid id="pnlIdeaComment" rendered="#{ideaBean.showIdeaComments}">
 				<p:column>
 					<p:dataTable id="dtViewComments" widgetVar="dtViewComments" value="#{ideaBean.comments}" var="comment" scrollable="true" scrollRows="5" emptyMessage="No Comments Found">
 						<p:column width="30%">
@@ -63,11 +65,11 @@
 				<p:column>
 					<p:commandButton id="btnSubmitComment" value="Post" action="#{ideaBean.commentIdea}" ajax="false" />
 				</p:column>
-			</h:panelGrid>
-			<h:panelGrid id="pnlIdeaLikes" rendered="#{ideaBean.showIdeaLikes}">
+			</p:panelGrid>
+			<p:panelGrid id="pnlIdeaLikes" rendered="#{ideaBean.showIdeaLikes}">
 				<p:tagCloud id="tgLikes" model="#{ideaBean.likes}" />
-			</h:panelGrid>
-			<h:panelGrid id="pnlIdeaBuildOn" rendered="#{ideaBean.showIdeaBuildOns}">
+			</p:panelGrid>
+			<p:panelGrid id="pnlIdeaBuildOn" rendered="#{ideaBean.showIdeaBuildOns}">
 				<p:column>
 					<p:dataTable id="dtViewBuildOns" widgetVar="dtViewBuildOns" value="#{ideaBean.buildOns}" var="buildOn" scrollable="true" scrollRows="5" emptyMessage="No BuildOns Found">
 						<p:column width="30%">
@@ -84,8 +86,7 @@
 				<p:column>
 					<p:commandButton id="btnSubmitBuildOn" value="Post" action="#{ideaBean.buildOnIdea}" ajax="false" />
 				</p:column>
-			</h:panelGrid>
-		</ui:define>
-	</ui:composition>
-</h:body>
-</html>
+			</p:panelGrid>
+		</p:panel>
+	</ui:define>
+</ui:composition>

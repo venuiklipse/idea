@@ -1,6 +1,5 @@
 package za.co.idea.ip.orm.bean;
 
-import java.sql.Blob;
 import java.util.Date;
 
 /**
@@ -23,10 +22,7 @@ public class IpSolution implements java.io.Serializable {
 	private String solTitle;
 	private String solDesc;
 	private String solTags;
-	private Blob solBlob;
 	private Date solCrtdDt;
-	private String solFileName;
-	private String solFileType;
 
 	// Constructors
 
@@ -35,7 +31,7 @@ public class IpSolution implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpSolution(Long solId, IpSolutionStatus ipSolutionStatus, IpUser ipUser, IpChallenge ipChallenge, String solTitle, String solDesc, Date solCrtdDt, String solFileName, String solFileType) {
+	public IpSolution(Long solId, IpSolutionStatus ipSolutionStatus, IpUser ipUser, IpChallenge ipChallenge, String solTitle, String solDesc, Date solCrtdDt) {
 		this.solId = solId;
 		this.ipSolutionStatus = ipSolutionStatus;
 		this.ipUser = ipUser;
@@ -43,12 +39,10 @@ public class IpSolution implements java.io.Serializable {
 		this.solTitle = solTitle;
 		this.solDesc = solDesc;
 		this.solCrtdDt = solCrtdDt;
-		this.solFileName = solFileName;
-		this.solFileType = solFileType;
 	}
 
 	/** full constructor */
-	public IpSolution(Long solId, IpSolutionStatus ipSolutionStatus, IpSolutionCat ipSolutionCat, IpUser ipUser, IpChallenge ipChallenge, String solTitle, String solDesc, String solTags, Blob solBlob, Date solCrtdDt, String solFileName, String solFileType) {
+	public IpSolution(Long solId, IpSolutionStatus ipSolutionStatus, IpSolutionCat ipSolutionCat, IpUser ipUser, IpChallenge ipChallenge, String solTitle, String solDesc, String solTags, Date solCrtdDt) {
 		this.solId = solId;
 		this.ipSolutionStatus = ipSolutionStatus;
 		this.ipSolutionCat = ipSolutionCat;
@@ -57,10 +51,7 @@ public class IpSolution implements java.io.Serializable {
 		this.solTitle = solTitle;
 		this.solDesc = solDesc;
 		this.solTags = solTags;
-		this.solBlob = solBlob;
 		this.solCrtdDt = solCrtdDt;
-		this.solFileName = solFileName;
-		this.solFileType = solFileType;
 	}
 
 	// Property accessors
@@ -129,14 +120,6 @@ public class IpSolution implements java.io.Serializable {
 		this.solTags = solTags;
 	}
 
-	public Blob getSolBlob() {
-		return this.solBlob;
-	}
-
-	public void setSolBlob(Blob solBlob) {
-		this.solBlob = solBlob;
-	}
-
 	public Date getSolCrtdDt() {
 		return this.solCrtdDt;
 	}
@@ -144,21 +127,4 @@ public class IpSolution implements java.io.Serializable {
 	public void setSolCrtdDt(Date solCrtdDt) {
 		this.solCrtdDt = solCrtdDt;
 	}
-
-	public String getSolFileName() {
-		return solFileName;
-	}
-
-	public void setSolFileName(String solFileName) {
-		this.solFileName = solFileName;
-	}
-
-	public String getSolFileType() {
-		return solFileType;
-	}
-
-	public void setSolFileType(String solFileType) {
-		this.solFileType = solFileType;
-	}
-
 }

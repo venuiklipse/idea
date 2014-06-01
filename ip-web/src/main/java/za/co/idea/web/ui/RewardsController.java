@@ -1,5 +1,6 @@
 package za.co.idea.web.ui;
 
+import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,15 +11,21 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import za.co.idea.ip.jaxws.document.Document;
+import za.co.idea.ip.jaxws.document.DocumentService;
+import za.co.idea.ip.jaxws.document.DownloadDocumentRq;
+import za.co.idea.ip.jaxws.document.DownloadDocumentRs;
+import za.co.idea.ip.jaxws.document.UploadDocumentRq;
+import za.co.idea.ip.jaxws.document.UploadDocumentRs;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
 import za.co.idea.ip.ws.bean.RewardsMessage;
@@ -112,6 +119,27 @@ public class RewardsController implements Serializable {
 			admUsers = fetchAllUsers();
 			rewardsCat = fetchAllRewardsCat();
 			rewardsStatus = fetchAllRewardsStatuses();
+			try {
+				DocumentService service = new DocumentService();
+				DownloadDocumentRq rq = new DownloadDocumentRq();
+				rq.setEntityId(rewardsBean.getRwId().toString());
+				rq.setEntityTableName("ip_rewards");
+				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
+				if (Integer.parseInt(rs.getResponse().getRespCode()) == 0) {
+					fileAvail = true;
+					rewardsBean.setRwFileName(rs.getFileName());
+					rewardsBean.setRwFileType(rs.getContentType());
+					fileContent = new DefaultStreamedContent(new ByteArrayInputStream(rs.getFileContent()));
+				} else {
+					fileAvail = false;
+					fileContent = null;
+				}
+			} catch (Exception e) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				fileAvail = false;
+				fileContent = null;
+			}
 			return "rwer";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,9 +158,6 @@ public class RewardsController implements Serializable {
 		try {
 			WebClient addRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/add");
 			RewardsMessage message = new RewardsMessage();
-			message.setRwBlob(new String(Base64.encodeBase64URLSafe(rewardsBean.getRwBlob().getBytes())));
-			message.setRwFileName(rewardsBean.getRwFileName());
-			message.setRwFileType(rewardsBean.getRwFileType());
 			message.setrCatId(rewardsBean.getrCatId());
 			message.setRwCrtdDt(new Date());
 			message.setRwDesc(rewardsBean.getRwDesc());
@@ -147,10 +172,29 @@ public class RewardsController implements Serializable {
 			message.setRwExpiryDt(rewardsBean.getRwExpiryDt());
 			ResponseMessage response = addRewardsClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			if (response.getStatusCode() == 0) {
-				addRewardsClient.close();
+				try {
+					Document document = new Document();
+					document.setContentType(rewardsBean.getRwFileType());
+					document.setEntityId(message.getRwId().toString());
+					document.setEntityTableName("ip_rewards");
+					document.setFileContent(rewardsBean.getRwBlob().getBytes());
+					document.setFileName(rewardsBean.getRwFileName());
+					DocumentService service = new DocumentService();
+					UploadDocumentRq rq = new UploadDocumentRq();
+					rq.setDocument(document);
+					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+				} catch (Exception e) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
 				return "home";
 			} else {
-				addRewardsClient.close();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -166,9 +210,6 @@ public class RewardsController implements Serializable {
 		try {
 			WebClient updateRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/modify");
 			RewardsMessage message = new RewardsMessage();
-			message.setRwBlob(new String(Base64.encodeBase64URLSafe(rewardsBean.getRwBlob().getBytes())));
-			message.setRwFileName(rewardsBean.getRwFileName());
-			message.setRwFileType(rewardsBean.getRwFileType());
 			message.setrCatId(rewardsBean.getrCatId());
 			message.setRwCrtdDt(new Date());
 			message.setRwDesc(rewardsBean.getRwDesc());
@@ -183,10 +224,29 @@ public class RewardsController implements Serializable {
 			message.setRwExpiryDt(rewardsBean.getRwExpiryDt());
 			ResponseMessage response = updateRewardsClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			if (response.getStatusCode() == 0) {
-				updateRewardsClient.close();
+				try {
+					Document document = new Document();
+					document.setContentType(rewardsBean.getRwFileType());
+					document.setEntityId(message.getRwId().toString());
+					document.setEntityTableName("ip_rewards");
+					document.setFileContent(rewardsBean.getRwBlob().getBytes());
+					document.setFileName(rewardsBean.getRwFileName());
+					DocumentService service = new DocumentService();
+					UploadDocumentRq rq = new UploadDocumentRq();
+					rq.setDocument(document);
+					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+				} catch (Exception e) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
 				return "home";
 			} else {
-				updateRewardsClient.close();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -204,7 +264,6 @@ public class RewardsController implements Serializable {
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		for (UserMessage userMessage : users) {
 			UserBean bean = new UserBean();
-			bean.setAvatar(userMessage.getAvatar());
 			bean.setBio(userMessage.getBio());
 			bean.setContact(userMessage.getContact());
 			bean.seteMail(userMessage.geteMail());
@@ -250,12 +309,9 @@ public class RewardsController implements Serializable {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
 			bean.setrStatusId(message.getrStatusId());
-			bean.setRwBlob(new String(Base64.decodeBase64(message.getRwBlob())));
 			bean.setRwCrtdDt(message.getRwCrtdDt());
 			bean.setRwDesc(message.getRwDesc());
 			bean.setRwExpiryDt(message.getRwExpiryDt());
-			bean.setRwFileName(message.getRwFileName());
-			bean.setRwFileType(message.getRwFileType());
 			bean.setRwHoverText(message.getRwHoverText());
 			bean.setRwId(message.getRwId());
 			bean.setRwLaunchDt(message.getRwLaunchDt());
@@ -263,6 +319,21 @@ public class RewardsController implements Serializable {
 			bean.setRwTag(message.getRwTag());
 			bean.setRwTitle(message.getRwTitle());
 			bean.setRwValue(message.getRwValue());
+			try {
+				DocumentService service = new DocumentService();
+				DownloadDocumentRq rq = new DownloadDocumentRq();
+				rq.setEntityId(message.getRwId().toString());
+				rq.setEntityTableName("ip_rewards");
+				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
+				if (Integer.parseInt(rs.getResponse().getRespCode()) == 0) {
+					bean.setRwFileName(rs.getFileName());
+					bean.setRwFileType(rs.getContentType());
+					bean.setRwBlob(new String(rs.getFileContent()));
+				}
+			} catch (Exception e) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Fetch Image For Id :: " + message.getRwId(), e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			}
 			ret.add(bean);
 		}
 		return ret;
@@ -276,12 +347,9 @@ public class RewardsController implements Serializable {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
 			bean.setrStatusId(message.getrStatusId());
-			bean.setRwBlob(new String(Base64.decodeBase64(message.getRwBlob())));
 			bean.setRwCrtdDt(message.getRwCrtdDt());
 			bean.setRwDesc(message.getRwDesc());
 			bean.setRwExpiryDt(message.getRwExpiryDt());
-			bean.setRwFileName(message.getRwFileName());
-			bean.setRwFileType(message.getRwFileType());
 			bean.setRwHoverText(message.getRwHoverText());
 			bean.setRwId(message.getRwId());
 			bean.setRwLaunchDt(message.getRwLaunchDt());
@@ -289,6 +357,21 @@ public class RewardsController implements Serializable {
 			bean.setRwTag(message.getRwTag());
 			bean.setRwTitle(message.getRwTitle());
 			bean.setRwValue(message.getRwValue());
+			try {
+				DocumentService service = new DocumentService();
+				DownloadDocumentRq rq = new DownloadDocumentRq();
+				rq.setEntityId(message.getRwId().toString());
+				rq.setEntityTableName("ip_rewards");
+				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
+				if (Integer.parseInt(rs.getResponse().getRespCode()) == 0) {
+					bean.setRwFileName(rs.getFileName());
+					bean.setRwFileType(rs.getContentType());
+					bean.setRwBlob(new String(rs.getFileContent()));
+				}
+			} catch (Exception e) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Fetch Image For Id :: " + message.getRwId(), e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			}
 			ret.add(bean);
 		}
 		return ret;

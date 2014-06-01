@@ -29,17 +29,8 @@
 		<property name="solTags" type="java.lang.String">
 			<column name="sol_tags" length="500" />
 		</property>
-		<property name="solBlob" type="java.sql.Blob">
-			<column name="sol_blob" />
-		</property>
 		<property name="solCrtdDt" type="java.sql.Timestamp">
 			<column name="sol_crtd_dt" length="19" not-null="true" />
-		</property>
-		<property name="solFileName" type="java.lang.String">
-			<column name="sol_file_name" length="450" not-null="true" />
-		</property>
-		<property name="solFileType" type="java.lang.String">
-			<column name="sol_file_type" length="150" not-null="true" />
 		</property>
 	</class>
 	<sql-query name="getSolutionByUser">

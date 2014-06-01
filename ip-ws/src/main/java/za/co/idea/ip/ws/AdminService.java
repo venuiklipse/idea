@@ -15,7 +15,6 @@ import javax.ws.rs.Produces;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.hibernate.Hibernate;
 
 import za.co.idea.ip.orm.bean.IpFunction;
 import za.co.idea.ip.orm.bean.IpFunctionConfig;
@@ -238,8 +237,6 @@ public class AdminService {
 			ipUser.setUserStatus(((user.getIsActive() != null && user.getIsActive()) ? "y" : "n"));
 			if (user.getFbHandle() != null && user.getFbHandle().length() > 0)
 				ipUser.setUserFbHandle(user.getFbHandle());
-			if (user.getAvatar() != null && user.getAvatar().length() > 0)
-				ipUser.setUserAvatar(Hibernate.createBlob(Base64.decodeBase64(user.getAvatar())));
 			if (user.getBio() != null && user.getBio().length() > 0)
 				ipUser.setUserBio(user.getBio());
 			if (user.getmName() != null && user.getmName().length() > 0)
@@ -417,8 +414,6 @@ public class AdminService {
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());
-				if (ipUser.getUserAvatar() != null && ipUser.getUserAvatar().length() > 0)
-					user.setAvatar(new String(Base64.encodeBase64URLSafe(ipUser.getUserAvatar().getBytes(1, (int) ipUser.getUserAvatar().length()))));
 				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
 					user.setBio(ipUser.getUserBio());
 				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
@@ -451,8 +446,6 @@ public class AdminService {
 			user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 			if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 				user.setFbHandle(ipUser.getUserFbHandle());
-			if (ipUser.getUserAvatar() != null && ipUser.getUserAvatar().length() > 0)
-				user.setAvatar(new String(Base64.encodeBase64URLSafe(ipUser.getUserAvatar().getBytes(1, (int) ipUser.getUserAvatar().length()))));
 			if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
 				user.setBio(ipUser.getUserBio());
 			if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)
@@ -497,30 +490,6 @@ public class AdminService {
 		try {
 			try {
 				ipLoginDAO.updateSecurity(param[0], param[1], Base64.encodeBase64URLSafeString(DigestUtils.md5(param[2].getBytes())));
-			} catch (Exception e) {
-				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
-			}
-			ResponseMessage message = new ResponseMessage();
-			message.setStatusCode(0);
-			message.setStatusDesc("Success");
-			return message;
-		} catch (Exception e) {
-			e.printStackTrace();
-			ResponseMessage message = new ResponseMessage();
-			message.setStatusCode(1);
-			message.setStatusDesc(e.getMessage());
-			return message;
-		}
-	}
-
-	@PUT
-	@Path("/user/imgupd")
-	@Consumes("application/json")
-	@Produces("application/json")
-	public ResponseMessage updateImage(String[] param) {
-		try {
-			try {
-				ipUserDAO.updateImage(new String(Base64.decodeBase64(param[0])), Long.valueOf(param[1]));
 			} catch (Exception e) {
 				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
 			}
@@ -584,8 +553,6 @@ public class AdminService {
 				user.setIsActive(ipUser.getUserStatus().equalsIgnoreCase("y"));
 				if (ipUser.getUserFbHandle() != null && ipUser.getUserFbHandle().length() > 0)
 					user.setFbHandle(ipUser.getUserFbHandle());
-				if (ipUser.getUserAvatar() != null && ipUser.getUserAvatar().length() > 0)
-					user.setAvatar(new String(Base64.encodeBase64URLSafe(ipUser.getUserAvatar().getBytes(1, (int) ipUser.getUserAvatar().length()))));
 				if (ipUser.getUserBio() != null && ipUser.getUserBio().length() > 0)
 					user.setBio(ipUser.getUserBio());
 				if (ipUser.getUserMName() != null && ipUser.getUserMName().length() > 0)

@@ -1,8 +1,10 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-<h:body>
-	<ui:composition template="/templates/layout.xhtml">
-		<ui:define name="title">Edit Idea</ui:define>
-		<ui:define name="body">
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">Edit Idea</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrEditIdea">
+			<f:facet name="header">
+					Edit Idea
+				</f:facet>
 			<p:panelGrid columns="2" id="pnlEditIdea">
 				<p:column>
 					<p:outputLabel id="lblITitle" value="Title : " />
@@ -58,7 +60,7 @@
 					<p:outputLabel id="lblIUpload" value="Upload File : " />
 				</p:column>
 				<p:column>
-					<p:fileUpload id="fuIUpload" fileUploadListener="#{ideaBean.fileUploadHandle}" multiple="false" />
+					<p:fileUpload auto="true" id="fuIUpload" fileUploadListener="#{ideaBean.fileUploadHandle}" multiple="false" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblCrtdBy" value="Created By : " />
@@ -75,7 +77,6 @@
 					</p:column>
 				</p:row>
 			</p:panelGrid>
-		</ui:define>
-	</ui:composition>
-</h:body>
-</html>
+		</p:panel>
+	</ui:define>
+</ui:composition>

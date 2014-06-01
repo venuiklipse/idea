@@ -1,8 +1,10 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
-<h:body>
-	<ui:composition template="/templates/layout.xhtml">
-		<ui:define name="title">View Users</ui:define>
-		<ui:define name="body">
+<ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="title">View Users</ui:define>
+	<ui:define name="body">
+		<p:panel id="ctrVwUser">
+			<f:facet name="header">
+					View Users
+				</f:facet>
 			<p:dataTable id="dtViewUsers" value="#{adminBean.viewUsers}" var="user" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Users Found">
 				<p:column filterBy="#{user.uId}" filterMatchMode="contains">
 					<f:facet name="header">User Id</f:facet>
@@ -26,12 +28,12 @@
 				</p:column>
 				<p:column>
 					<f:facet name="header">Social</f:facet>
-					<h:outputLink id="lnkFBHanlde" target="new" value="#{user.fbHandle}">
+					<p:commandLink id="lnkFBHanlde" target="new" value="#{user.fbHandle}">
 						<p:graphicImage id="giFBHandle" name="fb.jpg" library="images" height="25px" width="25px" />
-					</h:outputLink>
-					<h:outputLink id="lnkTWHanlde" target="new" value="#{user.twHandle}">
+					</p:commandLink>
+					<p:commandLink id="lnkTWHanlde" target="new" value="#{user.twHandle}">
 						<p:graphicImage id="giTWHandle" name="twitter.jpg" library="images" height="25px" width="25px" />
-					</h:outputLink>
+					</p:commandLink>
 				</p:column>
 				<p:column>
 					<f:facet name="header">Active</f:facet>
@@ -43,7 +45,6 @@
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
-		</ui:define>
-	</ui:composition>
-</h:body>
-</html>
+		</p:panel>
+	</ui:define>
+</ui:composition>

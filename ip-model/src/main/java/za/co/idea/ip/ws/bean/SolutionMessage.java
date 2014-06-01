@@ -13,11 +13,8 @@ public class SolutionMessage {
 	private Integer catId;
 	private Integer statusId;
 	private String tags;
-	private String blob;
 	private Date crtdDt;
 	private Long crtdById;
-	private String contentType;
-	private String fileName;
 
 	public Long getId() {
 		return id;
@@ -75,14 +72,6 @@ public class SolutionMessage {
 		this.tags = tags;
 	}
 
-	public String getBlob() {
-		return blob;
-	}
-
-	public void setBlob(String blob) {
-		this.blob = blob;
-	}
-
 	public Date getCrtdDt() {
 		return crtdDt;
 	}
@@ -97,22 +86,6 @@ public class SolutionMessage {
 
 	public void setCrtdById(Long crtdById) {
 		this.crtdById = crtdById;
-	}
-
-	public String getContentType() {
-		return contentType;
-	}
-
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
 	}
 
 }

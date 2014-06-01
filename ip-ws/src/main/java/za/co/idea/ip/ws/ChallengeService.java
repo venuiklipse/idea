@@ -11,9 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import org.apache.commons.codec.binary.Base64;
-import org.hibernate.Hibernate;
-
 import za.co.idea.ip.orm.bean.IpChallenge;
 import za.co.idea.ip.orm.bean.IpChallengeCat;
 import za.co.idea.ip.orm.bean.IpChallengeStatus;
@@ -40,8 +37,6 @@ public class ChallengeService {
 	public ResponseMessage createChallenge(ChallengeMessage challenge) {
 		IpChallenge ipChallenge = new IpChallenge();
 		try {
-			if (challenge.getBlob() != null && challenge.getBlob().length() > 0)
-				ipChallenge.setChalBlob(Hibernate.createBlob(Base64.decodeBase64(challenge.getBlob().getBytes())));
 			ipChallenge.setChalCrtdDt(challenge.getCrtdDt());
 			ipChallenge.setChalDesc(challenge.getDesc());
 			ipChallenge.setChalExpiryDt(challenge.getExprDt());
@@ -53,8 +48,6 @@ public class ChallengeService {
 			ipChallenge.setIpChallengeCat(ipChallengeCatDAO.findById(challenge.getCatId()));
 			ipChallenge.setIpChallengeStatus(ipChallengeStatusDAO.findById(challenge.getStatusId()));
 			ipChallenge.setIpUser(ipUserDAO.findById(challenge.getCrtdById()));
-			ipChallenge.setChalFileName(challenge.getFileName());
-			ipChallenge.setChalFileType(challenge.getContentType());
 			ipChallengeDAO.save(ipChallenge);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -76,8 +69,6 @@ public class ChallengeService {
 	public ResponseMessage updateChallenge(ChallengeMessage challenge) {
 		IpChallenge ipChallenge = new IpChallenge();
 		try {
-			if (challenge.getBlob() != null && challenge.getBlob().length() > 0)
-				ipChallenge.setChalBlob(Hibernate.createBlob(Base64.decodeBase64(challenge.getBlob().getBytes())));
 			ipChallenge.setChalCrtdDt(challenge.getCrtdDt());
 			ipChallenge.setChalDesc(challenge.getDesc());
 			ipChallenge.setChalExpiryDt(challenge.getExprDt());
@@ -89,8 +80,6 @@ public class ChallengeService {
 			ipChallenge.setIpChallengeCat(ipChallengeCatDAO.findById(challenge.getCatId()));
 			ipChallenge.setIpChallengeStatus(ipChallengeStatusDAO.findById(challenge.getStatusId()));
 			ipChallenge.setIpUser(ipUserDAO.findById(challenge.getCrtdById()));
-			ipChallenge.setChalFileName(challenge.getFileName());
-			ipChallenge.setChalFileType(challenge.getContentType());
 			ipChallengeDAO.merge(ipChallenge);
 			ResponseMessage message = new ResponseMessage();
 			message.setStatusCode(0);
@@ -116,7 +105,6 @@ public class ChallengeService {
 				IpChallenge ipChallenge = (IpChallenge) object;
 				ChallengeMessage challenge = new ChallengeMessage();
 				challenge.setId(ipChallenge.getChalId());
-				challenge.setBlob(new String(Base64.encodeBase64URLSafe(ipChallenge.getChalBlob().getBytes(1, (int) ipChallenge.getChalBlob().length()))));
 				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
 				challenge.setCrtdById(ipChallenge.getIpUser().getUserId());
 				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
@@ -127,8 +115,6 @@ public class ChallengeService {
 				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
 				challenge.setTag(ipChallenge.getChalTags());
 				challenge.setTitle(ipChallenge.getChalTitle());
-				challenge.setFileName(ipChallenge.getChalFileName());
-				challenge.setContentType(ipChallenge.getChalFileType());
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -148,7 +134,6 @@ public class ChallengeService {
 				IpChallenge ipChallenge = (IpChallenge) object;
 				ChallengeMessage challenge = new ChallengeMessage();
 				challenge.setId(ipChallenge.getChalId());
-				challenge.setBlob(new String(Base64.encodeBase64URLSafe(ipChallenge.getChalBlob().getBytes(1, (int) ipChallenge.getChalBlob().length()))));
 				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
 				challenge.setCrtdById(ipChallenge.getIpUser().getUserId());
 				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
@@ -159,8 +144,6 @@ public class ChallengeService {
 				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
 				challenge.setTag(ipChallenge.getChalTags());
 				challenge.setTitle(ipChallenge.getChalTitle());
-				challenge.setFileName(ipChallenge.getChalFileName());
-				challenge.setContentType(ipChallenge.getChalFileType());
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -180,7 +163,6 @@ public class ChallengeService {
 				IpChallenge ipChallenge = (IpChallenge) object;
 				ChallengeMessage challenge = new ChallengeMessage();
 				challenge.setId(ipChallenge.getChalId());
-				challenge.setBlob(new String(Base64.encodeBase64URLSafe(ipChallenge.getChalBlob().getBytes(1, (int) ipChallenge.getChalBlob().length()))));
 				challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
 				challenge.setCrtdById(ipChallenge.getIpUser().getUserId());
 				challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
@@ -191,8 +173,6 @@ public class ChallengeService {
 				challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
 				challenge.setTag(ipChallenge.getChalTags());
 				challenge.setTitle(ipChallenge.getChalTitle());
-				challenge.setFileName(ipChallenge.getChalFileName());
-				challenge.setContentType(ipChallenge.getChalFileType());
 				ret.add((T) challenge);
 			}
 		} catch (Exception e) {
@@ -279,7 +259,6 @@ public class ChallengeService {
 		try {
 			IpChallenge ipChallenge = ipChallengeDAO.findById(id);
 			challenge.setId(ipChallenge.getChalId());
-			challenge.setBlob(new String(ipChallenge.getChalBlob().getBytes(1, (int) ipChallenge.getChalBlob().length())));
 			challenge.setCatId(ipChallenge.getIpChallengeCat().getCcId());
 			challenge.setCrtdById(ipChallenge.getIpUser().getUserId());
 			challenge.setCrtdDt(ipChallenge.getChalCrtdDt());
@@ -290,8 +269,6 @@ public class ChallengeService {
 			challenge.setStatusId(ipChallenge.getIpChallengeStatus().getCsId());
 			challenge.setTag(ipChallenge.getChalTags());
 			challenge.setTitle(ipChallenge.getChalTitle());
-			challenge.setFileName(ipChallenge.getChalFileName());
-			challenge.setContentType(ipChallenge.getChalFileType());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

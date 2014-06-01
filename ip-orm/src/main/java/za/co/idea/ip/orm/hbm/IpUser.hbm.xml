@@ -41,9 +41,6 @@
 		<property name="userTwHandle" type="java.lang.String">
 			<column name="user_tw_handle" length="65535" not-null="true" />
 		</property>
-		<property name="userAvatar" type="java.sql.Blob">
-			<column name="user_avatar" />
-		</property>
 		<property name="userStatus" type="java.lang.String">
 			<column name="user_status" length="1" not-null="true" />
 		</property>

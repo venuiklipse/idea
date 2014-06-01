@@ -32,15 +32,6 @@
 		<property name="ideaTag" type="java.lang.String">
 			<column name="idea_tag" length="500" not-null="true" />
 		</property>
-		<property name="ideaBlob" type="java.sql.Blob">
-			<column name="idea_blob" />
-		</property>
-		<property name="ideaFileType" type="java.lang.String">
-			<column name="idea_file_type" length="150" />
-		</property>
-		<property name="ideaFileName" type="java.lang.String">
-			<column name="idea_file_name" length="450" />
-		</property>
 	</class>
 	<sql-query name="getIdeaByUser">
 		select idea.* from ip_idea idea where idea.idea_user_id=:id

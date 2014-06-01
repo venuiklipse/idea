@@ -125,10 +125,10 @@ public class ClaimController implements Serializable {
 			message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			ResponseMessage response = addClaimClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			if (response.getStatusCode() == 0) {
-				addClaimClient.close();
 				return "home";
 			} else {
-				addClaimClient.close();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -142,7 +142,7 @@ public class ClaimController implements Serializable {
 
 	public String updateClaim() {
 		try {
-			WebClient addClaimClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cls/claim/modify");
+			WebClient updateClaimClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cls/claim/modify");
 			ClaimMessage message = new ClaimMessage();
 			message.setClaimCrtdDt(claimBean.getClaimCrtdDt());
 			message.setClaimDesc(claimBean.getClaimDesc());
@@ -150,12 +150,12 @@ public class ClaimController implements Serializable {
 			message.setcStatusId(claimBean.getcStatusId());
 			message.setRewardsId(claimBean.getRewardsId());
 			message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
-			ResponseMessage response = addClaimClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
+			ResponseMessage response = updateClaimClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			if (response.getStatusCode() == 0) {
-				addClaimClient.close();
 				return "home";
 			} else {
-				addClaimClient.close();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -173,7 +173,6 @@ public class ClaimController implements Serializable {
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		for (UserMessage userMessage : users) {
 			UserBean bean = new UserBean();
-			bean.setAvatar(userMessage.getAvatar());
 			bean.setBio(userMessage.getBio());
 			bean.setContact(userMessage.getContact());
 			bean.seteMail(userMessage.geteMail());
@@ -253,12 +252,9 @@ public class ClaimController implements Serializable {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
 			bean.setrStatusId(message.getrStatusId());
-			bean.setRwBlob(message.getRwBlob());
 			bean.setRwCrtdDt(message.getRwCrtdDt());
 			bean.setRwDesc(message.getRwDesc());
 			bean.setRwExpiryDt(message.getRwExpiryDt());
-			bean.setRwFileName(message.getRwFileName());
-			bean.setRwFileType(message.getRwFileType());
 			bean.setRwHoverText(message.getRwHoverText());
 			bean.setRwId(message.getRwId());
 			bean.setRwLaunchDt(message.getRwLaunchDt());

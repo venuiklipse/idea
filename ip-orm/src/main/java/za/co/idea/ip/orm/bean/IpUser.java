@@ -1,6 +1,5 @@
 package za.co.idea.ip.orm.bean;
 
-import java.sql.Blob;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +25,6 @@ public class IpUser implements java.io.Serializable {
 	private String userBio;
 	private String userFbHandle;
 	private String userTwHandle;
-	private Blob userAvatar;
 	private String userStatus;
 	private IpLogin ipLogin;
 	private Set ipFunctionConfigs = new HashSet(0);
@@ -61,7 +59,7 @@ public class IpUser implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpUser(Long userId, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, Blob userAvatar, String userStatus, IpLogin ipLogin, Set ipFunctionConfigs, Set ipFunctions, Set ipGroups, Set ipTags, Set ipClaims, Set ipPointses, Set ipChallenges, Set ipIdeas, Set ipLogins, Set ipSolutions) {
+	public IpUser(Long userId, String userFName, String userLName, String userMName, Long userIdNum, String userScreenName, String userEmail, String userContact, String userSkills, String userBio, String userFbHandle, String userTwHandle, String userStatus, IpLogin ipLogin, Set ipFunctionConfigs, Set ipFunctions, Set ipGroups, Set ipTags, Set ipClaims, Set ipPointses, Set ipChallenges, Set ipIdeas, Set ipLogins, Set ipSolutions) {
 		this.userId = userId;
 		this.userFName = userFName;
 		this.userLName = userLName;
@@ -74,7 +72,6 @@ public class IpUser implements java.io.Serializable {
 		this.userBio = userBio;
 		this.userFbHandle = userFbHandle;
 		this.userTwHandle = userTwHandle;
-		this.userAvatar = userAvatar;
 		this.userStatus = userStatus;
 		this.ipLogin = ipLogin;
 		this.ipFunctionConfigs = ipFunctionConfigs;
@@ -184,14 +181,6 @@ public class IpUser implements java.io.Serializable {
 
 	public void setUserTwHandle(String userTwHandle) {
 		this.userTwHandle = userTwHandle;
-	}
-
-	public Blob getUserAvatar() {
-		return this.userAvatar;
-	}
-
-	public void setUserAvatar(Blob userAvatar) {
-		this.userAvatar = userAvatar;
 	}
 
 	public String getUserStatus() {

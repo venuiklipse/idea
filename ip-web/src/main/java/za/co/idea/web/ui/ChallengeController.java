@@ -11,7 +11,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
@@ -24,6 +23,12 @@ import org.primefaces.model.tagcloud.DefaultTagCloudItem;
 import org.primefaces.model.tagcloud.DefaultTagCloudModel;
 import org.primefaces.model.tagcloud.TagCloudModel;
 
+import za.co.idea.ip.jaxws.document.Document;
+import za.co.idea.ip.jaxws.document.DocumentService;
+import za.co.idea.ip.jaxws.document.DownloadDocumentRq;
+import za.co.idea.ip.jaxws.document.DownloadDocumentRs;
+import za.co.idea.ip.jaxws.document.UploadDocumentRq;
+import za.co.idea.ip.jaxws.document.UploadDocumentRs;
 import za.co.idea.ip.ws.bean.ChallengeMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
@@ -131,17 +136,29 @@ public class ChallengeController implements Serializable {
 			challengeCats = fetchAllChallengeCat();
 			admUsers = fetchAllUsers();
 			challengeStatuses = fetchAllChallengeStatuses();
-			if (challengeBean.getBlob() != null && challengeBean.getBlob().length() > 0) {
+			try {
+				DocumentService service = new DocumentService();
+				DownloadDocumentRq rq = new DownloadDocumentRq();
+				rq.setEntityId(challengeBean.getId().toString());
+				rq.setEntityTableName("ip_challenge");
+				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
+				if (Integer.parseInt(rs.getResponse().getRespCode()) == 0) {
+					fileAvail = true;
+					challengeBean.setFileName(rs.getFileName());
+					challengeBean.setContentType(rs.getContentType());
+					fileContent = new DefaultStreamedContent(new ByteArrayInputStream(rs.getFileContent()));
+				} else {
+					fileAvail = false;
+					fileContent = null;
+				}
+			} catch (Exception e) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = false;
-				fileContent = new DefaultStreamedContent(new ByteArrayInputStream(challengeBean.getBlob().getBytes()), challengeBean.getContentType(), challengeBean.getFileName());
-			} else {
-				fileAvail = true;
 				fileContent = null;
 			}
 			return "chalec";
 		} catch (Exception e) {
-			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -162,14 +179,11 @@ public class ChallengeController implements Serializable {
 		try {
 			WebClient addChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/add");
 			ChallengeMessage message = new ChallengeMessage();
-			message.setBlob(new String(Base64.encodeBase64URLSafe(challengeBean.getBlob().getBytes())));
 			message.setCatId(challengeBean.getCatId());
-			message.setContentType(challengeBean.getContentType());
 			message.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			message.setCrtdDt(new Date());
 			message.setDesc(challengeBean.getDesc());
 			message.setExprDt(challengeBean.getExprDt());
-			message.setFileName(challengeBean.getFileName());
 			message.setHoverText(challengeBean.getHoverText());
 			message.setId(COUNTER.getNextId("ip_challenge"));
 			message.setLaunchDt(challengeBean.getLaunchDt());
@@ -178,10 +192,29 @@ public class ChallengeController implements Serializable {
 			message.setTitle(challengeBean.getTitle());
 			ResponseMessage response = addChallengeClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			if (response.getStatusCode() == 0) {
-				addChallengeClient.close();
+				try {
+					Document document = new Document();
+					document.setContentType(challengeBean.getContentType());
+					document.setEntityId(message.getId().toString());
+					document.setEntityTableName("ip_challenge");
+					document.setFileContent(challengeBean.getBlob().getBytes());
+					document.setFileName(challengeBean.getFileName());
+					DocumentService service = new DocumentService();
+					UploadDocumentRq rq = new UploadDocumentRq();
+					rq.setDocument(document);
+					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+				} catch (Exception e) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
 				return "home";
 			} else {
-				addChallengeClient.close();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -197,14 +230,11 @@ public class ChallengeController implements Serializable {
 		try {
 			WebClient updateChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/modify");
 			ChallengeMessage message = new ChallengeMessage();
-			message.setBlob(new String(Base64.encodeBase64URLSafe(challengeBean.getBlob().getBytes())));
 			message.setCatId(challengeBean.getCatId());
-			message.setContentType(challengeBean.getContentType());
 			message.setCrtdById(challengeBean.getId());
 			message.setCrtdDt(challengeBean.getCrtdDt());
 			message.setDesc(challengeBean.getDesc());
 			message.setExprDt(challengeBean.getExprDt());
-			message.setFileName(challengeBean.getFileName());
 			message.setHoverText(challengeBean.getHoverText());
 			message.setId(challengeBean.getId());
 			message.setLaunchDt(challengeBean.getLaunchDt());
@@ -213,10 +243,29 @@ public class ChallengeController implements Serializable {
 			message.setTitle(challengeBean.getTitle());
 			ResponseMessage response = updateChallengeClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 			if (response.getStatusCode() == 0) {
-				updateChallengeClient.close();
+				try {
+					Document document = new Document();
+					document.setContentType(challengeBean.getContentType());
+					document.setEntityId(message.getId().toString());
+					document.setEntityTableName("ip_challenge");
+					document.setFileContent(challengeBean.getBlob().getBytes());
+					document.setFileName(challengeBean.getFileName());
+					DocumentService service = new DocumentService();
+					UploadDocumentRq rq = new UploadDocumentRq();
+					rq.setDocument(document);
+					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+				} catch (Exception e) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
 				return "home";
 			} else {
-				updateChallengeClient.close();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -336,11 +385,25 @@ public class ChallengeController implements Serializable {
 			viewChallenges = fetchAllChallenges();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
-			if (solutionBean.getBlob() != null && solutionBean.getBlob().length() > 0) {
+			try {
+				DocumentService service = new DocumentService();
+				DownloadDocumentRq rq = new DownloadDocumentRq();
+				rq.setEntityId(solutionBean.getId().toString());
+				rq.setEntityTableName("ip_solution");
+				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
+				if (Integer.parseInt(rs.getResponse().getRespCode()) == 0) {
+					fileAvail = true;
+					solutionBean.setFileName(rs.getFileName());
+					solutionBean.setContentType(rs.getContentType());
+					fileContent = new DefaultStreamedContent(new ByteArrayInputStream(rs.getFileContent()));
+				} else {
+					fileAvail = false;
+					fileContent = null;
+				}
+			} catch (Exception e) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = false;
-				fileContent = new DefaultStreamedContent(new ByteArrayInputStream(solutionBean.getBlob().getBytes()), solutionBean.getContentType(), solutionBean.getFileName());
-			} else {
-				fileAvail = true;
 				fileContent = null;
 			}
 			return "soles";
@@ -367,9 +430,6 @@ public class ChallengeController implements Serializable {
 		try {
 			WebClient addSolutionClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/add");
 			SolutionMessage message = new SolutionMessage();
-			message.setBlob(new String(Base64.encodeBase64URLSafe(solutionBean.getBlob().getBytes())));
-			message.setFileName(solutionBean.getFileName());
-			message.setContentType(solutionBean.getContentType());
 			message.setCatId(solutionBean.getCatId());
 			message.setChalId(solutionBean.getChalId());
 			message.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
@@ -381,10 +441,29 @@ public class ChallengeController implements Serializable {
 			message.setTitle(solutionBean.getTitle());
 			ResponseMessage response = addSolutionClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 			if (response.getStatusCode() == 0) {
-				addSolutionClient.close();
+				try {
+					Document document = new Document();
+					document.setContentType(solutionBean.getContentType());
+					document.setEntityId(message.getId().toString());
+					document.setEntityTableName("ip_solution");
+					document.setFileContent(solutionBean.getBlob().getBytes());
+					document.setFileName(solutionBean.getFileName());
+					DocumentService service = new DocumentService();
+					UploadDocumentRq rq = new UploadDocumentRq();
+					rq.setDocument(document);
+					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+				} catch (Exception e) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
 				return "home";
 			} else {
-				addSolutionClient.close();
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
 		} catch (Exception e) {
@@ -399,9 +478,6 @@ public class ChallengeController implements Serializable {
 	public String updateSolution() {
 		WebClient updateSolutionClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/modify");
 		SolutionMessage message = new SolutionMessage();
-		message.setBlob(new String(Base64.encodeBase64URLSafe(solutionBean.getBlob().getBytes())));
-		message.setFileName(solutionBean.getFileName());
-		message.setContentType(solutionBean.getContentType());
 		message.setCatId(solutionBean.getCatId());
 		message.setChalId(solutionBean.getChalId());
 		message.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
@@ -413,10 +489,29 @@ public class ChallengeController implements Serializable {
 		message.setTitle(solutionBean.getTitle());
 		ResponseMessage response = updateSolutionClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 		if (response.getStatusCode() == 0) {
-			updateSolutionClient.close();
+			try {
+				Document document = new Document();
+				document.setContentType(solutionBean.getContentType());
+				document.setEntityId(message.getId().toString());
+				document.setEntityTableName("ip_solution");
+				document.setFileContent(solutionBean.getBlob().getBytes());
+				document.setFileName(solutionBean.getFileName());
+				DocumentService service = new DocumentService();
+				UploadDocumentRq rq = new UploadDocumentRq();
+				rq.setDocument(document);
+				UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+				if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				}
+			} catch (Exception e) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			}
 			return "home";
 		} else {
-			updateSolutionClient.close();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
 		}
 	}
@@ -476,14 +571,11 @@ public class ChallengeController implements Serializable {
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		for (ChallengeMessage challengeMessage : challenges) {
 			ChallengeBean bean = new ChallengeBean();
-			bean.setBlob(new String(Base64.decodeBase64(challengeMessage.getBlob())));
 			bean.setCatId(challengeMessage.getCatId());
-			bean.setContentType(challengeMessage.getContentType());
 			bean.setCrtdById(challengeMessage.getId());
 			bean.setCrtdDt(challengeMessage.getCrtdDt());
 			bean.setDesc(challengeMessage.getDesc());
 			bean.setExprDt(challengeMessage.getExprDt());
-			bean.setFileName(challengeMessage.getFileName());
 			bean.setHoverText(challengeMessage.getHoverText());
 			bean.setId(challengeMessage.getId());
 			bean.setLaunchDt(challengeMessage.getLaunchDt());
@@ -502,14 +594,11 @@ public class ChallengeController implements Serializable {
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		for (ChallengeMessage challengeMessage : challenges) {
 			ChallengeBean bean = new ChallengeBean();
-			bean.setBlob(new String(Base64.decodeBase64(challengeMessage.getBlob())));
 			bean.setCatId(challengeMessage.getCatId());
-			bean.setContentType(challengeMessage.getContentType());
 			bean.setCrtdById(challengeMessage.getId());
 			bean.setCrtdDt(challengeMessage.getCrtdDt());
 			bean.setDesc(challengeMessage.getDesc());
 			bean.setExprDt(challengeMessage.getExprDt());
-			bean.setFileName(challengeMessage.getFileName());
 			bean.setHoverText(challengeMessage.getHoverText());
 			bean.setId(challengeMessage.getId());
 			bean.setLaunchDt(challengeMessage.getLaunchDt());
@@ -529,13 +618,10 @@ public class ChallengeController implements Serializable {
 		for (SolutionMessage solutionMessage : solutions) {
 			SolutionBean bean = new SolutionBean();
 			bean.setChalId(solutionMessage.getChalId());
-			bean.setBlob(new String(Base64.decodeBase64(solutionMessage.getBlob())));
 			bean.setCatId(solutionMessage.getCatId());
-			bean.setContentType(solutionMessage.getContentType());
 			bean.setCrtdById(solutionMessage.getId());
 			bean.setCrtdDt(solutionMessage.getCrtdDt());
 			bean.setDesc(solutionMessage.getDesc());
-			bean.setFileName(solutionMessage.getFileName());
 			bean.setId(solutionMessage.getId());
 			bean.setStatusId(solutionMessage.getStatusId());
 			bean.setTags(solutionMessage.getTags());
@@ -553,13 +639,10 @@ public class ChallengeController implements Serializable {
 		for (SolutionMessage solutionMessage : solutions) {
 			SolutionBean bean = new SolutionBean();
 			bean.setChalId(solutionMessage.getChalId());
-			bean.setBlob(new String(Base64.decodeBase64(solutionMessage.getBlob())));
 			bean.setCatId(solutionMessage.getCatId());
-			bean.setContentType(solutionMessage.getContentType());
 			bean.setCrtdById(solutionMessage.getId());
 			bean.setCrtdDt(solutionMessage.getCrtdDt());
 			bean.setDesc(solutionMessage.getDesc());
-			bean.setFileName(solutionMessage.getFileName());
 			bean.setId(solutionMessage.getId());
 			bean.setStatusId(solutionMessage.getStatusId());
 			bean.setTags(solutionMessage.getTags());
@@ -706,7 +789,6 @@ public class ChallengeController implements Serializable {
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		for (UserMessage userMessage : users) {
 			UserBean bean = new UserBean();
-			bean.setAvatar(userMessage.getAvatar());
 			bean.setBio(userMessage.getBio());
 			bean.setContact(userMessage.getContact());
 			bean.seteMail(userMessage.geteMail());
