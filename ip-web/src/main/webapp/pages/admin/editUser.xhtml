@@ -1,12 +1,12 @@
 <ui:composition template="/templates/layout.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="title">Edit User</ui:define>
 	<ui:define name="body">
-		<p:dialog id="dlgFBHelp" widgetVar="dlgFB" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true">
+		<p:dialog id="dlgFBHelp" widgetVar="dlgFB" resizable="false" dynamic="true" showEffect="explode" hideEffect="explode" position="10,100" appendToBody="true">
 			<p:panelGrid columns="2" style="margin-bottom:10px">
 				<p:graphicImage id="giFBHandle" name="fb_help.jpg" library="images" />
 			</p:panelGrid>
 		</p:dialog>
-		<p:dialog id="dlgTWHelp" widgetVar="dlgTW" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" position="10,100" appendToBody="true">
+		<p:dialog id="dlgTWHelp" widgetVar="dlgTW" resizable="false" dynamic="true" showEffect="explode" hideEffect="explode" position="10,100" appendToBody="true">
 			<p:panelGrid columns="2" style="margin-bottom:10px">
 				<p:graphicImage id="giTWHandle" name="tw_help.jpg" library="images" />
 			</p:panelGrid>
@@ -119,6 +119,7 @@
 				<p:row>
 					<p:column colspan="4" style="align: center;">
 						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.updateUser}" />
+						<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
 					</p:column>
 				</p:row>
 			</p:panelGrid>

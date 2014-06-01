@@ -1,5 +1,7 @@
 package za.co.idea.ip.orm.bean;
 
+import java.sql.Timestamp;
+
 /**
  * IpTag entity. @author MyEclipse Persistence Tools
  */
@@ -18,6 +20,7 @@ public class IpTag implements java.io.Serializable {
 	private IpTagType ipTagType;
 	private Long tagEntityId;
 	private String tagText;
+	private Timestamp tagDate;
 
 	// Constructors
 
@@ -34,13 +37,14 @@ public class IpTag implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public IpTag(Long tagId, IpUser ipUser, IpTagEntityType ipTagEntityType, IpTagType ipTagType, Long tagEntityId, String tagText) {
+	public IpTag(Long tagId, IpUser ipUser, IpTagEntityType ipTagEntityType, IpTagType ipTagType, Long tagEntityId, String tagText, Timestamp tagDate) {
 		this.tagId = tagId;
 		this.ipUser = ipUser;
 		this.ipTagEntityType = ipTagEntityType;
 		this.ipTagType = ipTagType;
 		this.tagEntityId = tagEntityId;
 		this.tagText = tagText;
+		this.tagDate = tagDate;
 	}
 
 	// Property accessors
@@ -91,6 +95,14 @@ public class IpTag implements java.io.Serializable {
 
 	public void setTagText(String tagText) {
 		this.tagText = tagText;
+	}
+
+	public Timestamp getTagDate() {
+		return tagDate;
+	}
+
+	public void setTagDate(Timestamp tagDate) {
+		this.tagDate = tagDate;
 	}
 
 }

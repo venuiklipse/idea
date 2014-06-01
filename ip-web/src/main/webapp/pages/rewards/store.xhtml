@@ -18,6 +18,9 @@
 						</p:commandButton>
 					</p:panelGrid>
 				</p:panel>
+				<f:facet name="footer">
+					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+				</f:facet>
 			</p:dataGrid>
 		</p:panel>
 	</ui:define>

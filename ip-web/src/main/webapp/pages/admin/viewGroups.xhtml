@@ -41,6 +41,9 @@
 						<f:setPropertyActionListener value="#{grp}" target="#{adminBean.groupBean}" />
 					</p:commandButton>
 				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+				</f:facet>
 			</p:dataTable>
 		</p:panel>
 	</ui:define>

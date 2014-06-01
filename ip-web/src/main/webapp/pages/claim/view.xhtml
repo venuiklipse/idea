@@ -31,6 +31,9 @@
 						<f:setPropertyActionListener value="#{claim}" target="#{claimBean.claimBean}" />
 					</p:commandButton>
 				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+				</f:facet>
 			</p:dataTable>
 		</p:panel>
 	</ui:define>

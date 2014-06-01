@@ -23,6 +23,9 @@
 		<property generated="never" lazy="false" name="tagText" type="java.lang.String">
 			<column length="1000" name="tag_text" />
 		</property>
+		<property generated="never" lazy="false" name="tagDate" type="java.sql.Timestamp">
+			<column length="19" name="tag_date" />
+		</property>
 	</class>
 	<sql-query name="getTagByFilterA">
 		select tag.* from ip_tag tag where tag.tag_type=:ttId and tag.tag_entity_type=:teId and tag.tag_entity_id=:entityId

@@ -28,6 +28,7 @@
 				</p:column>
 				<f:facet name="footer">
 					<p:commandButton id="addButton" value="Add" ajax="false" immediate="true" action="#{metaDataBean.showMetaDataAdd}" rendered="#{metaDataBean.showAddBtn}" />
+					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
 				</f:facet>
 			</p:dataTable>
 			<br />

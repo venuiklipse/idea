@@ -4,7 +4,7 @@
 		<p:panel id="ctrVWFunction">
 			<f:facet name="header">
 					View Function
-				</f:facet>
+			</f:facet>
 			<p:dataTable id="dtViewFunctions" value="#{adminBean.functions}" var="func" paginator="true" paginatorPosition="bottom" rows="20" emptyMessage="No Functions Found">
 				<p:column filterBy="#{func.funcId}" filterMatchMode="contains">
 					<f:facet name="header">Function Id</f:facet>
@@ -19,6 +19,9 @@
 						<f:setPropertyActionListener value="#{func}" target="#{adminBean.functionBean}" />
 					</p:commandButton>
 				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+				</f:facet>
 			</p:dataTable>
 		</p:panel>
 	</ui:define>

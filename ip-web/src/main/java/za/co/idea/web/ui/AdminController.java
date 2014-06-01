@@ -200,6 +200,10 @@ public class AdminController implements Serializable {
 		return "rpw";
 	}
 
+	public String redirectHome() {
+		return "home";
+	}
+
 	public String showEditUser() {
 		try {
 			userBean.setcPw(userBean.getPwd());

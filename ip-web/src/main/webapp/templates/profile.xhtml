@@ -1,5 +1,5 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui/extensions" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
-	<p:dialog id="dlgProfileImgUpload" widgetVar="dlgProfileImgUpload" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" appendToBody="@(body)" header="Update Profile Image">
+	<p:dialog id="dlgProfileImgUpload" widgetVar="dlgProfileImgUpload" resizable="false" dynamic="true" showEffect="explode" hideEffect="explode" appendToBody="@(body)" header="Update Profile Image">
 		<p:panelGrid columns="1">
 			<p:column>
 				<p:fileUpload auto="true" id="fuProfileImg" widgetVar="fuImg" fileUploadListener="#{adminBean.fileImageUploadHandle}" multiple="false" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
@@ -9,7 +9,7 @@
 			</p:column>
 		</p:panelGrid>
 	</p:dialog>
-	<p:dialog id="dlgProfileSecUpdate" widgetVar="dlgProfileSecUpdate" resizable="false" dynamic="true" showEffect="explode" hideEffect="bounce" appendToBody="@(body)" header="Update Security Question">
+	<p:dialog id="dlgProfileSecUpdate" widgetVar="dlgProfileSecUpdate" resizable="false" dynamic="true" showEffect="explode" hideEffect="explode" appendToBody="@(body)" header="Update Security Question">
 		<p:panelGrid columns="2">
 			<p:column>
 				<p:outputLabel id="lblProfileSecQ" value="Security Question : " />
@@ -53,6 +53,9 @@
 			</p:column>
 			<p:column>
 				<p:commandLink style="float: right !important;" id="lnkResetSec" value="Update Security Question" onclick="PF('dlgProfileSecUpdate').show()" />
+			</p:column>
+			<p:column>
+				<p:commandLink style="float: right !important;" id="lnkHome" value="Home" action="${adminBean.redirectHome}" />
 			</p:column>
 		</p:panelGrid>
 	</p:panel>

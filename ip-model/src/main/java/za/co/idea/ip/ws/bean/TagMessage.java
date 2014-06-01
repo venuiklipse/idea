@@ -1,5 +1,7 @@
 package za.co.idea.ip.ws.bean;
 
+import java.sql.Timestamp;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "tagMessage")
@@ -12,6 +14,7 @@ public class TagMessage {
 	private Long entityId;
 	private Long userId;
 	private Long tagId;
+	private Timestamp tagDate;
 	private boolean duplicate;
 
 	public String getUsrScreenName() {
@@ -84,5 +87,13 @@ public class TagMessage {
 
 	public void setDuplicate(boolean duplicate) {
 		this.duplicate = duplicate;
+	}
+
+	public Timestamp getTagDate() {
+		return tagDate;
+	}
+
+	public void setTagDate(Timestamp tagDate) {
+		this.tagDate = tagDate;
 	}
 }

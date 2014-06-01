@@ -28,26 +28,38 @@
 					<p:outputLabel id="lblISocial" value="Social : " />
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblLikeCnt" value="#{challengeBean.chalLikeCnt}" style="height:25px; width:25px;" />
-					<p:commandLink id="clChallengeLike" action="#{challengeBean.likeChallenge}" ajax="false" immediate="true">
-						<p:graphicImage id="giChallengeLike" name="like-128.png" library="images" height="25px" width="25px" />
-					</p:commandLink>
-					<p:outputLabel id="lblCommentCnt" value="#{challengeBean.chalCommentCnt}" style="height:25px; width:25px;" />
-					<p:commandLink id="clChallengeComment" action="#{challengeBean.showCommentChallenge}" ajax="false" immediate="true">
-						<p:graphicImage id="giChallengeComment" name="comment.jpg" library="images" height="25px" width="25px" />
-					</p:commandLink>
+					<p:panelGrid columns="2" style="border: 0px !important;">
+						<p:column>
+							<p:commandLink id="clChallengeLike" action="#{challengeBean.likeChallenge}" ajax="false" immediate="true">
+								<p:outputLabel id="lblLikeCnt" value="#{challengeBean.chalLikeCnt}" style="height:25px; width:25px;" />
+							</p:commandLink>
+						</p:column>
+						<p:column>
+							<p:commandLink id="clChallengeComment" action="#{challengeBean.showCommentChallenge}" ajax="false" immediate="true">
+								<p:outputLabel id="lblCommentCnt" value="#{challengeBean.chalCommentCnt}" style="height:25px; width:25px;" />
+							</p:commandLink>
+						</p:column>
+					</p:panelGrid>
 				</p:column>
+				<f:facet name="footer">
+					<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+				</f:facet>
 			</p:panelGrid>
-			<p:panelGrid id="pnlChallengeComment" rendered="#{challengeBean.showChallengeComments}">
+			<p:panelGrid id="pnlChallengeComment" rendered="#{challengeBean.showChallengeComments}" columns="1">
 				<p:column>
-					<p:dataTable id="dtViewComments" widgetVar="dtViewComments" value="#{challengeBean.chalComments}" var="comment" scrollable="true" scrollRows="5" emptyMessage="No Comments Found">
-						<p:column width="30%">
-							<p:outputLabel id="lblCommentBy" value="#{comment.usrScreenName}" />
-						</p:column>
-						<p:column width="70%">
-							<p:outputLabel id="lblCommentText" value="#{comment.tagText}" escape="false" />
-						</p:column>
-					</p:dataTable>
+					<p:dataGrid id="dtViewComments" widgetVar="dtViewComments" value="#{challengeBean.chalComments}" var="comment" columns="1" emptyMessage="No Comments Found">
+						<p:panel style="border: 0px !important;">
+							<f:facet name="header">
+								<p:outputLabel style="float: left !important" value="#{comment.usrScreenName}" />
+							</f:facet>
+							<f:facet name="footer">
+								<p:outputLabel style="float: right !important" value="#{comment.tagDate}" />
+							</f:facet>
+							<p:column>
+								<p:outputLabel value="#{comment.tagText}" />
+							</p:column>
+						</p:panel>
+					</p:dataGrid>
 				</p:column>
 				<p:column>
 					<p:editor id="edComment" value="#{challengeBean.commentText}" />
@@ -56,7 +68,7 @@
 					<p:commandButton id="btnSubmitComment" value="Post" action="#{challengeBean.commentChallenge}" ajax="false" />
 				</p:column>
 			</p:panelGrid>
-			<p:panelGrid id="pnlChallengeLikes" rendered="#{challengeBean.showChallengeLikes}">
+			<p:panelGrid id="pnlChallengeLikes" rendered="#{challengeBean.showChallengeLikes}" columns="1">
 				<p:tagCloud id="tgLikes" model="#{challengeBean.chalLikes}" />
 			</p:panelGrid>
 		</p:panel>

@@ -1,5 +1,6 @@
 package za.co.idea.ip.ws;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class TagService {
 				message.setUserFullName(ipTag.getIpUser().getUserFName() + " " + ((ipTag.getIpUser().getUserMName() != null && ipTag.getIpUser().getUserMName().length() > 0) ? (ipTag.getIpUser().getUserMName() + " ") : "") + ipTag.getIpUser().getUserLName());
 				message.setUserId(ipTag.getIpUser().getUserId());
 				message.setTagId(ipTag.getTagId());
+				message.setTagDate(ipTag.getTagDate());
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
@@ -74,6 +76,7 @@ public class TagService {
 				message.setUserFullName(ipTag.getIpUser().getUserFName() + " " + ((ipTag.getIpUser().getUserMName() != null && ipTag.getIpUser().getUserMName().length() > 0) ? (ipTag.getIpUser().getUserMName() + " ") : "") + ipTag.getIpUser().getUserLName());
 				message.setUserId(ipTag.getIpUser().getUserId());
 				message.setTagId(ipTag.getTagId());
+				message.setTagDate(ipTag.getTagDate());
 				ret.add((T) message);
 			}
 		} catch (Exception e) {
@@ -101,6 +104,7 @@ public class TagService {
 				ipTag.setTagEntityId(tag.getEntityId());
 				ipTag.setTagId(tag.getTagId());
 				ipTag.setTagText(tag.getTagText());
+				ipTag.setTagDate(new Timestamp(System.currentTimeMillis()));
 				ipTagDAO.save(ipTag);
 				ResponseMessage message = new ResponseMessage();
 				message.setStatusCode(0);

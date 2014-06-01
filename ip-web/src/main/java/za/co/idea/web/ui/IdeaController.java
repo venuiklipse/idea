@@ -147,9 +147,9 @@ public class IdeaController implements Serializable {
 		likes = fetchAllLikes();
 		comments = fetchAllComments();
 		buildOns = fetchAllBuildOns();
-		likeCnt = "(" + likes.getTags().size() + ")";
-		commentCnt = "(" + comments.size() + ")";
-		buildOnCnt = "(" + buildOns.size() + ")";
+		likeCnt = "(" + likes.getTags().size() + ") Likes	";
+		commentCnt = "(" + comments.size() + ") Comments	";
+		buildOnCnt = "(" + buildOns.size() + ") Build-Ons";
 		showIdeaComments = false;
 		showIdeaLikes = false;
 		showIdeaBuildOns = false;
@@ -185,7 +185,7 @@ public class IdeaController implements Serializable {
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
 		likes = fetchAllLikes();
-		likeCnt = "(" + likes.getTags().size() + ")";
+		likeCnt = "(" + likes.getTags().size() + ") Likes	";
 		showIdeaComments = false;
 		showIdeaLikes = true;
 		showIdeaBuildOns = false;
@@ -207,7 +207,7 @@ public class IdeaController implements Serializable {
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
 		comments = fetchAllComments();
-		commentCnt = "(" + comments.size() + ")";
+		commentCnt = "(" + comments.size() + ") Comments	";
 		commentText = "";
 		showIdeaComments = true;
 		showIdeaLikes = false;
@@ -230,7 +230,7 @@ public class IdeaController implements Serializable {
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Build-On", "Error While Saving Build-On"));
 		buildOns = fetchAllBuildOns();
-		buildOnCnt = "(" + buildOns.size() + ")";
+		buildOnCnt = "(" + buildOns.size() + ") Build-Ons";
 		buildOnText = "";
 		showIdeaComments = false;
 		showIdeaLikes = false;
@@ -372,6 +372,7 @@ public class IdeaController implements Serializable {
 			TagBean bean = new TagBean();
 			bean.setTagText(msg.getTagText());
 			bean.setUsrScreenName(msg.getUsrScreenName());
+			bean.setTagDate(msg.getTagDate());
 			ret.add(bean);
 		}
 		return ret;
@@ -386,6 +387,7 @@ public class IdeaController implements Serializable {
 			TagBean bean = new TagBean();
 			bean.setTagText(msg.getTagText());
 			bean.setUsrScreenName(msg.getUsrScreenName());
+			bean.setTagDate(msg.getTagDate());
 			ret.add(bean);
 		}
 		return ret;
