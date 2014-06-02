@@ -10,8 +10,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.primefaces.model.StreamedContent;
@@ -30,7 +28,6 @@ import za.co.idea.web.util.IdNumberGen;
 
 public class ClaimController implements Serializable {
 
-	private static final Log LOG = LogFactory.getLog(ClaimController.class);
 	private static final long serialVersionUID = 1568895653520394971L;
 	private ClaimBean claimBean;
 	private StreamedContent fileContent;
@@ -54,12 +51,11 @@ public class ClaimController implements Serializable {
 		try {
 			admUsers = fetchAllUsers();
 			claimStatus = fetchAllClaimStatuses();
-			viewRewardsBeans = fetchAllRewards();
+			viewRewardsBeans = fetchAllAvailableRewards();
 			claimBean = new ClaimBean();
 			return "clmcc";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -75,7 +71,6 @@ public class ClaimController implements Serializable {
 			return "clmvc";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -91,7 +86,6 @@ public class ClaimController implements Serializable {
 			return "clmuc";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -106,7 +100,6 @@ public class ClaimController implements Serializable {
 			return "clmec";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -119,13 +112,14 @@ public class ClaimController implements Serializable {
 			ClaimMessage message = new ClaimMessage();
 			message.setClaimCrtdDt(new Date());
 			message.setClaimDesc(claimBean.getClaimDesc());
-			message.setClaimId(COUNTER.getNextId("ip_claim"));
+			message.setClaimId(COUNTER.getNextId("IpClaim"));
 			message.setcStatusId(1);
 			message.setRewardsId(claimBean.getRewardsId());
 			message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			ResponseMessage response = addClaimClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+			addClaimClient.close();
 			if (response.getStatusCode() == 0) {
-				return "home";
+				return showViewClaim();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -133,7 +127,6 @@ public class ClaimController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -151,8 +144,9 @@ public class ClaimController implements Serializable {
 			message.setRewardsId(claimBean.getRewardsId());
 			message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			ResponseMessage response = updateClaimClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
+			updateClaimClient.close();
 			if (response.getStatusCode() == 0) {
-				return "home";
+				return showViewClaim();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -160,7 +154,6 @@ public class ClaimController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -171,6 +164,7 @@ public class ClaimController implements Serializable {
 		List<UserBean> ret = new ArrayList<UserBean>();
 		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/list");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
+		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
 			UserBean bean = new UserBean();
 			bean.setBio(userMessage.getBio());
@@ -198,6 +192,7 @@ public class ClaimController implements Serializable {
 		List<ClaimBean> ret = new ArrayList<ClaimBean>();
 		WebClient fetchClaimClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cls/claim/list");
 		Collection<? extends ClaimMessage> claims = new ArrayList<ClaimMessage>(fetchClaimClient.accept(MediaType.APPLICATION_JSON).getCollection(ClaimMessage.class));
+		fetchClaimClient.close();
 		for (ClaimMessage message : claims) {
 			ClaimBean bean = new ClaimBean();
 			bean.setClaimCrtdDt(message.getClaimCrtdDt());
@@ -216,6 +211,7 @@ public class ClaimController implements Serializable {
 		List<ClaimBean> ret = new ArrayList<ClaimBean>();
 		WebClient fetchClaimClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cls/claim/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends ClaimMessage> claims = new ArrayList<ClaimMessage>(fetchClaimClient.accept(MediaType.APPLICATION_JSON).getCollection(ClaimMessage.class));
+		fetchClaimClient.close();
 		for (ClaimMessage message : claims) {
 			ClaimBean bean = new ClaimBean();
 			bean.setClaimCrtdDt(message.getClaimCrtdDt());
@@ -234,6 +230,7 @@ public class ClaimController implements Serializable {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewClaimSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cls/claim/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewClaimSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewClaimSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
@@ -248,6 +245,7 @@ public class ClaimController implements Serializable {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewClaimSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cls/claim/status/list/" + claimBean.getcStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewClaimSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewClaimSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
@@ -262,6 +260,31 @@ public class ClaimController implements Serializable {
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
 		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/list");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
+		viewRewardsClient.close();
+		for (RewardsMessage message : rewards) {
+			RewardsBean bean = new RewardsBean();
+			bean.setrCatId(message.getrCatId());
+			bean.setrStatusId(message.getrStatusId());
+			bean.setRwCrtdDt(message.getRwCrtdDt());
+			bean.setRwDesc(message.getRwDesc());
+			bean.setRwExpiryDt(message.getRwExpiryDt());
+			bean.setRwHoverText(message.getRwHoverText());
+			bean.setRwId(message.getRwId());
+			bean.setRwLaunchDt(message.getRwLaunchDt());
+			bean.setRwStockCodeNum(message.getRwStockCodeNum());
+			bean.setRwTag(message.getRwTag());
+			bean.setRwTitle(message.getRwTitle());
+			bean.setRwValue(message.getRwValue());
+			ret.add(bean);
+		}
+		return ret;
+	}
+
+	private List<RewardsBean> fetchAllAvailableRewards() {
+		List<RewardsBean> ret = new ArrayList<RewardsBean>();
+		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/list/3");
+		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
+		viewRewardsClient.close();
 		for (RewardsMessage message : rewards) {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());

@@ -11,10 +11,12 @@ import za.co.idea.ip.ws.util.CustomObjectMapper;
 
 public class IdNumberGen {
 
-	public Long getNextId(String table) {
-		WebClient client = WebClient.create("http://127.0.0.1:38080/ip-ws/ip/as/gen/" + table, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+	public Long getNextId(String clazz) {
+		WebClient client = WebClient.create("http://127.0.0.1:38080/ip-ws/ip/as/gen/" + clazz, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
 		client.header("Content-Type", "application/json");
 		client.header("Accept", "application/json");
-		return client.accept(MediaType.APPLICATION_JSON).get(Long.class);
+		Long ret = client.accept(MediaType.APPLICATION_JSON).get(Long.class);
+		client.close();
+		return ret;
 	}
 }

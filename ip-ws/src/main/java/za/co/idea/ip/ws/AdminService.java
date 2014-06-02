@@ -19,14 +19,13 @@ import org.apache.commons.codec.digest.DigestUtils;
 import za.co.idea.ip.orm.bean.IpFunction;
 import za.co.idea.ip.orm.bean.IpFunctionConfig;
 import za.co.idea.ip.orm.bean.IpGroup;
-import za.co.idea.ip.orm.bean.IpKeys;
 import za.co.idea.ip.orm.bean.IpLogin;
 import za.co.idea.ip.orm.bean.IpUser;
 import za.co.idea.ip.orm.dao.IpFunctionConfigDAO;
 import za.co.idea.ip.orm.dao.IpFunctionDAO;
 import za.co.idea.ip.orm.dao.IpGroupDAO;
-import za.co.idea.ip.orm.dao.IpKeysDAO;
 import za.co.idea.ip.orm.dao.IpLoginDAO;
+import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
 import za.co.idea.ip.orm.dao.IpUserDAO;
 import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
@@ -41,7 +40,7 @@ public class AdminService {
 	private IpLoginDAO ipLoginDAO;
 	private IpFunctionDAO ipFunctionDAO;
 	private IpFunctionConfigDAO ipFunctionConfigDAO;
-	private IpKeysDAO ipKeysDAO;
+	private IpNativeSQLDAO ipNativeSQLDAO;
 
 	@POST
 	@Path("/group/add")
@@ -516,16 +515,14 @@ public class AdminService {
 	}
 
 	@GET
-	@Path("/gen/{table}")
+	@Path("/gen/{clazz}")
 	@Produces("application/json")
-	public Long getNextId(@PathParam("table") String table) {
-		List nextId = ipKeysDAO.findByTable(table);
+	public Long getNextId(@PathParam("clazz") String clazz) {
 		Long ret = -1l;
-		if (nextId != null && nextId.size() > 0) {
-			IpKeys ipKeys = (IpKeys) nextId.get(0);
-			ret = ipKeys.getVal();
-			ipKeys.setVal(ret + 1);
-			ipKeysDAO.merge(ipKeys);
+		try {
+			ret = ipNativeSQLDAO.getNextId(Class.forName("za.co.idea.ip.orm.bean." + clazz));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return ret;
 	}
@@ -642,11 +639,11 @@ public class AdminService {
 		this.ipFunctionConfigDAO = ipFunctionConfigDAO;
 	}
 
-	public IpKeysDAO getIpKeysDAO() {
-		return ipKeysDAO;
+	public IpNativeSQLDAO getIpNativeSQLDAO() {
+		return ipNativeSQLDAO;
 	}
 
-	public void setIpKeysDAO(IpKeysDAO ipKeysDAO) {
-		this.ipKeysDAO = ipKeysDAO;
+	public void setIpNativeSQLDAO(IpNativeSQLDAO ipNativeSQLDAO) {
+		this.ipNativeSQLDAO = ipNativeSQLDAO;
 	}
 }

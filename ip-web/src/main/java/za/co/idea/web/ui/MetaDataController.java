@@ -71,6 +71,7 @@ public class MetaDataController {
 		message.setId(bean.getId());
 		message.setTable(table);
 		ResponseMessage response = mDataClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
+		mDataClient.close();
 		if (response.getStatusCode() == 0) {
 			beans = fetchAllMetadata();
 			return "mdata";
@@ -91,6 +92,7 @@ public class MetaDataController {
 		message.setId(bean.getId());
 		message.setTable(table);
 		ResponseMessage response = mDataClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		mDataClient.close();
 		if (response.getStatusCode() == 0) {
 			beans = fetchAllMetadata();
 			return "mdata";
@@ -119,6 +121,7 @@ public class MetaDataController {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
 		WebClient mDataClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ms/list/" + table);
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		mDataClient.close();
 		for (MetaDataMessage message : messages) {
 			MetaDataBean bean = new MetaDataBean();
 			bean.setDesc(message.getDesc());
@@ -132,10 +135,10 @@ public class MetaDataController {
 	public HashMap<String, String> getMetaList() {
 		if (metaList == null) {
 			metaList = new HashMap<String, String>();
-			metaList.put("Challenge Category", "ip_challenge_cat");
-			metaList.put("Idea Category", "ip_idea_cat");
-			metaList.put("Rewards Category", "ip_rewards_cat");
-			metaList.put("Solution Category", "ip_solution_cat");
+			metaList.put("Challenge Category", "IpChallengeCat");
+			metaList.put("Idea Category", "IpIdeaCat");
+			metaList.put("Rewards Category", "IpRewardsCat");
+			metaList.put("Solution Category", "IpSolutionCat");
 		}
 		return metaList;
 	}

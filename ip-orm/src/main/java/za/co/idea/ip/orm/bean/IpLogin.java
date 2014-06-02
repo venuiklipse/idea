@@ -9,7 +9,6 @@ import java.sql.Timestamp;
 public class IpLogin implements java.io.Serializable {
 
 	// Fields
-
 	private static final long serialVersionUID = -8779292447681305257L;
 	private Long loginId;
 	private IpUser ipUser;

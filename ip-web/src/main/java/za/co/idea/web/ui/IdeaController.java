@@ -11,8 +11,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.primefaces.event.FileUploadEvent;
@@ -44,7 +42,6 @@ import za.co.idea.web.util.IdNumberGen;
 public class IdeaController implements Serializable {
 
 	private static final long serialVersionUID = -2647562847121760969L;
-	private static final Log LOG = LogFactory.getLog(IdeaController.class);
 	private IdeaBean ideaBean;
 	private List<UserBean> admUsers;
 	private List<ListSelectorBean> ideaCats;
@@ -84,7 +81,6 @@ public class IdeaController implements Serializable {
 			return "ideavi";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -100,7 +96,6 @@ public class IdeaController implements Serializable {
 			return "ideaui";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -128,6 +123,7 @@ public class IdeaController implements Serializable {
 					fileContent = null;
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = false;
@@ -136,7 +132,6 @@ public class IdeaController implements Serializable {
 			return "ideaei";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -176,12 +171,13 @@ public class IdeaController implements Serializable {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
-		message.setTagId(COUNTER.getNextId("ip_tag"));
+		message.setTagId(COUNTER.getNextId("IpTag"));
 		message.setTeId(1);
 		message.setTtId(1);
 		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 		message.setDuplicate(false);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		addTagClient.close();
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
 		likes = fetchAllLikes();
@@ -197,13 +193,14 @@ public class IdeaController implements Serializable {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
-		message.setTagId(COUNTER.getNextId("ip_tag"));
+		message.setTagId(COUNTER.getNextId("IpTag"));
 		message.setTagText(commentText);
 		message.setTeId(1);
 		message.setTtId(2);
 		message.setDuplicate(true);
 		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		addTagClient.close();
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
 		comments = fetchAllComments();
@@ -220,13 +217,14 @@ public class IdeaController implements Serializable {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(ideaBean.getIdeaId());
-		message.setTagId(COUNTER.getNextId("ip_tag"));
+		message.setTagId(COUNTER.getNextId("IpTag"));
 		message.setTagText(buildOnText);
 		message.setTeId(1);
 		message.setTtId(3);
 		message.setDuplicate(true);
 		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		addTagClient.close();
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Build-On", "Error While Saving Build-On"));
 		buildOns = fetchAllBuildOns();
@@ -248,7 +246,6 @@ public class IdeaController implements Serializable {
 			return "ideaci";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -264,11 +261,12 @@ public class IdeaController implements Serializable {
 			ideaMessage.setIdeaBa(ideaBean.getIdeaBa());
 			ideaMessage.setIdeaDesc(ideaBean.getIdeaDesc());
 			ideaMessage.setIdeaTag(ideaBean.getIdeaTag());
-			ideaMessage.setIdeaId(COUNTER.getNextId("ip_idea"));
+			ideaMessage.setIdeaId(COUNTER.getNextId("IpIdea"));
 			ideaMessage.setIdeaTitle(ideaBean.getIdeaTitle());
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setSetStatusId(1l);
 			ResponseMessage response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage, ResponseMessage.class);
+			addIdeaClient.close();
 			if (response.getStatusCode() == 0) {
 				try {
 					Document document = new Document();
@@ -286,10 +284,11 @@ public class IdeaController implements Serializable {
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
-				return "home";
+				return showViewIdeas();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -297,7 +296,6 @@ public class IdeaController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -318,6 +316,7 @@ public class IdeaController implements Serializable {
 			ideaMessage.setSelCatId(ideaBean.getSelCatId());
 			ideaMessage.setSetStatusId(ideaBean.getSetStatusId());
 			ResponseMessage response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage, ResponseMessage.class);
+			updateIdeaClient.close();
 			if (response.getStatusCode() == 0) {
 				try {
 					Document document = new Document();
@@ -335,10 +334,11 @@ public class IdeaController implements Serializable {
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
-				return "home";
+				return showViewIdeas();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -346,7 +346,6 @@ public class IdeaController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -357,9 +356,9 @@ public class IdeaController implements Serializable {
 		TagCloudModel likes = new DefaultTagCloudModel();
 		WebClient fetchIdeaLikesClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/get/" + ideaBean.getIdeaId() + "/1/1");
 		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchIdeaLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
+		fetchIdeaLikesClient.close();
 		for (TagMessage tagMessage : likeList)
 			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
-		fetchIdeaLikesClient.close();
 		return likes;
 	}
 
@@ -397,6 +396,7 @@ public class IdeaController implements Serializable {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/list");
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = new IdeaBean();
 			bean.setCrtdById(ideaMessage.getCrtdById());
@@ -410,7 +410,6 @@ public class IdeaController implements Serializable {
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
 			ret.add(bean);
 		}
-		fetchIdeaClient.close();
 		return ret;
 	}
 
@@ -418,6 +417,7 @@ public class IdeaController implements Serializable {
 		List<IdeaBean> ret = new ArrayList<IdeaBean>();
 		WebClient fetchIdeaClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends IdeaMessage> ideas = new ArrayList<IdeaMessage>(fetchIdeaClient.accept(MediaType.APPLICATION_JSON).getCollection(IdeaMessage.class));
+		fetchIdeaClient.close();
 		for (IdeaMessage ideaMessage : ideas) {
 			IdeaBean bean = new IdeaBean();
 			bean.setCrtdById(ideaMessage.getCrtdById());
@@ -431,7 +431,6 @@ public class IdeaController implements Serializable {
 			bean.setSetStatusId(ideaMessage.getSetStatusId());
 			ret.add(bean);
 		}
-		fetchIdeaClient.close();
 		return ret;
 	}
 
@@ -439,13 +438,13 @@ public class IdeaController implements Serializable {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewIdeaSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
-		viewIdeaSelectClient.close();
 		return ret;
 	}
 
@@ -453,13 +452,13 @@ public class IdeaController implements Serializable {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/status/list/" + ideaBean.getSetStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewIdeaSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
-		viewIdeaSelectClient.close();
 		return ret;
 	}
 
@@ -467,25 +466,25 @@ public class IdeaController implements Serializable {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewIdeaSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/is/idea/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewIdeaSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewIdeaSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
-		viewIdeaSelectClient.close();
 		return ret;
 	}
 
-	public void fileUploadHandle(FileUploadEvent e) {
+	public void fileUploadHandle(FileUploadEvent fue) {
 		try {
-			UploadedFile file = e.getFile();
+			UploadedFile file = fue.getFile();
 			this.ideaBean.setFileUpload(new String(file.getContents()));
 			this.ideaBean.setContentType(file.getContentType());
 			this.ideaBean.setFileName(file.getFileName());
-		} catch (Exception ex) {
-			LOG.error(ex, ex);
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), ex.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}
@@ -494,6 +493,7 @@ public class IdeaController implements Serializable {
 		List<UserBean> ret = new ArrayList<UserBean>();
 		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/list");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
+		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
 			UserBean bean = new UserBean();
 			bean.setBio(userMessage.getBio());
@@ -513,7 +513,6 @@ public class IdeaController implements Serializable {
 			bean.setuId(userMessage.getuId());
 			ret.add(bean);
 		}
-		viewUsersClient.close();
 		return ret;
 	}
 

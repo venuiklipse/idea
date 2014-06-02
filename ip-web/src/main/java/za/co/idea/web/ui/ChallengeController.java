@@ -11,8 +11,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.primefaces.event.FileUploadEvent;
@@ -46,7 +44,6 @@ import za.co.idea.web.util.IdNumberGen;
 public class ChallengeController implements Serializable {
 
 	private static final long serialVersionUID = -6939719926402016671L;
-	private static final Log LOG = LogFactory.getLog(ChallengeController.class);
 	private ChallengeBean challengeBean;
 	private SolutionBean solutionBean;
 	private List<ChallengeBean> viewChallenges;
@@ -92,7 +89,6 @@ public class ChallengeController implements Serializable {
 			return "chalcc";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -108,7 +104,6 @@ public class ChallengeController implements Serializable {
 			return "chalvc";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -124,7 +119,6 @@ public class ChallengeController implements Serializable {
 			return "chaluc";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -152,6 +146,7 @@ public class ChallengeController implements Serializable {
 					fileContent = null;
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = false;
@@ -159,6 +154,7 @@ public class ChallengeController implements Serializable {
 			}
 			return "chalec";
 		} catch (Exception e) {
+			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -185,12 +181,13 @@ public class ChallengeController implements Serializable {
 			message.setDesc(challengeBean.getDesc());
 			message.setExprDt(challengeBean.getExprDt());
 			message.setHoverText(challengeBean.getHoverText());
-			message.setId(COUNTER.getNextId("ip_challenge"));
+			message.setId(COUNTER.getNextId("IpChallenge"));
 			message.setLaunchDt(challengeBean.getLaunchDt());
 			message.setStatusId(1);
 			message.setTag(challengeBean.getTag());
 			message.setTitle(challengeBean.getTitle());
 			ResponseMessage response = addChallengeClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+			addChallengeClient.close();
 			if (response.getStatusCode() == 0) {
 				try {
 					Document document = new Document();
@@ -208,10 +205,11 @@ public class ChallengeController implements Serializable {
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
-				return "home";
+				return showViewChallenge();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -219,7 +217,6 @@ public class ChallengeController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -231,7 +228,7 @@ public class ChallengeController implements Serializable {
 			WebClient updateChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/modify");
 			ChallengeMessage message = new ChallengeMessage();
 			message.setCatId(challengeBean.getCatId());
-			message.setCrtdById(challengeBean.getId());
+			message.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			message.setCrtdDt(challengeBean.getCrtdDt());
 			message.setDesc(challengeBean.getDesc());
 			message.setExprDt(challengeBean.getExprDt());
@@ -242,6 +239,7 @@ public class ChallengeController implements Serializable {
 			message.setTag(challengeBean.getTag());
 			message.setTitle(challengeBean.getTitle());
 			ResponseMessage response = updateChallengeClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
+			updateChallengeClient.close();
 			if (response.getStatusCode() == 0) {
 				try {
 					Document document = new Document();
@@ -259,10 +257,11 @@ public class ChallengeController implements Serializable {
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
-				return "home";
+				return showViewChallenge();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -270,7 +269,6 @@ public class ChallengeController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -281,13 +279,14 @@ public class ChallengeController implements Serializable {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(challengeBean.getId());
-		message.setTagId(COUNTER.getNextId("ip_tag"));
+		message.setTagId(COUNTER.getNextId("IpTag"));
 		message.setTagText(commentText);
 		message.setTeId(2);
 		message.setTtId(2);
 		message.setDuplicate(true);
 		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		addTagClient.close();
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
 		chalComments = fetchAllChalComments();
@@ -295,7 +294,6 @@ public class ChallengeController implements Serializable {
 		commentText = "";
 		showChallengeComments = true;
 		showChallengeLikes = false;
-		addTagClient.close();
 		return "";
 	}
 
@@ -303,19 +301,19 @@ public class ChallengeController implements Serializable {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(challengeBean.getId());
-		message.setTagId(COUNTER.getNextId("ip_tag"));
+		message.setTagId(COUNTER.getNextId("IpTag"));
 		message.setTeId(2);
 		message.setTtId(1);
 		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 		message.setDuplicate(false);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		addTagClient.close();
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
 		chalLikes = fetchAllChalLikes();
 		chalLikeCnt = "(" + chalLikes.getTags().size() + ") Likes	";
 		showChallengeComments = false;
 		showChallengeLikes = true;
-		addTagClient.close();
 		return "";
 	}
 
@@ -329,14 +327,13 @@ public class ChallengeController implements Serializable {
 	public String showCreateSolution() {
 		try {
 			admUsers = fetchAllUsers();
-			viewChallenges = fetchAllChallenges();
+			viewChallenges = fetchAllAvailableChallenges();
 			solutionCats = fetchAllSolutionCat();
 			solutionStatuses = fetchAllSolutionStatuses();
 			solutionBean = new SolutionBean();
 			return "solcs";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -354,7 +351,6 @@ public class ChallengeController implements Serializable {
 			return "solvs";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -372,7 +368,6 @@ public class ChallengeController implements Serializable {
 			return "solus";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -401,6 +396,7 @@ public class ChallengeController implements Serializable {
 					fileContent = null;
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				fileAvail = false;
@@ -409,7 +405,6 @@ public class ChallengeController implements Serializable {
 			return "soles";
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -435,11 +430,12 @@ public class ChallengeController implements Serializable {
 			message.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			message.setCrtdDt(new Date());
 			message.setDesc(solutionBean.getDesc());
-			message.setId(COUNTER.getNextId("ip_solution"));
+			message.setId(COUNTER.getNextId("IpSolution"));
 			message.setStatusId(1);
 			message.setTags(solutionBean.getTags());
 			message.setTitle(solutionBean.getTitle());
 			ResponseMessage response = addSolutionClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+			addSolutionClient.close();
 			if (response.getStatusCode() == 0) {
 				try {
 					Document document = new Document();
@@ -457,10 +453,11 @@ public class ChallengeController implements Serializable {
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
 				} catch (Exception e) {
+					e.printStackTrace();
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
-				return "home";
+				return showViewSolution();
 			} else {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -468,7 +465,6 @@ public class ChallengeController implements Serializable {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			LOG.error(e, e);
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			return "";
@@ -488,6 +484,7 @@ public class ChallengeController implements Serializable {
 		message.setTags(solutionBean.getTags());
 		message.setTitle(solutionBean.getTitle());
 		ResponseMessage response = updateSolutionClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
+		updateSolutionClient.close();
 		if (response.getStatusCode() == 0) {
 			try {
 				Document document = new Document();
@@ -505,10 +502,11 @@ public class ChallengeController implements Serializable {
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			}
-			return "home";
+			return showViewSolution();
 		} else {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, response.getStatusDesc(), response.getStatusDesc());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -520,19 +518,19 @@ public class ChallengeController implements Serializable {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(solutionBean.getId());
-		message.setTagId(COUNTER.getNextId("ip_tag"));
+		message.setTagId(COUNTER.getNextId("IpTag"));
 		message.setTeId(3);
 		message.setTtId(1);
 		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 		message.setDuplicate(false);
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		addTagClient.close();
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
 		solLikes = fetchAllSolLikes();
 		solLikeCnt = "(" + solLikes.getTags().size() + ") Comments	";
 		showSolutionComments = false;
 		showSolutionLikes = true;
-		addTagClient.close();
 		return "";
 	}
 
@@ -540,13 +538,14 @@ public class ChallengeController implements Serializable {
 		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(solutionBean.getId());
-		message.setTagId(COUNTER.getNextId("ip_tag"));
+		message.setTagId(COUNTER.getNextId("IpTag"));
 		message.setTagText(commentText);
 		message.setTeId(3);
 		message.setTtId(2);
 		message.setDuplicate(true);
 		message.setUserId((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 		ResponseMessage response = addTagClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
+		addTagClient.close();
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
 		solComments = fetchAllSolComments();
@@ -554,7 +553,6 @@ public class ChallengeController implements Serializable {
 		commentText = "";
 		showSolutionComments = true;
 		showSolutionLikes = false;
-		addTagClient.close();
 		return "";
 	}
 
@@ -569,6 +567,7 @@ public class ChallengeController implements Serializable {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
 		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/list");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
+		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
 			ChallengeBean bean = new ChallengeBean();
 			bean.setCatId(challengeMessage.getCatId());
@@ -584,7 +583,29 @@ public class ChallengeController implements Serializable {
 			bean.setTitle(challengeMessage.getTitle());
 			ret.add(bean);
 		}
+		return ret;
+	}
+
+	private List<ChallengeBean> fetchAllAvailableChallenges() {
+		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
+		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/list//status/4");
+		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
+		for (ChallengeMessage challengeMessage : challenges) {
+			ChallengeBean bean = new ChallengeBean();
+			bean.setCatId(challengeMessage.getCatId());
+			bean.setCrtdById(challengeMessage.getId());
+			bean.setCrtdDt(challengeMessage.getCrtdDt());
+			bean.setDesc(challengeMessage.getDesc());
+			bean.setExprDt(challengeMessage.getExprDt());
+			bean.setHoverText(challengeMessage.getHoverText());
+			bean.setId(challengeMessage.getId());
+			bean.setLaunchDt(challengeMessage.getLaunchDt());
+			bean.setStatusId(challengeMessage.getStatusId());
+			bean.setTag(challengeMessage.getTag());
+			bean.setTitle(challengeMessage.getTitle());
+			ret.add(bean);
+		}
 		return ret;
 	}
 
@@ -592,6 +613,7 @@ public class ChallengeController implements Serializable {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
 		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
+		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
 			ChallengeBean bean = new ChallengeBean();
 			bean.setCatId(challengeMessage.getCatId());
@@ -607,7 +629,6 @@ public class ChallengeController implements Serializable {
 			bean.setTitle(challengeMessage.getTitle());
 			ret.add(bean);
 		}
-		fetchChallengeClient.close();
 		return ret;
 	}
 
@@ -615,6 +636,7 @@ public class ChallengeController implements Serializable {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/list");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
+		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
 			SolutionBean bean = new SolutionBean();
 			bean.setChalId(solutionMessage.getChalId());
@@ -628,7 +650,6 @@ public class ChallengeController implements Serializable {
 			bean.setTitle(solutionMessage.getTitle());
 			ret.add(bean);
 		}
-		fetchSolutionClient.close();
 		return ret;
 	}
 
@@ -636,6 +657,7 @@ public class ChallengeController implements Serializable {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
 		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
+		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
 			SolutionBean bean = new SolutionBean();
 			bean.setChalId(solutionMessage.getChalId());
@@ -649,32 +671,31 @@ public class ChallengeController implements Serializable {
 			bean.setTitle(solutionMessage.getTitle());
 			ret.add(bean);
 		}
-		fetchSolutionClient.close();
 		return ret;
 	}
 
-	public void chalFileUploadHandle(FileUploadEvent e) {
+	public void chalFileUploadHandle(FileUploadEvent fue) {
 		try {
-			UploadedFile file = e.getFile();
+			UploadedFile file = fue.getFile();
 			this.challengeBean.setBlob(new String(file.getContents()));
 			this.challengeBean.setContentType(file.getContentType());
 			this.challengeBean.setFileName(file.getFileName());
-		} catch (Exception ex) {
-			LOG.error(ex, ex);
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), ex.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}
 
-	public void solFileUploadHandle(FileUploadEvent e) {
+	public void solFileUploadHandle(FileUploadEvent fue) {
 		try {
-			UploadedFile file = e.getFile();
+			UploadedFile file = fue.getFile();
 			this.solutionBean.setBlob(new String(file.getContents()));
 			this.solutionBean.setContentType(file.getContentType());
 			this.solutionBean.setFileName(file.getFileName());
-		} catch (Exception ex) {
-			LOG.error(ex, ex);
-			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, ex.getMessage(), ex.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 		}
 	}
@@ -683,9 +704,9 @@ public class ChallengeController implements Serializable {
 		TagCloudModel likes = new DefaultTagCloudModel();
 		WebClient fetchChallengeLikesClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/get/" + challengeBean.getId() + "/2/1");
 		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchChallengeLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
+		fetchChallengeLikesClient.close();
 		for (TagMessage tagMessage : likeList)
 			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
-		fetchChallengeLikesClient.close();
 		return likes;
 	}
 
@@ -708,9 +729,9 @@ public class ChallengeController implements Serializable {
 		TagCloudModel likes = new DefaultTagCloudModel();
 		WebClient fetchSolutionLikesClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/1");
 		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchSolutionLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
+		fetchSolutionLikesClient.close();
 		for (TagMessage tagMessage : likeList)
 			likes.addTag(new DefaultTagCloudItem(tagMessage.getUsrScreenName(), 1));
-		fetchSolutionLikesClient.close();
 		return likes;
 	}
 
@@ -733,13 +754,13 @@ public class ChallengeController implements Serializable {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewChallengeSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
-		viewChallengeSelectClient.close();
 		return ret;
 	}
 
@@ -747,13 +768,13 @@ public class ChallengeController implements Serializable {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/status/list/" + challengeBean.getStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewChallengeSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
-		viewChallengeSelectClient.close();
 		return ret;
 	}
 
@@ -761,13 +782,13 @@ public class ChallengeController implements Serializable {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewChallengeSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
-		viewChallengeSelectClient.close();
 		return ret;
 	}
 
@@ -775,13 +796,13 @@ public class ChallengeController implements Serializable {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewSolutionSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
-		viewSolutionSelectClient.close();
 		return ret;
 	}
 
@@ -789,13 +810,13 @@ public class ChallengeController implements Serializable {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/status/list/" + solutionBean.getStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewSolutionSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
-		viewSolutionSelectClient.close();
 		return ret;
 	}
 
@@ -803,13 +824,13 @@ public class ChallengeController implements Serializable {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
 		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
+		viewSolutionSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
 			ListSelectorBean bean = new ListSelectorBean();
 			bean.setId(metaDataMessage.getId());
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
-		viewSolutionSelectClient.close();
 		return ret;
 	}
 
@@ -817,6 +838,7 @@ public class ChallengeController implements Serializable {
 		List<UserBean> ret = new ArrayList<UserBean>();
 		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/list");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
+		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
 			UserBean bean = new UserBean();
 			bean.setBio(userMessage.getBio());
@@ -836,7 +858,6 @@ public class ChallengeController implements Serializable {
 			bean.setuId(userMessage.getuId());
 			ret.add(bean);
 		}
-		viewUsersClient.close();
 		return ret;
 	}
 
@@ -1056,10 +1077,6 @@ public class ChallengeController implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-
-	public static Log getLog() {
-		return LOG;
 	}
 
 	public static IdNumberGen getCounter() {

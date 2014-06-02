@@ -309,7 +309,7 @@ public class MetaDataService {
 	@Consumes("application/json")
 	public <T extends MetaDataMessage> List<T> listByTable(@PathParam("table") String table) {
 		List<T> ret = new ArrayList<T>();
-		if (table.equalsIgnoreCase("ip_challenge_cat")) {
+		if (table.equalsIgnoreCase("IpChallengeCat")) {
 			List vals = ipChallengeCatDAO.findAll();
 			for (Object object : vals) {
 				MetaDataMessage message = new MetaDataMessage();
@@ -319,27 +319,7 @@ public class MetaDataService {
 				message.setTable("ip_challenge_cat");
 				ret.add((T) message);
 			}
-		} else if (table.equalsIgnoreCase("ip_challenge_status")) {
-			List vals = ipChallengeStatusDAO.findAll();
-			for (Object object : vals) {
-				MetaDataMessage message = new MetaDataMessage();
-				IpChallengeStatus status = (IpChallengeStatus) object;
-				message.setId(status.getCsId());
-				message.setDesc(status.getCsDesc());
-				message.setTable("ip_challenge_status");
-				ret.add((T) message);
-			}
-		} else if (table.equalsIgnoreCase("ip_claim_status")) {
-			List vals = ipClaimStatusDAO.findAll();
-			for (Object object : vals) {
-				MetaDataMessage message = new MetaDataMessage();
-				IpClaimStatus status = (IpClaimStatus) object;
-				message.setDesc(status.getCsDesc());
-				message.setId(status.getCsId());
-				message.setTable("ip_claim_status");
-				ret.add((T) message);
-			}
-		} else if (table.equalsIgnoreCase("ip_idea_cat")) {
+		} else if (table.equalsIgnoreCase("IpIdeaCat")) {
 			List vals = ipIdeaCatDAO.findAll();
 			for (Object object : vals) {
 				MetaDataMessage message = new MetaDataMessage();
@@ -349,17 +329,7 @@ public class MetaDataService {
 				message.setTable("ip_idea_cat");
 				ret.add((T) message);
 			}
-		} else if (table.equalsIgnoreCase("ip_idea_status")) {
-			List vals = ipIdeaStatusDAO.findAll();
-			for (Object object : vals) {
-				MetaDataMessage message = new MetaDataMessage();
-				IpIdeaStatus status = (IpIdeaStatus) object;
-				message.setDesc(status.getIsDesc());
-				message.setId(status.getIsId());
-				message.setTable("ip_idea_status");
-				ret.add((T) message);
-			}
-		} else if (table.equalsIgnoreCase("ip_rewards_cat")) {
+		} else if (table.equalsIgnoreCase("IpRewardsCat")) {
 			List vals = ipRewardsCatDAO.findAll();
 			for (Object object : vals) {
 				MetaDataMessage message = new MetaDataMessage();
@@ -369,17 +339,7 @@ public class MetaDataService {
 				message.setTable("ip_rewards_cat");
 				ret.add((T) message);
 			}
-		} else if (table.equalsIgnoreCase("ip_rewards_status")) {
-			List vals = ipRewardsStatusDAO.findAll();
-			for (Object object : vals) {
-				MetaDataMessage message = new MetaDataMessage();
-				IpRewardsStatus status = (IpRewardsStatus) object;
-				message.setDesc(status.getRsDesc());
-				message.setId(status.getRsId());
-				message.setTable("ip_rewards_status");
-				ret.add((T) message);
-			}
-		} else if (table.equalsIgnoreCase("ip_solution_cat")) {
+		} else if (table.equalsIgnoreCase("IpSolutionCat")) {
 			List vals = ipSolutionCatDAO.findAll();
 			for (Object object : vals) {
 				MetaDataMessage message = new MetaDataMessage();
@@ -387,16 +347,6 @@ public class MetaDataService {
 				message.setDesc(cat.getScDesc());
 				message.setId(cat.getScId());
 				message.setTable("ip_solution_cat");
-				ret.add((T) message);
-			}
-		} else if (table.equalsIgnoreCase("ip_solution_status")) {
-			List vals = ipSolutionStatusDAO.findAll();
-			for (Object object : vals) {
-				MetaDataMessage message = new MetaDataMessage();
-				IpSolutionStatus status = (IpSolutionStatus) object;
-				message.setDesc(status.getSsDesc());
-				message.setId(status.getSsId());
-				message.setTable("ip_solution_status");
 				ret.add((T) message);
 			}
 		}
