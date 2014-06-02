@@ -185,7 +185,6 @@ public class IdeaController implements Serializable {
 		showIdeaComments = false;
 		showIdeaLikes = true;
 		showIdeaBuildOns = false;
-		addTagClient.close();
 		return "";
 	}
 
@@ -209,7 +208,6 @@ public class IdeaController implements Serializable {
 		showIdeaComments = true;
 		showIdeaLikes = false;
 		showIdeaBuildOns = false;
-		addTagClient.close();
 		return "";
 	}
 
@@ -233,7 +231,6 @@ public class IdeaController implements Serializable {
 		showIdeaComments = false;
 		showIdeaLikes = false;
 		showIdeaBuildOns = true;
-		addTagClient.close();
 		return "";
 	}
 

@@ -55,6 +55,7 @@ public class DocumentPortImpl implements DocumentPort {
 			_return.setResponse(_returnResponse);
 			return _return;
 		} catch (java.lang.Exception ex) {
+			ex.printStackTrace();
 			_returnResponse.setRespCode("1");
 			_returnResponse.setRespDesc(ex.getMessage());
 			_return.setResponse(_returnResponse);
@@ -75,6 +76,7 @@ public class DocumentPortImpl implements DocumentPort {
 			_return.setResponse(_returnResponse);
 			return _return;
 		} catch (java.lang.Exception ex) {
+			ex.printStackTrace();
 			_returnResponse.setRespCode("1");
 			_returnResponse.setRespDesc(ex.getMessage());
 			_return.setResponse(_returnResponse);
@@ -83,8 +85,9 @@ public class DocumentPortImpl implements DocumentPort {
 	}
 
 	public za.co.idea.ip.jaxws.document.ListDocumentRs listDocument(ListDocumentRq param) {
+		za.co.idea.ip.jaxws.document.ListDocumentRs _return = new za.co.idea.ip.jaxws.document.ListDocumentRs();
+		za.co.idea.ip.jaxws.document.Response _returnResponse = new za.co.idea.ip.jaxws.document.Response();
 		try {
-			za.co.idea.ip.jaxws.document.ListDocumentRs _return = new za.co.idea.ip.jaxws.document.ListDocumentRs();
 			za.co.idea.ip.jaxws.document.Documents _returnDocuments = new za.co.idea.ip.jaxws.document.Documents();
 			java.util.List<za.co.idea.ip.jaxws.document.Document> _returnDocumentsDocument = new java.util.ArrayList<za.co.idea.ip.jaxws.document.Document>();
 			za.co.idea.ip.jaxws.document.Document _returnDocumentsDocumentVal1 = new za.co.idea.ip.jaxws.document.Document();
@@ -97,14 +100,16 @@ public class DocumentPortImpl implements DocumentPort {
 			_returnDocumentsDocument.add(_returnDocumentsDocumentVal1);
 			_returnDocuments.getDocument().addAll(_returnDocumentsDocument);
 			_return.setDocuments(_returnDocuments);
-			za.co.idea.ip.jaxws.document.Response _returnResponse = new za.co.idea.ip.jaxws.document.Response();
 			_returnResponse.setRespCode("0");
 			_returnResponse.setRespDesc("Success");
 			_return.setResponse(_returnResponse);
 			return _return;
 		} catch (java.lang.Exception ex) {
 			ex.printStackTrace();
-			throw new RuntimeException(ex);
+			_returnResponse.setRespCode("1");
+			_returnResponse.setRespDesc(ex.getMessage());
+			_return.setResponse(_returnResponse);
+			return _return;
 		}
 	}
 

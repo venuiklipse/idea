@@ -184,7 +184,6 @@ public class ClaimController implements Serializable {
 			bean.setuId(userMessage.getuId());
 			ret.add(bean);
 		}
-		viewUsersClient.close();
 		return ret;
 	}
 
@@ -203,7 +202,6 @@ public class ClaimController implements Serializable {
 			bean.setUserId(message.getUserId());
 			ret.add(bean);
 		}
-		fetchClaimClient.close();
 		return ret;
 	}
 
@@ -222,7 +220,6 @@ public class ClaimController implements Serializable {
 			bean.setUserId(message.getUserId());
 			ret.add(bean);
 		}
-		fetchClaimClient.close();
 		return ret;
 	}
 
@@ -237,7 +234,6 @@ public class ClaimController implements Serializable {
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
-		viewClaimSelectClient.close();
 		return ret;
 	}
 
@@ -252,7 +248,6 @@ public class ClaimController implements Serializable {
 			bean.setDesc(metaDataMessage.getDesc());
 			ret.add(bean);
 		}
-		viewClaimSelectClient.close();
 		return ret;
 	}
 

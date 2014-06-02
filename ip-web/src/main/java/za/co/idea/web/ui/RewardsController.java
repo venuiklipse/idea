@@ -282,7 +282,6 @@ public class RewardsController implements Serializable {
 			bean.setuId(userMessage.getuId());
 			ret.add(bean);
 		}
-		viewUsersClient.close();
 		return ret;
 	}
 
@@ -299,7 +298,6 @@ public class RewardsController implements Serializable {
 		addTagClient.close();
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
-		addTagClient.close();
 		return "";
 	}
 

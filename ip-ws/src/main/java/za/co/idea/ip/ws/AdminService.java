@@ -253,6 +253,7 @@ public class AdminService {
 			try {
 				ipLoginDAO.save(ipLogin);
 			} catch (Exception e) {
+				e.printStackTrace();
 				ipUserDAO.delete(ipUser);
 				throw new RuntimeException("Cannot create user :: " + e.getMessage());
 			}
@@ -377,6 +378,7 @@ public class AdminService {
 			try {
 				ipLoginDAO.merge(ipLogin);
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
 			}
 			ResponseMessage message = new ResponseMessage();
@@ -466,6 +468,7 @@ public class AdminService {
 			try {
 				ipLoginDAO.updatePassword(param[0], param[1]);
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
 			}
 			ResponseMessage message = new ResponseMessage();
@@ -490,6 +493,7 @@ public class AdminService {
 			try {
 				ipLoginDAO.updateSecurity(param[0], param[1], Base64.encodeBase64URLSafeString(DigestUtils.md5(param[2].getBytes())));
 			} catch (Exception e) {
+				e.printStackTrace();
 				throw new RuntimeException("Cannot merge login :: " + e.getMessage());
 			}
 			ResponseMessage message = new ResponseMessage();
