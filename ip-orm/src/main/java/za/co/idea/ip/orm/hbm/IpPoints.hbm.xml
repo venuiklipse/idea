@@ -10,10 +10,10 @@
             <column name="point_id" />
             <generator class="assigned" />
         </id>
-        <many-to-one name="ipAllocation" class="za.co.idea.ip.orm.bean.IpAllocation" fetch="select">
+        <many-to-one name="ipAllocation" class="za.co.idea.ip.orm.bean.IpAllocation"  fetch="select" lazy="proxy">
             <column name="alloc_id" />
         </many-to-one>
-        <many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser" fetch="select">
+        <many-to-one name="ipUser" class="za.co.idea.ip.orm.bean.IpUser"  fetch="select" lazy="proxy">
             <column name="user_id" />
         </many-to-one>
         <property name="pointValue" type="java.lang.Integer">

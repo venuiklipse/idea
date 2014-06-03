@@ -2,11 +2,12 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
-import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpKeys;
 
@@ -22,74 +23,94 @@ import za.co.idea.ip.orm.bean.IpKeys;
  * @author MyEclipse Persistence Tools
  */
 @SuppressWarnings("rawtypes")
-public class IpKeysDAO extends HibernateDaoSupport {
+public class IpKeysDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory.getLogger(IpKeysDAO.class);
 	// property constants
-	public static final String TABLE = "table";
+	public static final String TABLE_NM = "tableNm";
 	public static final String VAL = "val";
-
-	protected void initDao() {
-		// do nothing
-	}
 
 	public void save(IpKeys transientInstance) {
 		log.debug("saving IpKeys instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().save(transientInstance);
+			session.save(transientInstance);
+			transaction.commit();
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public void delete(IpKeys persistentInstance) {
 		log.debug("deleting IpKeys instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			session.delete(persistentInstance);
+			transaction.commit();
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public IpKeys findById(java.lang.Integer id) {
 		log.debug("getting IpKeys instance with id: " + id);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			IpKeys instance = (IpKeys) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpKeys", id);
+			IpKeys instance = (IpKeys) session.get("za.co.idea.ip.orm.bean.IpKeys", id);
+			transaction.commit();
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public List findByExample(IpKeys instance) {
 		log.debug("finding IpKeys instance by example");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpKeys").add(Example.create(instance)).list();
+			transaction.commit();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpKeys instance with property: " + propertyName + ", value: " + value);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpKeys as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = session.createQuery(queryString);
+			queryObject.setParameter(0, value);
+			List results = queryObject.list();
+			transaction.commit();
+			return results;
+
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
-	public List findByTable(Object table) {
-		return findByProperty(TABLE, table);
+	public List findByTableNm(Object tableNm) {
+		return findByProperty(TABLE_NM, tableNm);
 	}
 
 	public List findByVal(Object val) {
@@ -98,50 +119,51 @@ public class IpKeysDAO extends HibernateDaoSupport {
 
 	public List findAll() {
 		log.debug("finding all IpKeys instances");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpKeys";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = session.createQuery(queryString);
+			List results = queryObject.list();
+			transaction.commit();
+			return results;
+
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public IpKeys merge(IpKeys detachedInstance) {
 		log.debug("merging IpKeys instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			IpKeys result = (IpKeys) getHibernateTemplate().merge(detachedInstance);
+			IpKeys result = (IpKeys) session.merge(detachedInstance);
+			transaction.commit();
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpKeys instance) {
 		log.debug("attaching dirty IpKeys instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			session.saveOrUpdate(instance);
+			transaction.commit();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
-	public void attachClean(IpKeys instance) {
-		log.debug("attaching clean IpKeys instance");
-		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
-			log.debug("attach successful");
-		} catch (RuntimeException re) {
-			log.error("attach failed", re);
-			throw re;
-		}
-	}
-
-	public static IpKeysDAO getFromApplicationContext(ApplicationContext ctx) {
-		return (IpKeysDAO) ctx.getBean("IpKeysDAO");
-	}
 }

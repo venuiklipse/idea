@@ -2,7 +2,6 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -10,30 +9,29 @@ import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import za.co.idea.ip.orm.bean.IpIdea;
+import za.co.idea.ip.orm.bean.IpStateTran;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * IpIdea entities. Transaction control of the save(), update() and delete()
- * operations can directly support Spring container-managed transactions or they
- * can be augmented to handle user-managed Spring transactions. Each of these
- * methods provides additional information for how to configure it for the
- * desired type of transaction control.
+ * IpStateTran entities. Transaction control of the save(), update() and
+ * delete() operations can directly support Spring container-managed
+ * transactions or they can be augmented to handle user-managed Spring
+ * transactions. Each of these methods provides additional information for how
+ * to configure it for the desired type of transaction control.
  * 
- * @see za.co.idea.ip.orm.bean.IpIdea
+ * @see za.co.idea.ip.orm.bean.IpStateTran
  * @author MyEclipse Persistence Tools
  */
 @SuppressWarnings("rawtypes")
-public class IpIdeaDAO extends BaseHibernateDAO {
-	private static final Logger log = LoggerFactory.getLogger(IpIdeaDAO.class);
+public class IpStateTranDAO extends BaseHibernateDAO {
+	private static final Logger log = LoggerFactory.getLogger(IpStateTranDAO.class);
 	// property constants
-	public static final String IDEA_TITLE = "ideaTitle";
-	public static final String IDEA_DESC = "ideaDesc";
-	public static final String IDEA_BA = "ideaBa";
-	public static final String IDEA_TAG = "ideaTag";
+	public static final String TRAN_ENTITY = "tranEntity";
+	public static final String TRAN_CURR_STATE = "tranCurrState";
+	public static final String TRAN_NEXT_STATE = "tranNextState";
 
-	public void save(IpIdea transientInstance) {
-		log.debug("saving IpIdea instance");
+	public void save(IpStateTran transientInstance) {
+		log.debug("saving IpStateTran instance");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -47,8 +45,8 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void delete(IpIdea persistentInstance) {
-		log.debug("deleting IpIdea instance");
+	public void delete(IpStateTran persistentInstance) {
+		log.debug("deleting IpStateTran instance");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -62,12 +60,12 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public IpIdea findById(java.lang.Long id) {
-		log.debug("getting IpIdea instance with id: " + id);
+	public IpStateTran findById(java.lang.Integer id) {
+		log.debug("getting IpStateTran instance with id: " + id);
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			IpIdea instance = (IpIdea) session.get("za.co.idea.ip.orm.bean.IpIdea", id);
+			IpStateTran instance = (IpStateTran) session.get("za.co.idea.ip.orm.bean.IpStateTran", id);
 			transaction.commit();
 			return instance;
 		} catch (RuntimeException re) {
@@ -77,14 +75,14 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List findByExample(IpIdea instance) {
-		log.debug("finding IpIdea instance by example");
+	public List findByExample(IpStateTran instance) {
+		log.debug("finding IpStateTran instance by example");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpIdea").add(Example.create(instance)).list();
-			transaction.commit();
+			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpStateTran").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
+			transaction.commit();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
@@ -94,17 +92,16 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding IpIdea instance with property: " + propertyName + ", value: " + value);
+		log.debug("finding IpStateTran instance with property: " + propertyName + ", value: " + value);
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			String queryString = "from IpIdea as model where model." + propertyName + "= ?";
+			String queryString = "from IpStateTran as model where model." + propertyName + "= ?";
 			Query queryObject = session.createQuery(queryString);
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
 			transaction.commit();
 			return results;
-
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			transaction.rollback();
@@ -112,33 +109,28 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List findByIdeaTitle(Object ideaTitle) {
-		return findByProperty(IDEA_TITLE, ideaTitle);
+	public List findByTranEntity(Object tranEntity) {
+		return findByProperty(TRAN_ENTITY, tranEntity);
 	}
 
-	public List findByIdeaDesc(Object ideaDesc) {
-		return findByProperty(IDEA_DESC, ideaDesc);
+	public List findByTranCurrState(Object tranCurrState) {
+		return findByProperty(TRAN_CURR_STATE, tranCurrState);
 	}
 
-	public List findByIdeaBa(Object ideaBa) {
-		return findByProperty(IDEA_BA, ideaBa);
-	}
-
-	public List findByIdeaTag(Object ideaTag) {
-		return findByProperty(IDEA_TAG, ideaTag);
+	public List findByTranNextState(Object tranNextState) {
+		return findByProperty(TRAN_NEXT_STATE, tranNextState);
 	}
 
 	public List findAll() {
-		log.debug("finding all IpIdea instances");
+		log.debug("finding all IpStateTran instances");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			String queryString = "from IpIdea";
+			String queryString = "from IpStateTran";
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
 			transaction.commit();
 			return results;
-
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			transaction.rollback();
@@ -146,14 +138,14 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public IpIdea merge(IpIdea detachedInstance) {
-		log.debug("merging IpIdea instance");
+	public IpStateTran merge(IpStateTran detachedInstance) {
+		log.debug("merging IpStateTran instance");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
-			IpIdea result = (IpIdea) session.merge(detachedInstance);
-			transaction.commit();
+			IpStateTran result = (IpStateTran) session.merge(detachedInstance);
 			log.debug("merge successful");
+			transaction.commit();
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
@@ -162,8 +154,8 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void attachDirty(IpIdea instance) {
-		log.debug("attaching dirty IpIdea instance");
+	public void attachDirty(IpStateTran instance) {
+		log.debug("attaching dirty IpStateTran instance");
 		Session session = getSession();
 		Transaction transaction = session.beginTransaction();
 		try {
@@ -173,27 +165,6 @@ public class IpIdeaDAO extends BaseHibernateDAO {
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			transaction.rollback();
-			throw re;
-		}
-	}
-
-	public List findByUserId(Long id) {
-		log.debug("finding IpIdea instances by user id :: " + id);
-		Session session = getSession();
-		try {
-			Query query = session.getNamedQuery("getIdeaByUser");
-			query.setLong("id", id);
-			List ret = query.list();
-			for (Object object : ret) {
-				IpIdea idea = (IpIdea) object;
-				Hibernate.initialize(idea.getIpIdeaCat());
-				Hibernate.initialize(idea.getIpIdeaStatus());
-				Hibernate.initialize(idea.getIpUser());
-			}
-			session.close();
-			return ret;
-		} catch (RuntimeException re) {
-			log.error("find all failed", re);
 			throw re;
 		}
 	}

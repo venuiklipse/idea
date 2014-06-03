@@ -1,7 +1,7 @@
 #MyEclipse Hibernate Properties
-#Tue Jun 03 11:03:33 SAST 2014
+#Tue Jun 03 20:41:24 SAST 2014
 genBasicCompId=false
-sessionFactoryName=
+sessionFactoryName=za.co.idea.ip.orm.bean.HibernateSessionFactory
 profile=
 daoSFId=
 jndiPath=
@@ -18,3 +18,4 @@ genAnnotations=false
 reSettingsFile=
 configFile=/ip-orm/src/main/resources/hibernate.cfg.xml
 createConfigFile=true
+baseDaoClass=za.co.idea.ip.orm.dao.BaseHibernateDAO

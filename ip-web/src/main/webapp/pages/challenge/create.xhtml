@@ -37,13 +37,15 @@
 					<p:outputLabel id="lblCLaunchDt" value="Launch Date : " />
 				</p:column>
 				<p:column>
-					<p:calendar id="txtCLaunchDt" value="#{challengeBean.challengeBean.launchDt}" />
+					<p:calendar id="txtCLaunchDt" value="#{challengeBean.challengeBean.launchDt}" pattern="MM/dd/yyyy HH:mm">
+						<p:ajax event="blur" update="txtCExpiryDt" />
+					</p:calendar>
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblCExpiryDt" value="Expiry Date : " />
 				</p:column>
 				<p:column>
-					<p:calendar id="txtCExpiryDt" value="#{challengeBean.challengeBean.exprDt}" />
+					<p:calendar id="txtCExpiryDt" value="#{challengeBean.challengeBean.exprDt}" pattern="MM/dd/yyyy HH:mm" mindate="#{challengeBean.challengeBean.launchDt}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblCTag" value="Tags : " />

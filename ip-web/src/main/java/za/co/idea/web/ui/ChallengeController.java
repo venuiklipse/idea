@@ -68,6 +68,7 @@ public class ChallengeController implements Serializable {
 	private boolean showChallengeLikes;
 	private boolean showSolutionComments;
 	private boolean showSolutionLikes;
+	private Date selLaunchDate;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -173,7 +174,7 @@ public class ChallengeController implements Serializable {
 
 	public String saveChallenge() {
 		try {
-			WebClient addChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/add");
+			WebClient addChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/add");
 			ChallengeMessage message = new ChallengeMessage();
 			message.setCatId(challengeBean.getCatId());
 			message.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
@@ -225,7 +226,7 @@ public class ChallengeController implements Serializable {
 
 	public String updateChallenge() {
 		try {
-			WebClient updateChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/modify");
+			WebClient updateChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/modify");
 			ChallengeMessage message = new ChallengeMessage();
 			message.setCatId(challengeBean.getCatId());
 			message.setCrtdById((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
@@ -276,7 +277,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String commentChallenge() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(challengeBean.getId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -298,7 +299,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String likeChallenge() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(challengeBean.getId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -423,7 +424,7 @@ public class ChallengeController implements Serializable {
 
 	public String saveSolution() {
 		try {
-			WebClient addSolutionClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/add");
+			WebClient addSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/add");
 			SolutionMessage message = new SolutionMessage();
 			message.setCatId(solutionBean.getCatId());
 			message.setChalId(solutionBean.getChalId());
@@ -472,7 +473,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String updateSolution() {
-		WebClient updateSolutionClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/modify");
+		WebClient updateSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/modify");
 		SolutionMessage message = new SolutionMessage();
 		message.setCatId(solutionBean.getCatId());
 		message.setChalId(solutionBean.getChalId());
@@ -515,7 +516,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String likeSolution() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(solutionBean.getId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -535,7 +536,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	public String commentSolution() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(solutionBean.getId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -565,7 +566,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ChallengeBean> fetchAllChallenges() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/list");
+		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -588,7 +589,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ChallengeBean> fetchAllAvailableChallenges() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/list//status/4");
+		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list//status/4");
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -611,7 +612,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ChallengeBean> fetchAllChallengesByUser() {
 		List<ChallengeBean> ret = new ArrayList<ChallengeBean>();
-		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchChallengeClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends ChallengeMessage> challenges = new ArrayList<ChallengeMessage>(fetchChallengeClient.accept(MediaType.APPLICATION_JSON).getCollection(ChallengeMessage.class));
 		fetchChallengeClient.close();
 		for (ChallengeMessage challengeMessage : challenges) {
@@ -634,7 +635,7 @@ public class ChallengeController implements Serializable {
 
 	private List<SolutionBean> fetchAllSolutions() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/list");
+		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list");
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -655,7 +656,7 @@ public class ChallengeController implements Serializable {
 
 	private List<SolutionBean> fetchAllSolutionsByUser() {
 		List<SolutionBean> ret = new ArrayList<SolutionBean>();
-		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient fetchSolutionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends SolutionMessage> solutions = new ArrayList<SolutionMessage>(fetchSolutionClient.accept(MediaType.APPLICATION_JSON).getCollection(SolutionMessage.class));
 		fetchSolutionClient.close();
 		for (SolutionMessage solutionMessage : solutions) {
@@ -702,7 +703,7 @@ public class ChallengeController implements Serializable {
 
 	private TagCloudModel fetchAllChalLikes() {
 		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchChallengeLikesClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/get/" + challengeBean.getId() + "/2/1");
+		WebClient fetchChallengeLikesClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + challengeBean.getId() + "/2/1");
 		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchChallengeLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchChallengeLikesClient.close();
 		for (TagMessage tagMessage : likeList)
@@ -711,7 +712,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllChalComments() {
-		WebClient fetchChallengeCommentsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/get/" + challengeBean.getId() + "/2/2");
+		WebClient fetchChallengeCommentsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + challengeBean.getId() + "/2/2");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchChallengeCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchChallengeCommentsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
@@ -727,7 +728,7 @@ public class ChallengeController implements Serializable {
 
 	private TagCloudModel fetchAllSolLikes() {
 		TagCloudModel likes = new DefaultTagCloudModel();
-		WebClient fetchSolutionLikesClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/1");
+		WebClient fetchSolutionLikesClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/1");
 		Collection<? extends TagMessage> likeList = new ArrayList<TagMessage>(fetchSolutionLikesClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchSolutionLikesClient.close();
 		for (TagMessage tagMessage : likeList)
@@ -736,7 +737,7 @@ public class ChallengeController implements Serializable {
 	}
 
 	private List<TagBean> fetchAllSolComments() {
-		WebClient fetchSolutionCommentsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/2");
+		WebClient fetchSolutionCommentsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/get/" + solutionBean.getId() + "/3/2");
 		Collection<? extends TagMessage> msgs = new ArrayList<TagMessage>(fetchSolutionCommentsClient.accept(MediaType.APPLICATION_JSON).getCollection(TagMessage.class));
 		fetchSolutionCommentsClient.close();
 		List<TagBean> ret = new ArrayList<TagBean>();
@@ -752,7 +753,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllChallengeStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/status/list");
+		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewChallengeSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -766,7 +767,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ListSelectorBean> fetchNextChallengeStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/status/list/" + challengeBean.getStatusId());
+		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/status/list/" + challengeBean.getStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewChallengeSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -780,7 +781,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllChallengeCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/cs/challenge/cat/list");
+		WebClient viewChallengeSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/cs/challenge/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewChallengeSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewChallengeSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -794,7 +795,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllSolutionStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/status/list");
+		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewSolutionSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -808,7 +809,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ListSelectorBean> fetchNextSolutionStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/status/list/" + solutionBean.getStatusId());
+		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/status/list/" + solutionBean.getStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewSolutionSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -822,7 +823,7 @@ public class ChallengeController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllSolutionCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ss/solution/cat/list");
+		WebClient viewSolutionSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ss/solution/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewSolutionSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewSolutionSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -836,7 +837,7 @@ public class ChallengeController implements Serializable {
 
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/list");
+		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
@@ -1081,6 +1082,14 @@ public class ChallengeController implements Serializable {
 
 	public static IdNumberGen getCounter() {
 		return COUNTER;
+	}
+
+	public Date getSelLaunchDate() {
+		return selLaunchDate;
+	}
+
+	public void setSelLaunchDate(Date selLaunchDate) {
+		this.selLaunchDate = selLaunchDate;
 	}
 
 }

@@ -3,13 +3,12 @@ package za.co.idea.ip.orm.dao;
 import java.util.List;
 
 import org.hibernate.Hibernate;
-import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpChallenge;
 
@@ -25,71 +24,90 @@ import za.co.idea.ip.orm.bean.IpChallenge;
  * @author MyEclipse Persistence Tools
  */
 @SuppressWarnings("rawtypes")
-public class IpChallengeDAO extends HibernateDaoSupport {
+public class IpChallengeDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory.getLogger(IpChallengeDAO.class);
 	// property constants
 	public static final String CHAL_TITLE = "chalTitle";
 	public static final String CHAL_DESC = "chalDesc";
 	public static final String CHAL_HOVER_TXT = "chalHoverTxt";
 	public static final String CHAL_TAGS = "chalTags";
-	public static final String CHAL_BLOB = "chalBlob";
-
-	protected void initDao() {
-		// do nothing
-	}
 
 	public void save(IpChallenge transientInstance) {
 		log.debug("saving IpChallenge instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().save(transientInstance);
+			session.save(transientInstance);
+			transaction.commit();
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public void delete(IpChallenge persistentInstance) {
 		log.debug("deleting IpChallenge instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			session.delete(persistentInstance);
+			transaction.commit();
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public IpChallenge findById(java.lang.Long id) {
 		log.debug("getting IpChallenge instance with id: " + id);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			IpChallenge instance = (IpChallenge) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpChallenge", id);
+			IpChallenge instance = (IpChallenge) session.get("za.co.idea.ip.orm.bean.IpChallenge", id);
+			transaction.commit();
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public List findByExample(IpChallenge instance) {
 		log.debug("finding IpChallenge instance by example");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpChallenge").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
+			transaction.commit();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpChallenge instance with property: " + propertyName + ", value: " + value);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpChallenge as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = session.createQuery(queryString);
+			queryObject.setParameter(0, value);
+			List results = queryObject.list();
+			transaction.commit();
+			return results;
+
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
@@ -110,57 +128,53 @@ public class IpChallengeDAO extends HibernateDaoSupport {
 		return findByProperty(CHAL_TAGS, chalTags);
 	}
 
-	public List findByChalBlob(Object chalBlob) {
-		return findByProperty(CHAL_BLOB, chalBlob);
-	}
-
 	public List findAll() {
 		log.debug("finding all IpChallenge instances");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpChallenge";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = session.createQuery(queryString);
+			List results = queryObject.list();
+			transaction.commit();
+			return results;
+
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public IpChallenge merge(IpChallenge detachedInstance) {
 		log.debug("merging IpChallenge instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			IpChallenge result = (IpChallenge) getHibernateTemplate().merge(detachedInstance);
+			IpChallenge result = (IpChallenge) session.merge(detachedInstance);
 			log.debug("merge successful");
+			transaction.commit();
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpChallenge instance) {
 		log.debug("attaching dirty IpChallenge instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			session.saveOrUpdate(instance);
+			transaction.commit();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
+			transaction.rollback();
 			throw re;
 		}
-	}
-
-	public void attachClean(IpChallenge instance) {
-		log.debug("attaching clean IpChallenge instance");
-		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
-			log.debug("attach successful");
-		} catch (RuntimeException re) {
-			log.error("attach failed", re);
-			throw re;
-		}
-	}
-
-	public static IpChallengeDAO getFromApplicationContext(ApplicationContext ctx) {
-		return (IpChallengeDAO) ctx.getBean("IpChallengeDAO");
 	}
 
 	public List findByUserId(Long id) {

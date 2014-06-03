@@ -148,6 +148,7 @@ public class AdminService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -175,6 +176,7 @@ public class AdminService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -197,6 +199,7 @@ public class AdminService {
 			function.setGroupIdList(gList);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return function;
 	}
@@ -227,6 +230,7 @@ public class AdminService {
 			group.setUserIdList(uList);
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return group;
 	}
@@ -428,6 +432,7 @@ public class AdminService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -458,6 +463,7 @@ public class AdminService {
 				user.setTwHandle(ipUser.getUserTwHandle());
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return user;
 	}
@@ -516,9 +522,14 @@ public class AdminService {
 	@Path("/user/check/screenName/{sc}")
 	@Produces("application/json")
 	public Boolean checkScreenName(@PathParam("sc") String sc) {
-		List usersByScName = ipUserDAO.findByUserScreenName(sc);
-		Boolean ret = (usersByScName != null && usersByScName.size() > 0);
-		return ret;
+		try {
+			List usersByScName = ipUserDAO.findByUserScreenName(sc);
+			Boolean ret = (usersByScName != null && usersByScName.size() > 0);
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
 	@GET
@@ -530,6 +541,7 @@ public class AdminService {
 			ret = ipNativeSQLDAO.getNextId(Class.forName("za.co.idea.ip.orm.bean." + clazz));
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -540,7 +552,7 @@ public class AdminService {
 	public UserMessage login(@PathParam("login") String login, @PathParam("pwd") String pwd) {
 		List logins = ipLoginDAO.verifyLogin(login, pwd);
 		if (logins.size() == 0)
-			return null;
+			throw new RuntimeException("Login Credentials Not Found");
 		else {
 			UserMessage user = new UserMessage();
 			try {
@@ -568,6 +580,7 @@ public class AdminService {
 				ipLoginDAO.merge(ipLogin);
 			} catch (Exception e) {
 				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 			return user;
 		}
@@ -579,7 +592,7 @@ public class AdminService {
 	public UserMessage verify(@PathParam("login") String login) {
 		List logins = ipLoginDAO.fetchLogin(login);
 		if (logins.size() == 0)
-			return null;
+			throw new RuntimeException("Login Credentials Not Found");
 		else {
 			UserMessage user = new UserMessage();
 			try {
@@ -601,6 +614,7 @@ public class AdminService {
 				ipLoginDAO.merge(ipLogin);
 			} catch (Exception e) {
 				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 			return user;
 		}

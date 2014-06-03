@@ -17,6 +17,7 @@
 		<mapping resource="za/co/idea/ip/orm/bean/IpFunction.hbm.xml" />
 		<mapping resource="za/co/idea/ip/orm/bean/IpGroupUser.hbm.xml" />
 		<mapping resource="za/co/idea/ip/orm/bean/IpUser.hbm.xml" />
+		<mapping resource="za/co/idea/ip/orm/bean/IpStateTran.hbm.xml" />
 
 	</session-factory>
 

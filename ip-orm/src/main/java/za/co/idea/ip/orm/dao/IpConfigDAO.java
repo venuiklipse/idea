@@ -2,11 +2,12 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
-import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpConfig;
 
@@ -22,7 +23,7 @@ import za.co.idea.ip.orm.bean.IpConfig;
  * @author MyEclipse Persistence Tools
  */
 @SuppressWarnings("rawtypes")
-public class IpConfigDAO extends HibernateDaoSupport {
+public class IpConfigDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory.getLogger(IpConfigDAO.class);
 	// property constants
 	public static final String CONFIG_KEY = "configKey";
@@ -30,62 +31,82 @@ public class IpConfigDAO extends HibernateDaoSupport {
 	public static final String CONFIG_ENV = "configEnv";
 	public static final String CREATED_BY = "createdBy";
 
-	protected void initDao() {
-		// do nothing
-	}
-
 	public void save(IpConfig transientInstance) {
 		log.debug("saving IpConfig instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().save(transientInstance);
+			session.save(transientInstance);
+			transaction.commit();
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public void delete(IpConfig persistentInstance) {
 		log.debug("deleting IpConfig instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			session.delete(persistentInstance);
+			transaction.commit();
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public IpConfig findById(java.lang.Integer id) {
 		log.debug("getting IpConfig instance with id: " + id);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			IpConfig instance = (IpConfig) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpConfig", id);
+			IpConfig instance = (IpConfig) session.get("za.co.idea.ip.orm.bean.IpConfig", id);
+			transaction.commit();
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public List findByExample(IpConfig instance) {
 		log.debug("finding IpConfig instance by example");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpConfig").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
+			transaction.commit();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpConfig instance with property: " + propertyName + ", value: " + value);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpConfig as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = session.createQuery(queryString);
+			queryObject.setParameter(0, value);
+			List results = queryObject.list();
+			transaction.commit();
+			return results;
+
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
@@ -108,50 +129,50 @@ public class IpConfigDAO extends HibernateDaoSupport {
 
 	public List findAll() {
 		log.debug("finding all IpConfig instances");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpConfig";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = session.createQuery(queryString);
+			List results = queryObject.list();
+			transaction.commit();
+			return results;
+
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public IpConfig merge(IpConfig detachedInstance) {
 		log.debug("merging IpConfig instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			IpConfig result = (IpConfig) getHibernateTemplate().merge(detachedInstance);
+			IpConfig result = (IpConfig) session.merge(detachedInstance);
+			transaction.commit();
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpConfig instance) {
 		log.debug("attaching dirty IpConfig instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			session.saveOrUpdate(instance);
+			transaction.commit();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
+			transaction.rollback();
 			throw re;
 		}
-	}
-
-	public void attachClean(IpConfig instance) {
-		log.debug("attaching clean IpConfig instance");
-		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
-			log.debug("attach successful");
-		} catch (RuntimeException re) {
-			log.error("attach failed", re);
-			throw re;
-		}
-	}
-
-	public static IpConfigDAO getFromApplicationContext(ApplicationContext ctx) {
-		return (IpConfigDAO) ctx.getBean("IpConfigDAO");
 	}
 }

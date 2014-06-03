@@ -71,7 +71,7 @@ public class AdminController implements Serializable {
 	}
 
 	public String login() {
-		WebClient loginClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())));
+		WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/login/" + userBean.getScName() + "/" + Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())));
 		UserMessage userMessage = loginClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		loginClient.close();
 		if (userMessage == null) {
@@ -122,7 +122,7 @@ public class AdminController implements Serializable {
 	}
 
 	public String verifyLogin() {
-		WebClient loginClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/verify/" + userBean.getScName());
+		WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/verify/" + userBean.getScName());
 		UserMessage userMessage = loginClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		loginClient.close();
 		if (userMessage == null) {
@@ -139,7 +139,7 @@ public class AdminController implements Serializable {
 
 	public String resetPassword() {
 		if (Base64.encodeBase64URLSafeString(DigestUtils.md5(secA.getBytes())).equalsIgnoreCase(userBean.getSecA())) {
-			WebClient loginClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/rpw/");
+			WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rpw/");
 			ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), Base64.encodeBase64URLSafeString(DigestUtils.md5(userBean.getPwd().getBytes())) }, ResponseMessage.class);
 			loginClient.close();
 			if (response.getStatusCode() == 0) {
@@ -172,7 +172,7 @@ public class AdminController implements Serializable {
 			RequestContext.getCurrentInstance().openDialog("dlgSecUpdate");
 			return "";
 		}
-		WebClient loginClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/rsec");
+		WebClient loginClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/rsec");
 		ResponseMessage response = loginClient.accept(MediaType.APPLICATION_JSON).put(new String[] { userBean.getScName(), secQ, secA }, ResponseMessage.class);
 		loginClient.close();
 		this.userBean.setSecA(secA);
@@ -250,8 +250,7 @@ public class AdminController implements Serializable {
 
 	public String showViewGroups() {
 		try {
-			viewGroups = fetchAllGroups();
-			pGrps = fetchAllGroups();
+			pGrps = viewGroups = fetchAllGroups();
 			admUsers = fetchAllUsers();
 			return "admvg";
 		} catch (Exception e) {
@@ -332,7 +331,7 @@ public class AdminController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Screen Name to Check Availability", "Enter Screen Name to Check Availability");
 			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
 		}
-		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/check/screenName/" + userBean.getScName());
+		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/check/screenName/" + userBean.getScName());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
 		checkAvailablityClient.close();
 		available = avail.booleanValue();
@@ -352,7 +351,7 @@ public class AdminController implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				return "";
 			}
-			WebClient addUserClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/add");
+			WebClient addUserClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/add");
 			UserMessage bean = new UserMessage();
 			bean.setBio(userBean.getBio());
 			bean.setContact(userBean.getContact());
@@ -411,7 +410,7 @@ public class AdminController implements Serializable {
 
 	public String updateUser() {
 		try {
-			WebClient updateUserClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/modify");
+			WebClient updateUserClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/modify");
 			UserMessage bean = new UserMessage();
 			bean.setBio(userBean.getBio());
 			bean.setContact(userBean.getContact());
@@ -463,7 +462,12 @@ public class AdminController implements Serializable {
 
 	public String saveGroup() {
 		try {
-			WebClient addGroupClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/group/add");
+			if (verifyGroup(groupBean.getgName())) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Create Duplicate Group entries", "Cannot Create Duplicate Group entries");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+			WebClient addGroupClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/add");
 			GroupMessage groupMessage = new GroupMessage();
 			groupMessage.setAdmUserId(groupBean.getSelAdmUser());
 			groupMessage.setGeMail(groupBean.getGeMail());
@@ -491,7 +495,12 @@ public class AdminController implements Serializable {
 
 	public String saveFunction() {
 		try {
-			WebClient addFunctionClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/func/add");
+			if (verifyFunction(functionBean.getFuncName())) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Create Duplicate Function entries", "Cannot Create Duplicate Function entries");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+			WebClient addFunctionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/func/add");
 			FunctionMessage functionMessage = new FunctionMessage();
 			functionMessage.setFuncId(COUNTER.getNextId("IpFunction"));
 			functionMessage.setFuncName(functionBean.getFuncName());
@@ -516,7 +525,12 @@ public class AdminController implements Serializable {
 
 	public String updateGroup() {
 		try {
-			WebClient updateGroupClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/group/modify");
+			if (verifyGroup(groupBean.getgName())) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Create Duplicate Group entries", "Cannot Create Duplicate Group entries");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+			WebClient updateGroupClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/modify");
 			GroupMessage groupMessage = new GroupMessage();
 			groupMessage.setAdmUserId(groupBean.getSelAdmUser());
 			groupMessage.setGeMail(groupBean.getGeMail());
@@ -544,7 +558,12 @@ public class AdminController implements Serializable {
 
 	public String updateFunction() {
 		try {
-			WebClient updateFunctionClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/func/modify");
+			if (verifyFunction(functionBean.getFuncName())) {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Create Duplicate Function entries", "Cannot Create Duplicate Function entries");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
+			WebClient updateFunctionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/func/modify");
 			FunctionMessage functionMessage = new FunctionMessage();
 			functionMessage.setFuncId(functionBean.getFuncId());
 			functionMessage.setFuncName(functionBean.getFuncName());
@@ -602,7 +621,7 @@ public class AdminController implements Serializable {
 
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/list");
+		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
@@ -629,7 +648,7 @@ public class AdminController implements Serializable {
 
 	private List<GroupBean> fetchAllGroups() {
 		List<GroupBean> ret = new ArrayList<GroupBean>();
-		WebClient viewGroupsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/group/list");
+		WebClient viewGroupsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/list");
 		Collection<? extends GroupMessage> groups = new ArrayList<GroupMessage>(viewGroupsClient.accept(MediaType.APPLICATION_JSON).getCollection(GroupMessage.class));
 		viewGroupsClient.close();
 		for (GroupMessage groupMessage : groups) {
@@ -651,7 +670,7 @@ public class AdminController implements Serializable {
 
 	private List<FunctionBean> fetchAllFunctions() {
 		List<FunctionBean> ret = new ArrayList<FunctionBean>();
-		WebClient viewFunctionsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/func/list");
+		WebClient viewFunctionsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/func/list");
 		Collection<? extends FunctionMessage> functions = new ArrayList<FunctionMessage>(viewFunctionsClient.accept(MediaType.APPLICATION_JSON).getCollection(FunctionMessage.class));
 		viewFunctionsClient.close();
 		for (FunctionMessage functionMessage : functions) {
@@ -669,7 +688,7 @@ public class AdminController implements Serializable {
 
 	public GroupBean getParentGroup(Long pGrpId) {
 		GroupBean bean = new GroupBean();
-		WebClient groupByIdClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/group/get/" + pGrpId);
+		WebClient groupByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/get/" + pGrpId);
 		GroupMessage groupMessage = groupByIdClient.accept(MediaType.APPLICATION_JSON).get(GroupMessage.class);
 		groupByIdClient.close();
 		bean.setgId(groupMessage.getgId());
@@ -683,7 +702,7 @@ public class AdminController implements Serializable {
 
 	public UserBean getUserById(Long id) {
 		UserBean bean = new UserBean();
-		WebClient userByIdClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/get/" + id);
+		WebClient userByIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/get/" + id);
 		UserMessage userMessage = userByIdClient.accept(MediaType.APPLICATION_JSON).get(UserMessage.class);
 		userByIdClient.close();
 		bean.setBio(userMessage.getBio());
@@ -730,6 +749,22 @@ public class AdminController implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			enableUpload = false;
 		}
+	}
+
+	private boolean verifyGroup(String grpName) {
+		boolean ret = false;
+		for (GroupBean grpBean : viewGroups) {
+			if (grpBean.getgName().equalsIgnoreCase(grpName)) {
+				ret = true;
+				break;
+			}
+		}
+		return ret;
+	}
+
+	private boolean verifyFunction(String funcName) {
+		boolean ret = false;
+		return ret;
 	}
 
 	public UserBean getUserBean() {

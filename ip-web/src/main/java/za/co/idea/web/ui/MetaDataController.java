@@ -65,7 +65,14 @@ public class MetaDataController {
 		this.showAddPanel = false;
 		this.showModPanel = false;
 		this.showAddBtn = true;
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ms/modify");
+		if (verifyMetadata(bean.getDesc())) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Create duplicate values", "Cannot Create duplicate values");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			this.showAddPanel = false;
+			this.showModPanel = true;
+			return "";
+		}
+		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/modify");
 		MetaDataMessage message = new MetaDataMessage();
 		message.setDesc(bean.getDesc());
 		message.setId(bean.getId());
@@ -86,7 +93,14 @@ public class MetaDataController {
 		this.showAddPanel = false;
 		this.showModPanel = false;
 		this.showAddBtn = true;
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ms/add");
+		if (verifyMetadata(bean.getDesc())) {
+			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Create duplicate values", "Cannot Create duplicate values");
+			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			this.showAddPanel = true;
+			this.showModPanel = false;
+			return "";
+		}
+		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/add");
 		MetaDataMessage message = new MetaDataMessage();
 		message.setDesc(bean.getDesc());
 		message.setId(bean.getId());
@@ -119,7 +133,7 @@ public class MetaDataController {
 
 	private List<MetaDataBean> fetchAllMetadata() {
 		List<MetaDataBean> ret = new ArrayList<MetaDataBean>();
-		WebClient mDataClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ms/list/" + table);
+		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/list/" + table);
 		Collection<? extends MetaDataMessage> messages = new ArrayList<MetaDataMessage>(mDataClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		mDataClient.close();
 		for (MetaDataMessage message : messages) {
@@ -141,6 +155,17 @@ public class MetaDataController {
 			metaList.put("Solution Category", "IpSolutionCat");
 		}
 		return metaList;
+	}
+
+	private boolean verifyMetadata(String desc) {
+		boolean ret = false;
+		for (MetaDataBean bean : beans) {
+			if (bean.getDesc().equalsIgnoreCase(desc)) {
+				ret = true;
+				break;
+			}
+		}
+		return ret;
 	}
 
 	public void setMetaList(HashMap<String, String> metaList) {

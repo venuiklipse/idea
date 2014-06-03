@@ -3,138 +3,157 @@ package za.co.idea.ip.orm.dao;
 import java.util.List;
 
 import org.hibernate.Hibernate;
-import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpFuncGroup;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * IpFunction entities. Transaction control of the save(), update() and delete()
- * operations can directly support Spring container-managed transactions or they
- * can be augmented to handle user-managed Spring transactions. Each of these
- * methods provides additional information for how to configure it for the
- * desired type of transaction control.
+ * IpFuncGroup entities. Transaction control of the save(), update() and
+ * delete() operations can directly support Spring container-managed
+ * transactions or they can be augmented to handle user-managed Spring
+ * transactions. Each of these methods provides additional information for how
+ * to configure it for the desired type of transaction control.
  * 
- * @see za.co.idea.ip.orm.bean.IpFunction
+ * @see za.co.idea.ip.orm.bean.IpFuncGroup
  * @author MyEclipse Persistence Tools
  */
 @SuppressWarnings("rawtypes")
-public class IpFuncGroupDAO extends HibernateDaoSupport {
+public class IpFuncGroupDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory.getLogger(IpFuncGroupDAO.class);
-	// property constants
-	public static final String FUNC_NAME = "funcName";
 
-	protected void initDao() {
-		// do nothing
-	}
+	// property constants
 
 	public void save(IpFuncGroup transientInstance) {
 		log.debug("saving IpFuncGroup instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().save(transientInstance);
+			session.save(transientInstance);
+			transaction.commit();
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public void delete(IpFuncGroup persistentInstance) {
 		log.debug("deleting IpFuncGroup instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			session.delete(persistentInstance);
+			transaction.commit();
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public IpFuncGroup findById(java.lang.Long id) {
 		log.debug("getting IpFuncGroup instance with id: " + id);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			IpFuncGroup instance = (IpFuncGroup) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpFuncGroup", id);
+			IpFuncGroup instance = (IpFuncGroup) session.get("za.co.idea.ip.orm.bean.IpFuncGroup", id);
+			transaction.commit();
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public List findByExample(IpFuncGroup instance) {
 		log.debug("finding IpFuncGroup instance by example");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpFuncGroup").add(Example.create(instance)).list();
+			transaction.commit();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpFuncGroup instance with property: " + propertyName + ", value: " + value);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpFuncGroup as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = session.createQuery(queryString);
+			queryObject.setParameter(0, value);
+			List results = queryObject.list();
+			transaction.commit();
+			return results;
+
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
-	public List findByFuncName(Object funcName) {
-		return findByProperty(FUNC_NAME, funcName);
-	}
-
 	public List findAll() {
 		log.debug("finding all IpFuncGroup instances");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpFuncGroup";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = session.createQuery(queryString);
+			List results = queryObject.list();
+			transaction.commit();
+			return results;
+
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public IpFuncGroup merge(IpFuncGroup detachedInstance) {
 		log.debug("merging IpFuncGroup instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			IpFuncGroup result = (IpFuncGroup) getHibernateTemplate().merge(detachedInstance);
+			IpFuncGroup result = (IpFuncGroup) session.merge(detachedInstance);
 			log.debug("merge successful");
+			transaction.commit();
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpFuncGroup instance) {
 		log.debug("attaching dirty IpFuncGroup instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			session.saveOrUpdate(instance);
+			transaction.commit();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
-			throw re;
-		}
-	}
-
-	public void attachClean(IpFuncGroup instance) {
-		log.debug("attaching clean IpFuncGroup instance");
-		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
-			log.debug("attach successful");
-		} catch (RuntimeException re) {
-			log.error("attach failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
@@ -189,9 +208,4 @@ public class IpFuncGroupDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-
-	public static IpFuncGroupDAO getFromApplicationContext(ApplicationContext ctx) {
-		return (IpFuncGroupDAO) ctx.getBean("IpFunctionDAO");
-	}
-
 }

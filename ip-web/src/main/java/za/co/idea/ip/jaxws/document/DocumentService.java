@@ -26,7 +26,7 @@ public class DocumentService extends Service {
 	static {
 		URL url = null;
 		try {
-			url = new URL("http://localhost:38080/ip-jaxws/documentService?wsdl");
+			url = new URL("http://localhost:8080/ip-jaxws/documentService?wsdl");
 		} catch (MalformedURLException e) {
 			java.util.logging.Logger.getLogger(DocumentService.class.getName()).log(java.util.logging.Level.INFO, "Can not initialize the default wsdl from {0}", "file:/noformat/ws/lide/lfaces/sample/src/document.wsdl");
 		}

@@ -130,6 +130,7 @@ public class RewardsService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -155,6 +156,7 @@ public class RewardsService {
 			rewards.setRwValue(ipRewards.getRwValue());
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return rewards;
 	}
@@ -185,6 +187,7 @@ public class RewardsService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -215,6 +218,7 @@ public class RewardsService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -235,6 +239,7 @@ public class RewardsService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -255,6 +260,7 @@ public class RewardsService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -275,6 +281,7 @@ public class RewardsService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}
@@ -290,6 +297,7 @@ public class RewardsService {
 			message.setDesc(cat.getRcDesc());
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return message;
 	}
@@ -305,6 +313,7 @@ public class RewardsService {
 			message.setDesc(status.getRsDesc());
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return message;
 	}
@@ -375,6 +384,7 @@ public class RewardsService {
 			message.setUserId(ipPoints.getIpUser().getUserId());
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return message;
 	}
@@ -398,6 +408,7 @@ public class RewardsService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}

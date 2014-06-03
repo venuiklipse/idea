@@ -8,7 +8,7 @@
 			<p:dataTable id="dtMetaData" widgetVar="dtMetaData" value="#{metaDataBean.beans}" var="bean" rows="5" paginator="true" paginatorPosition="bottom" emptyMessage="No MetaData Found">
 				<f:facet name="header">
 					<p:selectOneMenu id="somSelectMeta" value="#{metaDataBean.table}">
-						<p:ajax listener="#{metaDataBean.changeMetaData}" update="dtMetaData" />
+						<p:ajax listener="#{metaDataBean.changeMetaData}" update="dtMetaData,:ideaFrm:pnlModMetaData,:ideaFrm:pnlAddMetaData" />
 						<f:selectItem itemLabel="Please Select" itemValue="" />
 						<f:selectItems value="#{metaDataBean.metaList}" />
 					</p:selectOneMenu>

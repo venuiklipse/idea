@@ -2,11 +2,12 @@ package za.co.idea.ip.orm.dao;
 
 import java.util.List;
 
-import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Example;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import za.co.idea.ip.orm.bean.IpTagType;
 
@@ -22,67 +23,86 @@ import za.co.idea.ip.orm.bean.IpTagType;
  * @author MyEclipse Persistence Tools
  */
 @SuppressWarnings("rawtypes")
-public class IpTagTypeDAO extends HibernateDaoSupport {
+public class IpTagTypeDAO extends BaseHibernateDAO {
 	private static final Logger log = LoggerFactory.getLogger(IpTagTypeDAO.class);
 	// property constants
 	public static final String TT_DESC = "ttDesc";
 
-	protected void initDao() {
-		// do nothing
-	}
-
 	public void save(IpTagType transientInstance) {
 		log.debug("saving IpTagType instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().save(transientInstance);
+			session.save(transientInstance);
+			transaction.commit();
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public void delete(IpTagType persistentInstance) {
 		log.debug("deleting IpTagType instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().delete(persistentInstance);
+			session.delete(persistentInstance);
+			transaction.commit();
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public IpTagType findById(java.lang.Integer id) {
 		log.debug("getting IpTagType instance with id: " + id);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			IpTagType instance = (IpTagType) getHibernateTemplate().get("za.co.idea.ip.orm.bean.IpTagType", id);
+			IpTagType instance = (IpTagType) session.get("za.co.idea.ip.orm.bean.IpTagType", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
+			transaction.commit();
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public List findByExample(IpTagType instance) {
 		log.debug("finding IpTagType instance by example");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			List results = getHibernateTemplate().findByExample(instance);
+			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpTagType").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
+			transaction.commit();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public List findByProperty(String propertyName, Object value) {
 		log.debug("finding IpTagType instance with property: " + propertyName + ", value: " + value);
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpTagType as model where model." + propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			Query queryObject = session.createQuery(queryString);
+			queryObject.setParameter(0, value);
+			List results = queryObject.list();
+			transaction.commit();
+			return results;
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
@@ -93,50 +113,49 @@ public class IpTagTypeDAO extends HibernateDaoSupport {
 
 	public List findAll() {
 		log.debug("finding all IpTagType instances");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
 			String queryString = "from IpTagType";
-			return getHibernateTemplate().find(queryString);
+			Query queryObject = session.createQuery(queryString);
+			List results = queryObject.list();
+			transaction.commit();
+			return results;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public IpTagType merge(IpTagType detachedInstance) {
 		log.debug("merging IpTagType instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			IpTagType result = (IpTagType) getHibernateTemplate().merge(detachedInstance);
+			IpTagType result = (IpTagType) session.merge(detachedInstance);
 			log.debug("merge successful");
+			transaction.commit();
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
+			transaction.rollback();
 			throw re;
 		}
 	}
 
 	public void attachDirty(IpTagType instance) {
 		log.debug("attaching dirty IpTagType instance");
+		Session session = getSession();
+		Transaction transaction = session.beginTransaction();
 		try {
-			getHibernateTemplate().saveOrUpdate(instance);
+			session.saveOrUpdate(instance);
+			transaction.commit();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
+			transaction.rollback();
 			throw re;
 		}
-	}
-
-	public void attachClean(IpTagType instance) {
-		log.debug("attaching clean IpTagType instance");
-		try {
-			getHibernateTemplate().lock(instance, LockMode.NONE);
-			log.debug("attach successful");
-		} catch (RuntimeException re) {
-			log.error("attach failed", re);
-			throw re;
-		}
-	}
-
-	public static IpTagTypeDAO getFromApplicationContext(ApplicationContext ctx) {
-		return (IpTagTypeDAO) ctx.getBean("IpTagTypeDAO");
 	}
 }

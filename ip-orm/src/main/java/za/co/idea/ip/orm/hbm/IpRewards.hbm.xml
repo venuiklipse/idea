@@ -8,10 +8,10 @@
 			<column name="rw_id" />
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="ipRewardsCat" class="za.co.idea.ip.orm.bean.IpRewardsCat" fetch="select">
+		<many-to-one name="ipRewardsCat" class="za.co.idea.ip.orm.bean.IpRewardsCat"  fetch="select" lazy="proxy">
 			<column name="rw_cat" not-null="true" />
 		</many-to-one>
-		<many-to-one name="ipRewardsStatus" class="za.co.idea.ip.orm.bean.IpRewardsStatus" fetch="select">
+		<many-to-one name="ipRewardsStatus" class="za.co.idea.ip.orm.bean.IpRewardsStatus"  fetch="select" lazy="proxy">
 			<column name="rw_status" not-null="true" />
 		</many-to-one>
 		<property name="rwTitle" type="java.lang.String">

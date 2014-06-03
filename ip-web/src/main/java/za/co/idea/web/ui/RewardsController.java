@@ -154,7 +154,7 @@ public class RewardsController implements Serializable {
 
 	public String saveRewards() {
 		try {
-			WebClient addRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/add");
+			WebClient addRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/add");
 			RewardsMessage message = new RewardsMessage();
 			message.setrCatId(rewardsBean.getrCatId());
 			message.setRwCrtdDt(new Date());
@@ -207,7 +207,7 @@ public class RewardsController implements Serializable {
 
 	public String updateRewards() {
 		try {
-			WebClient updateRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/modify");
+			WebClient updateRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/modify");
 			RewardsMessage message = new RewardsMessage();
 			message.setrCatId(rewardsBean.getrCatId());
 			message.setRwCrtdDt(new Date());
@@ -260,7 +260,7 @@ public class RewardsController implements Serializable {
 
 	private List<UserBean> fetchAllUsers() {
 		List<UserBean> ret = new ArrayList<UserBean>();
-		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/list");
+		WebClient viewUsersClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/user/list");
 		Collection<? extends UserMessage> users = new ArrayList<UserMessage>(viewUsersClient.accept(MediaType.APPLICATION_JSON).getCollection(UserMessage.class));
 		viewUsersClient.close();
 		for (UserMessage userMessage : users) {
@@ -286,7 +286,7 @@ public class RewardsController implements Serializable {
 	}
 
 	public String addToWishlist() {
-		WebClient addTagClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/ts/tag/add");
+		WebClient addTagClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ts/tag/add");
 		TagMessage message = new TagMessage();
 		message.setEntityId(rewardsBean.getRwId());
 		message.setTagId(COUNTER.getNextId("IpTag"));
@@ -303,9 +303,10 @@ public class RewardsController implements Serializable {
 
 	private List<RewardsBean> fetchAllRewards() {
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/list");
+		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list");
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
+		DocumentService service = new DocumentService();
 		for (RewardsMessage message : rewards) {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
@@ -321,7 +322,6 @@ public class RewardsController implements Serializable {
 			bean.setRwTitle(message.getRwTitle());
 			bean.setRwValue(message.getRwValue());
 			try {
-				DocumentService service = new DocumentService();
 				DownloadDocumentRq rq = new DownloadDocumentRq();
 				rq.setEntityId(message.getRwId().toString());
 				rq.setEntityTableName("ip_rewards");
@@ -343,9 +343,10 @@ public class RewardsController implements Serializable {
 
 	private List<RewardsBean> fetchAllRewardsByUser() {
 		List<RewardsBean> ret = new ArrayList<RewardsBean>();
-		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
+		WebClient viewRewardsClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/list/" + ((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId")).longValue());
 		Collection<? extends RewardsMessage> rewards = new ArrayList<RewardsMessage>(viewRewardsClient.accept(MediaType.APPLICATION_JSON).getCollection(RewardsMessage.class));
 		viewRewardsClient.close();
+		DocumentService service = new DocumentService();
 		for (RewardsMessage message : rewards) {
 			RewardsBean bean = new RewardsBean();
 			bean.setrCatId(message.getrCatId());
@@ -361,7 +362,6 @@ public class RewardsController implements Serializable {
 			bean.setRwTitle(message.getRwTitle());
 			bean.setRwValue(message.getRwValue());
 			try {
-				DocumentService service = new DocumentService();
 				DownloadDocumentRq rq = new DownloadDocumentRq();
 				rq.setEntityId(message.getRwId().toString());
 				rq.setEntityTableName("ip_rewards");
@@ -383,7 +383,7 @@ public class RewardsController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllRewardsCat() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewRewardsSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/cat/list");
+		WebClient viewRewardsSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/cat/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewRewardsSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewRewardsSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -397,7 +397,7 @@ public class RewardsController implements Serializable {
 
 	private List<ListSelectorBean> fetchAllRewardsStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewRewardsSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/status/list");
+		WebClient viewRewardsSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/status/list");
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewRewardsSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewRewardsSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {
@@ -411,7 +411,7 @@ public class RewardsController implements Serializable {
 
 	private List<ListSelectorBean> fetchNextRewardsStatuses() {
 		List<ListSelectorBean> ret = new ArrayList<ListSelectorBean>();
-		WebClient viewRewardsSelectClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/rs/rewards/status/list/" + rewardsBean.getrStatusId());
+		WebClient viewRewardsSelectClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/rs/rewards/status/list/" + rewardsBean.getrStatusId());
 		Collection<? extends MetaDataMessage> md = new ArrayList<MetaDataMessage>(viewRewardsSelectClient.accept(MediaType.APPLICATION_JSON).getCollection(MetaDataMessage.class));
 		viewRewardsSelectClient.close();
 		for (MetaDataMessage metaDataMessage : md) {

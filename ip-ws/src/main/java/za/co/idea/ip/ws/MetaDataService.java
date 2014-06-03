@@ -12,14 +12,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import za.co.idea.ip.orm.bean.IpChallengeCat;
-import za.co.idea.ip.orm.bean.IpChallengeStatus;
-import za.co.idea.ip.orm.bean.IpClaimStatus;
 import za.co.idea.ip.orm.bean.IpIdeaCat;
-import za.co.idea.ip.orm.bean.IpIdeaStatus;
 import za.co.idea.ip.orm.bean.IpRewardsCat;
-import za.co.idea.ip.orm.bean.IpRewardsStatus;
 import za.co.idea.ip.orm.bean.IpSolutionCat;
-import za.co.idea.ip.orm.bean.IpSolutionStatus;
 import za.co.idea.ip.orm.dao.IpChallengeCatDAO;
 import za.co.idea.ip.orm.dao.IpChallengeStatusDAO;
 import za.co.idea.ip.orm.dao.IpClaimStatusDAO;
@@ -52,7 +47,7 @@ public class MetaDataService {
 	public ResponseMessage addMetaData(MetaDataMessage mData) {
 		boolean success = false;
 		String msg = "Invalid Table Selected :: " + mData;
-		if (mData.getTable().equalsIgnoreCase("ip_challenge_cat")) {
+		if (mData.getTable().equalsIgnoreCase("IpChallengeCat")) {
 			IpChallengeCat cat = new IpChallengeCat();
 			cat.setCcDesc(mData.getDesc());
 			cat.setCcId(mData.getId());
@@ -64,31 +59,7 @@ public class MetaDataService {
 				success = false;
 				msg = e.getMessage();
 			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_challenge_status")) {
-			IpChallengeStatus status = new IpChallengeStatus();
-			status.setCsDesc(mData.getDesc());
-			status.setCsId(mData.getId());
-			try {
-				ipChallengeStatusDAO.save(status);
-				success = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				success = false;
-				msg = e.getMessage();
-			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_claim_status")) {
-			IpClaimStatus status = new IpClaimStatus();
-			status.setCsDesc(mData.getDesc());
-			status.setCsId(mData.getId());
-			try {
-				ipClaimStatusDAO.save(status);
-				success = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				success = false;
-				msg = e.getMessage();
-			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_idea_cat")) {
+		} else if (mData.getTable().equalsIgnoreCase("IpIdeaCat")) {
 			IpIdeaCat cat = new IpIdeaCat();
 			cat.setIcDesc(mData.getDesc());
 			cat.setIcId(mData.getId());
@@ -100,19 +71,7 @@ public class MetaDataService {
 				success = false;
 				msg = e.getMessage();
 			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_idea_status")) {
-			IpIdeaStatus status = new IpIdeaStatus();
-			status.setIsDesc(mData.getDesc());
-			status.setIsId(mData.getId());
-			try {
-				ipIdeaStatusDAO.save(status);
-				success = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				success = false;
-				msg = e.getMessage();
-			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_rewards_cat")) {
+		} else if (mData.getTable().equalsIgnoreCase("IpRewardsCat")) {
 			IpRewardsCat cat = new IpRewardsCat();
 			cat.setRcDesc(mData.getDesc());
 			cat.setRcId(mData.getId());
@@ -124,36 +83,12 @@ public class MetaDataService {
 				success = false;
 				msg = e.getMessage();
 			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_rewards_status")) {
-			IpRewardsStatus status = new IpRewardsStatus();
-			status.setRsDesc(mData.getDesc());
-			status.setRsId(mData.getId());
-			try {
-				ipRewardsStatusDAO.save(status);
-				success = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				success = false;
-				msg = e.getMessage();
-			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_solution_cat")) {
+		} else if (mData.getTable().equalsIgnoreCase("IpSolutionCat")) {
 			IpSolutionCat cat = new IpSolutionCat();
 			cat.setScDesc(mData.getDesc());
 			cat.setScId(mData.getId());
 			try {
 				ipSolutionCatDAO.save(cat);
-				success = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				success = false;
-				msg = e.getMessage();
-			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_solution_status")) {
-			IpSolutionStatus status = new IpSolutionStatus();
-			status.setSsDesc(mData.getDesc());
-			status.setSsId(mData.getId());
-			try {
-				ipSolutionStatusDAO.save(status);
 				success = true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -181,7 +116,7 @@ public class MetaDataService {
 	public ResponseMessage updateMetaData(MetaDataMessage mData) {
 		boolean success = false;
 		String msg = "Invalid Table Selected :: " + mData;
-		if (mData.getTable().equalsIgnoreCase("ip_challenge_cat")) {
+		if (mData.getTable().equalsIgnoreCase("IpChallengeCat")) {
 			IpChallengeCat cat = new IpChallengeCat();
 			cat.setCcDesc(mData.getDesc());
 			cat.setCcId(mData.getId());
@@ -193,31 +128,7 @@ public class MetaDataService {
 				success = false;
 				msg = e.getMessage();
 			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_challenge_status")) {
-			IpChallengeStatus status = new IpChallengeStatus();
-			status.setCsDesc(mData.getDesc());
-			status.setCsId(mData.getId());
-			try {
-				ipChallengeStatusDAO.merge(status);
-				success = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				success = false;
-				msg = e.getMessage();
-			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_claim_status")) {
-			IpClaimStatus status = new IpClaimStatus();
-			status.setCsDesc(mData.getDesc());
-			status.setCsId(mData.getId());
-			try {
-				ipClaimStatusDAO.merge(status);
-				success = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				success = false;
-				msg = e.getMessage();
-			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_idea_cat")) {
+		} else if (mData.getTable().equalsIgnoreCase("IpIdeaCat")) {
 			IpIdeaCat cat = new IpIdeaCat();
 			cat.setIcDesc(mData.getDesc());
 			cat.setIcId(mData.getId());
@@ -229,19 +140,7 @@ public class MetaDataService {
 				success = false;
 				msg = e.getMessage();
 			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_idea_status")) {
-			IpIdeaStatus status = new IpIdeaStatus();
-			status.setIsDesc(mData.getDesc());
-			status.setIsId(mData.getId());
-			try {
-				ipIdeaStatusDAO.merge(status);
-				success = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				success = false;
-				msg = e.getMessage();
-			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_rewards_cat")) {
+		} else if (mData.getTable().equalsIgnoreCase("IpRewardsCat")) {
 			IpRewardsCat cat = new IpRewardsCat();
 			cat.setRcDesc(mData.getDesc());
 			cat.setRcId(mData.getId());
@@ -253,36 +152,12 @@ public class MetaDataService {
 				success = false;
 				msg = e.getMessage();
 			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_rewards_status")) {
-			IpRewardsStatus status = new IpRewardsStatus();
-			status.setRsDesc(mData.getDesc());
-			status.setRsId(mData.getId());
-			try {
-				ipRewardsStatusDAO.merge(status);
-				success = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				success = false;
-				msg = e.getMessage();
-			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_solution_cat")) {
+		} else if (mData.getTable().equalsIgnoreCase("IpSolutionCat")) {
 			IpSolutionCat cat = new IpSolutionCat();
 			cat.setScDesc(mData.getDesc());
 			cat.setScId(mData.getId());
 			try {
 				ipSolutionCatDAO.merge(cat);
-				success = true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				success = false;
-				msg = e.getMessage();
-			}
-		} else if (mData.getTable().equalsIgnoreCase("ip_solution_status")) {
-			IpSolutionStatus status = new IpSolutionStatus();
-			status.setSsDesc(mData.getDesc());
-			status.setSsId(mData.getId());
-			try {
-				ipSolutionStatusDAO.merge(status);
 				success = true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -308,49 +183,54 @@ public class MetaDataService {
 	@Produces("application/json")
 	@Consumes("application/json")
 	public <T extends MetaDataMessage> List<T> listByTable(@PathParam("table") String table) {
-		List<T> ret = new ArrayList<T>();
-		if (table.equalsIgnoreCase("IpChallengeCat")) {
-			List vals = ipChallengeCatDAO.findAll();
-			for (Object object : vals) {
-				MetaDataMessage message = new MetaDataMessage();
-				IpChallengeCat cat = (IpChallengeCat) object;
-				message.setId(cat.getCcId());
-				message.setDesc(cat.getCcDesc());
-				message.setTable("ip_challenge_cat");
-				ret.add((T) message);
+		try {
+			List<T> ret = new ArrayList<T>();
+			if (table.equalsIgnoreCase("IpChallengeCat")) {
+				List vals = ipChallengeCatDAO.findAll();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpChallengeCat cat = (IpChallengeCat) object;
+					message.setId(cat.getCcId());
+					message.setDesc(cat.getCcDesc());
+					message.setTable("ip_challenge_cat");
+					ret.add((T) message);
+				}
+			} else if (table.equalsIgnoreCase("IpIdeaCat")) {
+				List vals = ipIdeaCatDAO.findAll();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpIdeaCat cat = (IpIdeaCat) object;
+					message.setDesc(cat.getIcDesc());
+					message.setId(cat.getIcId());
+					message.setTable("ip_idea_cat");
+					ret.add((T) message);
+				}
+			} else if (table.equalsIgnoreCase("IpRewardsCat")) {
+				List vals = ipRewardsCatDAO.findAll();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpRewardsCat cat = (IpRewardsCat) object;
+					message.setDesc(cat.getRcDesc());
+					message.setId(cat.getRcId());
+					message.setTable("ip_rewards_cat");
+					ret.add((T) message);
+				}
+			} else if (table.equalsIgnoreCase("IpSolutionCat")) {
+				List vals = ipSolutionCatDAO.findAll();
+				for (Object object : vals) {
+					MetaDataMessage message = new MetaDataMessage();
+					IpSolutionCat cat = (IpSolutionCat) object;
+					message.setDesc(cat.getScDesc());
+					message.setId(cat.getScId());
+					message.setTable("ip_solution_cat");
+					ret.add((T) message);
+				}
 			}
-		} else if (table.equalsIgnoreCase("IpIdeaCat")) {
-			List vals = ipIdeaCatDAO.findAll();
-			for (Object object : vals) {
-				MetaDataMessage message = new MetaDataMessage();
-				IpIdeaCat cat = (IpIdeaCat) object;
-				message.setDesc(cat.getIcDesc());
-				message.setId(cat.getIcId());
-				message.setTable("ip_idea_cat");
-				ret.add((T) message);
-			}
-		} else if (table.equalsIgnoreCase("IpRewardsCat")) {
-			List vals = ipRewardsCatDAO.findAll();
-			for (Object object : vals) {
-				MetaDataMessage message = new MetaDataMessage();
-				IpRewardsCat cat = (IpRewardsCat) object;
-				message.setDesc(cat.getRcDesc());
-				message.setId(cat.getRcId());
-				message.setTable("ip_rewards_cat");
-				ret.add((T) message);
-			}
-		} else if (table.equalsIgnoreCase("IpSolutionCat")) {
-			List vals = ipSolutionCatDAO.findAll();
-			for (Object object : vals) {
-				MetaDataMessage message = new MetaDataMessage();
-				IpSolutionCat cat = (IpSolutionCat) object;
-				message.setDesc(cat.getScDesc());
-				message.setId(cat.getScId());
-				message.setTable("ip_solution_cat");
-				ret.add((T) message);
-			}
+			return ret;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
-		return ret;
 	}
 
 	public IpChallengeCatDAO getIpChallengeCatDAO() {
