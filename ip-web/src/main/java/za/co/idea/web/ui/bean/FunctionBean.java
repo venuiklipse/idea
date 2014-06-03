@@ -9,7 +9,6 @@ public class FunctionBean implements Serializable {
 	private static final long serialVersionUID = -5754104006986083662L;
 	private Long funcId;
 	private String funcName;
-	private List<Long> userIdList;
 	private List<Long> groupIdList;
 
 	public Long getFuncId() {
@@ -26,16 +25,6 @@ public class FunctionBean implements Serializable {
 
 	public void setFuncName(String funcName) {
 		this.funcName = funcName;
-	}
-
-	public List<Long> getUserIdList() {
-		if (userIdList == null)
-			userIdList = new ArrayList<Long>();
-		return userIdList;
-	}
-
-	public void setUserIdList(List<Long> userIdList) {
-		this.userIdList = userIdList;
 	}
 
 	public List<Long> getGroupIdList() {

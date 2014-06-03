@@ -10,6 +10,7 @@ public class GroupMessage {
 	private Long pGrpId;
 	private Long admUserId;
 	private Boolean isActive;
+	private Long[] userIdList;
 
 	public Long getgId() {
 		return gId;
@@ -57,6 +58,16 @@ public class GroupMessage {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Long[] getUserIdList() {
+		if (userIdList == null)
+			userIdList = new Long[] {};
+		return userIdList;
+	}
+
+	public void setUserIdList(Long[] userIdList) {
+		this.userIdList = userIdList;
 	}
 
 }

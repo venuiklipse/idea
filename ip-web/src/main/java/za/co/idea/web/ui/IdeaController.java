@@ -142,9 +142,9 @@ public class IdeaController implements Serializable {
 		likes = fetchAllLikes();
 		comments = fetchAllComments();
 		buildOns = fetchAllBuildOns();
-		likeCnt = "(" + likes.getTags().size() + ") Likes	";
-		commentCnt = "(" + comments.size() + ") Comments	";
-		buildOnCnt = "(" + buildOns.size() + ") Build-Ons";
+		likeCnt = "(" + likes.getTags().size() + ")	";
+		commentCnt = "(" + comments.size() + ")	";
+		buildOnCnt = "(" + buildOns.size() + ")	";
 		showIdeaComments = false;
 		showIdeaLikes = false;
 		showIdeaBuildOns = false;
@@ -181,7 +181,7 @@ public class IdeaController implements Serializable {
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
 		likes = fetchAllLikes();
-		likeCnt = "(" + likes.getTags().size() + ") Likes	";
+		likeCnt = "(" + likes.getTags().size() + ")	";
 		showIdeaComments = false;
 		showIdeaLikes = true;
 		showIdeaBuildOns = false;
@@ -203,7 +203,7 @@ public class IdeaController implements Serializable {
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
 		comments = fetchAllComments();
-		commentCnt = "(" + comments.size() + ") Comments	";
+		commentCnt = "(" + comments.size() + ")	";
 		commentText = "";
 		showIdeaComments = true;
 		showIdeaLikes = false;
@@ -226,7 +226,7 @@ public class IdeaController implements Serializable {
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Build-On", "Error While Saving Build-On"));
 		buildOns = fetchAllBuildOns();
-		buildOnCnt = "(" + buildOns.size() + ") Build-Ons";
+		buildOnCnt = "(" + buildOns.size() + ")	";
 		buildOnText = "";
 		showIdeaComments = false;
 		showIdeaLikes = false;

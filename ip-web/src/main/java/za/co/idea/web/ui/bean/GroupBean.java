@@ -1,6 +1,8 @@
 package za.co.idea.web.ui.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupBean implements Serializable {
 
@@ -11,6 +13,7 @@ public class GroupBean implements Serializable {
 	private Long selPGrp;
 	private Long selAdmUser;
 	private Boolean isActive;
+	private List<Long> userIdList;
 
 	public Long getgId() {
 		return gId;
@@ -58,6 +61,16 @@ public class GroupBean implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public List<Long> getUserIdList() {
+		if (userIdList == null)
+			userIdList = new ArrayList<Long>();
+		return userIdList;
+	}
+
+	public void setUserIdList(List<Long> userIdList) {
+		this.userIdList = userIdList;
 	}
 
 }

@@ -59,7 +59,7 @@
 						<p:outputLabel id="lblContact" value="Contact : " />
 					</p:column>
 					<p:column>
-						<p:inputMask id="txtContact" value="#{adminBean.userBean.contact}" />
+						<p:inputMask id="txtContact" value="#{adminBean.userBean.contact}" mask="+99 999999999" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -93,10 +93,9 @@
 						<p:outputLabel id="lblSCName" value="Screen Name : " />
 					</p:column>
 					<p:column>
-						<p:inputText autocomplete="false" id="txtSCName" value="#{adminBean.userBean.scName}" />
-						<p:commandLink id="clCheckAvail" action="#{adminBean.checkAvailability}" ajax="false">
-							<p:graphicImage id="giIdeaLike" name="big-availability-icon.gif" library="images" height="25px" width="25px" />
-						</p:commandLink>
+						<p:inputText autocomplete="false" id="txtSCName" value="#{adminBean.userBean.scName}">
+							<p:ajax listener="#{adminBean.checkAvailability}" event="blur" update="grlMsg" />
+						</p:inputText>
 					</p:column>
 					<p:column>
 						<p:outputLabel id="lblProfImage" value="Profile Image : " />

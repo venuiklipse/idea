@@ -20,14 +20,6 @@
 						<f:selectItems value="#{adminBean.pGrps}" var="grp" itemLabel="#{grp.gName}" itemValue="#{grp.gId}" />
 					</p:selectManyMenu>
 				</p:column>
-				<p:column>
-					<p:outputLabel id="lblFuncUsers" value="Function Users" />
-				</p:column>
-				<p:column>
-					<p:selectManyMenu id="smmFuncUserss" value="#{adminBean.functionBean.userIdList}">
-						<f:selectItems value="#{adminBean.admUsers}" var="user" itemLabel="#{user.scName}" itemValue="#{user.uId}" />
-					</p:selectManyMenu>
-				</p:column>
 				<p:row>
 					<p:column colspan="2">
 						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.updateFunction}" />

@@ -30,43 +30,43 @@
 			<column name="user_contact" length="20" />
 		</property>
 		<property name="userSkills" type="java.lang.String">
-			<column name="user_skills" length="65535" not-null="true" />
+			<column name="user_skills" length="65535" />
 		</property>
 		<property name="userBio" type="java.lang.String">
-			<column name="user_bio" length="65535" not-null="true" />
+			<column name="user_bio" length="65535" />
 		</property>
 		<property name="userFbHandle" type="java.lang.String">
-			<column name="user_fb_handle" length="65535" not-null="true" />
+			<column name="user_fb_handle" length="65535" />
 		</property>
 		<property name="userTwHandle" type="java.lang.String">
-			<column name="user_tw_handle" length="65535" not-null="true" />
+			<column name="user_tw_handle" length="65535" />
 		</property>
 		<property name="userStatus" type="java.lang.String">
 			<column name="user_status" length="1" not-null="true" />
 		</property>
-		<set name="ipFunctionConfigs" inverse="true">
-			<key>
-				<column name="fc_user_id" />
-			</key>
-			<one-to-many class="za.co.idea.ip.orm.bean.IpFunctionConfig" />
-		</set>
-		<set name="ipFunctions" inverse="true">
-			<key>
-				<column name="user_id" />
-			</key>
-			<one-to-many class="za.co.idea.ip.orm.bean.IpFunction" />
-		</set>
 		<set name="ipGroups" inverse="true">
 			<key>
 				<column name="group_admin_id" />
 			</key>
 			<one-to-many class="za.co.idea.ip.orm.bean.IpGroup" />
 		</set>
+		<set name="ipGroupUsers" inverse="true">
+			<key>
+				<column name="gu_usr_id" not-null="true" />
+			</key>
+			<one-to-many class="za.co.idea.ip.orm.bean.IpGroupUser" />
+		</set>
 		<set name="ipTags" inverse="true">
 			<key>
 				<column name="tag_user_id" />
 			</key>
 			<one-to-many class="za.co.idea.ip.orm.bean.IpTag" />
+		</set>
+		<set name="ipFunctions" inverse="true">
+			<key>
+				<column name="func_crtd_by" />
+			</key>
+			<one-to-many class="za.co.idea.ip.orm.bean.IpFunction" />
 		</set>
 		<set name="ipClaims" inverse="true">
 			<key>

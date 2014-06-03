@@ -6,8 +6,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class FunctionMessage {
 	private Long funcId;
 	private String funcName;
-	private Long[] userIdList;
 	private Long[] groupIdList;
+	private Long crtdBy;
 
 	public Long getFuncId() {
 		return funcId;
@@ -25,16 +25,6 @@ public class FunctionMessage {
 		this.funcName = funcName;
 	}
 
-	public Long[] getUserIdList() {
-		if (userIdList == null)
-			userIdList = new Long[] {};
-		return userIdList;
-	}
-
-	public void setUserIdList(Long[] userIdList) {
-		this.userIdList = userIdList;
-	}
-
 	public Long[] getGroupIdList() {
 		if (groupIdList == null)
 			groupIdList = new Long[] {};
@@ -43,6 +33,14 @@ public class FunctionMessage {
 
 	public void setGroupIdList(Long[] groupIdList) {
 		this.groupIdList = groupIdList;
+	}
+
+	public Long getCrtdBy() {
+		return crtdBy;
+	}
+
+	public void setCrtdBy(Long crtdBy) {
+		this.crtdBy = crtdBy;
 	}
 
 }

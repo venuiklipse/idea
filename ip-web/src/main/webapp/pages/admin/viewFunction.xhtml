@@ -15,7 +15,7 @@
 					<p:outputLabel id="txtFuncName" value="#{func.funcName}" />
 				</p:column>
 				<p:column>
-					<p:commandButton id="viewButton" value="View" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showEditFunction}">
+					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showEditFunction}">
 						<f:setPropertyActionListener value="#{func}" target="#{adminBean.functionBean}" />
 					</p:commandButton>
 				</p:column>

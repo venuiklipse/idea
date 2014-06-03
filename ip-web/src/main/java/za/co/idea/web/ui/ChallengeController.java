@@ -164,8 +164,8 @@ public class ChallengeController implements Serializable {
 	public String showSummaryChallenge() {
 		chalLikes = fetchAllChalLikes();
 		chalComments = fetchAllChalComments();
-		chalLikeCnt = "(" + chalLikes.getTags().size() + ") Likes	";
-		chalCommentCnt = "(" + chalComments.size() + ") Comments";
+		chalLikeCnt = "(" + chalLikes.getTags().size() + ")	";
+		chalCommentCnt = "(" + chalComments.size() + ")	";
 		showChallengeComments = false;
 		showChallengeLikes = false;
 		return "chalsc";
@@ -290,7 +290,7 @@ public class ChallengeController implements Serializable {
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
 		chalComments = fetchAllChalComments();
-		chalCommentCnt = "(" + chalComments.size() + ") Comments";
+		chalCommentCnt = "(" + chalComments.size() + ")	";
 		commentText = "";
 		showChallengeComments = true;
 		showChallengeLikes = false;
@@ -311,7 +311,7 @@ public class ChallengeController implements Serializable {
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
 		chalLikes = fetchAllChalLikes();
-		chalLikeCnt = "(" + chalLikes.getTags().size() + ") Likes	";
+		chalLikeCnt = "(" + chalLikes.getTags().size() + ")	";
 		showChallengeComments = false;
 		showChallengeLikes = true;
 		return "";
@@ -414,8 +414,8 @@ public class ChallengeController implements Serializable {
 	public String showSummarySolution() {
 		solLikes = fetchAllSolLikes();
 		solComments = fetchAllSolComments();
-		solLikeCnt = "(" + solLikes.getTags().size() + ") Likes	";
-		solCommentCnt = "(" + solComments.size() + ") Comments ";
+		solLikeCnt = "(" + solLikes.getTags().size() + ")	";
+		solCommentCnt = "(" + solComments.size() + ")	";
 		showSolutionComments = false;
 		showSolutionLikes = false;
 		return "solss";
@@ -528,7 +528,7 @@ public class ChallengeController implements Serializable {
 		if (response.getStatusCode() != 0 && response.getStatusCode() != 2)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Like", "Error While Saving Like"));
 		solLikes = fetchAllSolLikes();
-		solLikeCnt = "(" + solLikes.getTags().size() + ") Comments	";
+		solLikeCnt = "(" + solLikes.getTags().size() + ")	";
 		showSolutionComments = false;
 		showSolutionLikes = true;
 		return "";
@@ -549,7 +549,7 @@ public class ChallengeController implements Serializable {
 		if (response.getStatusCode() != 0)
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error While Saving Comment", "Error While Saving Comment"));
 		solComments = fetchAllSolComments();
-		solCommentCnt = "(" + solComments.size() + ") Comments";
+		solCommentCnt = "(" + solComments.size() + ")	";
 		commentText = "";
 		showSolutionComments = true;
 		showSolutionLikes = false;

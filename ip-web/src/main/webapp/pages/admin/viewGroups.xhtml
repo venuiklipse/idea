@@ -37,7 +37,7 @@
 					<p:selectBooleanButton id="sbbActive" value="#{grp.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
 				</p:column>
 				<p:column>
-					<p:commandButton id="viewButton" value="View" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showEditGroup}">
+					<p:commandButton id="viewButton" value="Edit" icon="ui-icon-search" ajax="false" immediate="true" action="#{adminBean.showEditGroup}">
 						<f:setPropertyActionListener value="#{grp}" target="#{adminBean.groupBean}" />
 					</p:commandButton>
 				</p:column>

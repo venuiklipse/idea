@@ -39,6 +39,14 @@
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
+					<p:outputLabel id="lblFuncUsers" value="Function Users" />
+				</p:column>
+				<p:column>
+					<p:selectManyMenu id="smmFuncUserss" value="#{adminBean.groupBean.userIdList}">
+						<f:selectItems value="#{adminBean.admUsers}" var="user" itemLabel="#{user.scName}" itemValue="#{user.uId}" />
+					</p:selectManyMenu>
+				</p:column>
+				<p:column>
 					<p:outputLabel id="lblActive" value="De-Activate : " />
 				</p:column>
 				<p:column>

@@ -1,5 +1,6 @@
 package za.co.idea.ip.orm.bean;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,10 +16,13 @@ public class IpFunction implements java.io.Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2202065199665268149L;
+	private static final long serialVersionUID = -4943256207304653231L;
 	private Long funcId;
+	private IpUser ipUser;
 	private String funcName;
-	private Set ipFunctionConfigs = new HashSet(0);
+	private String funcIsCore;
+	private Timestamp funcCrtdDt;
+	private Set ipFuncGroups = new HashSet(0);
 
 	// Constructors
 
@@ -27,16 +31,20 @@ public class IpFunction implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public IpFunction(Long funcId, String funcName) {
+	public IpFunction(Long funcId, String funcName, String funcIsCore) {
 		this.funcId = funcId;
 		this.funcName = funcName;
+		this.funcIsCore = funcIsCore;
 	}
 
 	/** full constructor */
-	public IpFunction(Long funcId, String funcName, Set ipFunctionConfigs) {
+	public IpFunction(Long funcId, IpUser ipUser, String funcName, String funcIsCore, Timestamp funcCrtdDt, Set ipFuncGroups) {
 		this.funcId = funcId;
+		this.ipUser = ipUser;
 		this.funcName = funcName;
-		this.ipFunctionConfigs = ipFunctionConfigs;
+		this.funcIsCore = funcIsCore;
+		this.funcCrtdDt = funcCrtdDt;
+		this.ipFuncGroups = ipFuncGroups;
 	}
 
 	// Property accessors
@@ -49,6 +57,14 @@ public class IpFunction implements java.io.Serializable {
 		this.funcId = funcId;
 	}
 
+	public IpUser getIpUser() {
+		return this.ipUser;
+	}
+
+	public void setIpUser(IpUser ipUser) {
+		this.ipUser = ipUser;
+	}
+
 	public String getFuncName() {
 		return this.funcName;
 	}
@@ -57,12 +73,28 @@ public class IpFunction implements java.io.Serializable {
 		this.funcName = funcName;
 	}
 
-	public Set getIpFunctionConfigs() {
-		return this.ipFunctionConfigs;
+	public String getFuncIsCore() {
+		return this.funcIsCore;
 	}
 
-	public void setIpFunctionConfigs(Set ipFunctionConfigs) {
-		this.ipFunctionConfigs = ipFunctionConfigs;
+	public void setFuncIsCore(String funcIsCore) {
+		this.funcIsCore = funcIsCore;
+	}
+
+	public Timestamp getFuncCrtdDt() {
+		return this.funcCrtdDt;
+	}
+
+	public void setFuncCrtdDt(Timestamp funcCrtdDt) {
+		this.funcCrtdDt = funcCrtdDt;
+	}
+
+	public Set getIpFuncGroups() {
+		return this.ipFuncGroups;
+	}
+
+	public void setIpFuncGroups(Set ipFuncGroups) {
+		this.ipFuncGroups = ipFuncGroups;
 	}
 
 }

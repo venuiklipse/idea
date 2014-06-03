@@ -60,6 +60,7 @@ public class AdminController implements Serializable {
 	private boolean show;
 	private boolean showDef;
 	private boolean enableUpload;
+	private String loggedScrName;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	private WebClient createCustomClient(String url) {
@@ -95,6 +96,7 @@ public class AdminController implements Serializable {
 			bean.setIsActive(userMessage.getIsActive());
 			bean.setuId(userMessage.getuId());
 			bean.setLastLoginDt(userMessage.getLastLoginDt());
+			loggedScrName = userMessage.getScName();
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", bean);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userId", bean.getuId());
 			try {
@@ -289,7 +291,6 @@ public class AdminController implements Serializable {
 
 	public String showCreateFunction() {
 		try {
-			admUsers = fetchAllUsers();
 			pGrps = fetchAllGroups();
 			return "admcf";
 		} catch (Exception e) {
@@ -316,7 +317,6 @@ public class AdminController implements Serializable {
 
 	public String showEditFunction() {
 		try {
-			admUsers = fetchAllUsers();
 			pGrps = fetchAllGroups();
 			return "admef";
 		} catch (Exception e) {
@@ -327,11 +327,10 @@ public class AdminController implements Serializable {
 		}
 	}
 
-	public String checkAvailability() {
+	public void checkAvailability() {
 		if (userBean.getScName() == null || userBean.getScName().length() == 0) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Enter Screen Name to Check Availability", "Enter Screen Name to Check Availability");
 			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
-			return "";
 		}
 		WebClient checkAvailablityClient = createCustomClient("http://127.0.0.1:38080/ip-ws/ip/as/user/check/screenName/" + userBean.getScName());
 		Boolean avail = checkAvailablityClient.accept(MediaType.APPLICATION_JSON).get(Boolean.class);
@@ -344,7 +343,6 @@ public class AdminController implements Serializable {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_INFO, "Screen Name Available", "Screen Name Available");
 			FacesContext.getCurrentInstance().addMessage("txtSCName", exceptionMessage);
 		}
-		return "";
 	}
 
 	public String saveUser() {
@@ -471,6 +469,7 @@ public class AdminController implements Serializable {
 			groupMessage.setGeMail(groupBean.getGeMail());
 			groupMessage.setgId(COUNTER.getNextId("IpGroup"));
 			groupMessage.setgName(groupBean.getgName());
+			groupMessage.setUserIdList(toIdArray(groupBean.getUserIdList()));
 			groupMessage.setIsActive(true);
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
 			ResponseMessage response = addGroupClient.accept(MediaType.APPLICATION_JSON).post(groupMessage, ResponseMessage.class);
@@ -497,7 +496,7 @@ public class AdminController implements Serializable {
 			functionMessage.setFuncId(COUNTER.getNextId("IpFunction"));
 			functionMessage.setFuncName(functionBean.getFuncName());
 			functionMessage.setGroupIdList(toIdArray(functionBean.getGroupIdList()));
-			functionMessage.setUserIdList(toIdArray(functionBean.getUserIdList()));
+			functionMessage.setCrtdBy((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			ResponseMessage response = addFunctionClient.accept(MediaType.APPLICATION_JSON).post(functionMessage, ResponseMessage.class);
 			addFunctionClient.close();
 			if (response.getStatusCode() == 0)
@@ -523,6 +522,7 @@ public class AdminController implements Serializable {
 			groupMessage.setGeMail(groupBean.getGeMail());
 			groupMessage.setgId(groupBean.getgId());
 			groupMessage.setgName(groupBean.getgName());
+			groupMessage.setUserIdList(toIdArray(groupBean.getUserIdList()));
 			groupMessage.setIsActive(groupBean.getIsActive());
 			groupMessage.setpGrpId(groupBean.getSelPGrp());
 			ResponseMessage response = updateGroupClient.accept(MediaType.APPLICATION_JSON).put(groupMessage, ResponseMessage.class);
@@ -548,8 +548,8 @@ public class AdminController implements Serializable {
 			FunctionMessage functionMessage = new FunctionMessage();
 			functionMessage.setFuncId(functionBean.getFuncId());
 			functionMessage.setFuncName(functionBean.getFuncName());
+			functionMessage.setCrtdBy((Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId"));
 			functionMessage.setGroupIdList(toIdArray(functionBean.getGroupIdList()));
-			functionMessage.setUserIdList(toIdArray(functionBean.getUserIdList()));
 			ResponseMessage response = updateFunctionClient.accept(MediaType.APPLICATION_JSON).put(functionMessage, ResponseMessage.class);
 			updateFunctionClient.close();
 			if (response.getStatusCode() == 0)
@@ -640,6 +640,10 @@ public class AdminController implements Serializable {
 			bean.setIsActive(groupMessage.getIsActive());
 			bean.setSelAdmUser(groupMessage.getAdmUserId());
 			bean.setSelPGrp(groupMessage.getpGrpId());
+			bean.getUserIdList().clear();
+			for (Long id : groupMessage.getUserIdList())
+				if (id != null)
+					bean.getUserIdList().add(id);
 			ret.add(bean);
 		}
 		return ret;
@@ -658,10 +662,6 @@ public class AdminController implements Serializable {
 			for (Long id : functionMessage.getGroupIdList())
 				if (id != null)
 					bean.getGroupIdList().add(id);
-			bean.getUserIdList().clear();
-			for (Long id : functionMessage.getUserIdList())
-				if (id != null)
-					bean.getUserIdList().add(id);
 			ret.add(bean);
 		}
 		return ret;
@@ -890,6 +890,14 @@ public class AdminController implements Serializable {
 
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
+	}
+
+	public String getLoggedScrName() {
+		return loggedScrName;
+	}
+
+	public void setLoggedScrName(String loggedScrName) {
+		this.loggedScrName = loggedScrName;
 	}
 
 }
