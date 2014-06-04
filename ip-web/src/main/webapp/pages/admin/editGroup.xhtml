@@ -39,7 +39,7 @@
 					</p:selectOneMenu>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblFuncUsers" value="Function Users" />
+					<p:outputLabel id="lblFuncUsers" value="Group Users" />
 				</p:column>
 				<p:column>
 					<p:selectManyMenu id="smmFuncUserss" value="#{adminBean.groupBean.userIdList}">
@@ -47,7 +47,7 @@
 					</p:selectManyMenu>
 				</p:column>
 				<p:column>
-					<p:outputLabel id="lblActive" value="De-Activate : " />
+					<p:outputLabel id="lblActive" value="Active : " />
 				</p:column>
 				<p:column>
 					<p:selectBooleanButton id="sbbActive" value="#{adminBean.groupBean.isActive}" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" />
@@ -55,7 +55,7 @@
 				<p:row>
 					<p:column colspan="2">
 						<p:commandButton id="btnSave" value="Save" ajax="false" action="#{adminBean.updateGroup}" />
-						<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.redirectHome}" />
+						<p:commandButton id="btnCancel" value="Cancel" ajax="false" action="#{adminBean.showViewGroups}" />
 					</p:column>
 				</p:row>
 			</p:panelGrid>

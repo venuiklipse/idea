@@ -298,6 +298,7 @@ public class AdminService {
 			ipFunction.setFuncName(function.getFuncName());
 			ipFunction.setFuncCrtdDt(new Timestamp(System.currentTimeMillis()));
 			ipFunction.setIpUser(ipUserDAO.findById(function.getCrtdBy()));
+			ipFunction.setFuncIsCore("n");
 			ipFunctionDAO.save(ipFunction);
 			for (Long gId : function.getGroupIdList()) {
 				IpFuncGroup ipFuncGroup = new IpFuncGroup();
@@ -330,6 +331,7 @@ public class AdminService {
 			ipFunction.setFuncName(function.getFuncName());
 			ipFunction.setFuncCrtdDt(new Timestamp(System.currentTimeMillis()));
 			ipFunction.setIpUser(ipUserDAO.findById(function.getCrtdBy()));
+			ipFunction.setFuncIsCore("n");
 			ipFunctionDAO.merge(ipFunction);
 			ipFuncGroupDAO.deleteByFunctionId(ipFunction.getFuncId());
 			for (Long gId : function.getGroupIdList()) {

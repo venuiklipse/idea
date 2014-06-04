@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
-import org.apache.commons.io.IOUtils;
+import javax.xml.ws.soap.MTOMFeature;
 
 import za.co.idea.ip.jaxws.document.Document;
 import za.co.idea.ip.jaxws.document.DocumentPort;
@@ -18,19 +20,28 @@ import za.co.idea.ip.jaxws.document.UploadDocumentRq;
 public class TestClass {
 
 	public static void main(String[] args) throws Exception {
+		testUpload();
+		testDownload();
 	}
 
 	public static void testUpload() throws FileNotFoundException, IOException {
 		Document document = new Document();
-		document.setContentType("image/jpeg");
-		document.setEntityId("0");
+		document.setContentType("image/png");
+		document.setEntityId("2");
 		document.setEntityTableName("ip_user");
-		File file = new File("/home/main/Documents/sample.jpg");
-		System.out.println(file.length());
-		document.setFileContent(IOUtils.toByteArray(new FileInputStream(file)));
-		document.setFileName("profile.jpeg");
+		File file = new File("/home/main/Documents/sample.png");
+		FileInputStream stream = new FileInputStream(file);
+		InputStreamReader r = new InputStreamReader(stream);
+		System.out.println(r.getEncoding());
+		byte[] b = new byte[1024];
+		String s = new String();
+		while (stream.read(b) > 0)
+			s += new String(b);
+		stream.close();
+		document.setFileContent(s.getBytes());
+		document.setFileName("sample.png");
 		DocumentService service = new DocumentService();
-		DocumentPort port = service.getDocumentSOAP();
+		DocumentPort port = service.getDocumentSOAP(new MTOMFeature());
 		UploadDocumentRq rq = new UploadDocumentRq();
 		rq.setDocument(document);
 		port.uploadDocument(rq);
@@ -38,22 +49,24 @@ public class TestClass {
 
 	public static void testDownload() throws Exception {
 		DownloadDocumentRq rq = new DownloadDocumentRq();
-		rq.setEntityId("0");
+		rq.setEntityId("2");
 		rq.setEntityTableName("ip_user");
 		DocumentService service = new DocumentService();
-		DocumentPort port = service.getDocumentSOAP();
+		DocumentPort port = service.getDocumentSOAP(new MTOMFeature());
 		DownloadDocumentRs rs = port.downloadDocument(rq);
-		if (rs.getFileContent() == null || rs.getFileContent().length == 0)
+		if (rs.getFileContent() == null)
 			throw new Exception("Profile Image Not Avavilable");
 		else {
 			File file = new File(System.getProperty("user.home") + File.separator + rs.getFileName());
-			if (!file.exists())
-				file.createNewFile();
+			if (file.exists())
+				file.delete();
+			file.createNewFile();
 			FileOutputStream out = new FileOutputStream(file);
+			OutputStreamWriter r = new OutputStreamWriter(out);
+			System.out.println(r.getEncoding());
 			out.write(rs.getFileContent());
 			out.flush();
 			out.close();
 		}
 	}
-
 }

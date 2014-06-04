@@ -11,6 +11,7 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
+import javax.xml.ws.soap.MTOMFeature;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -104,7 +105,7 @@ public class AdminController implements Serializable {
 				rq.setEntityId(userMessage.getuId().toString());
 				rq.setEntityTableName("ip_user");
 				DocumentService service = new DocumentService();
-				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
+				DownloadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).downloadDocument(rq);
 				if (rs.getFileContent() == null || rs.getFileContent().length == 0)
 					throw new Exception("Profile Image Not Avavilable");
 				this.image = new DefaultStreamedContent(new ByteArrayInputStream(rs.getFileContent()));
@@ -263,7 +264,7 @@ public class AdminController implements Serializable {
 
 	public String showEditGroup() {
 		try {
-			pGrps = fetchAllGroups();
+			viewGroups = pGrps = fetchAllGroups();
 			admUsers = fetchAllUsers();
 			return "admeg";
 		} catch (Exception e) {
@@ -277,7 +278,7 @@ public class AdminController implements Serializable {
 	public String showCreateGroup() {
 		try {
 			groupBean = new GroupBean();
-			pGrps = fetchAllGroups();
+			viewGroups = pGrps = fetchAllGroups();
 			admUsers = fetchAllUsers();
 			return "admcg";
 		} catch (Exception e) {
@@ -384,7 +385,7 @@ public class AdminController implements Serializable {
 					DocumentService service = new DocumentService();
 					UploadDocumentRq rq = new UploadDocumentRq();
 					rq.setDocument(document);
-					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					UploadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).uploadDocument(rq);
 					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -441,7 +442,7 @@ public class AdminController implements Serializable {
 					DocumentService service = new DocumentService();
 					UploadDocumentRq rq = new UploadDocumentRq();
 					rq.setDocument(document);
-					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					UploadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).uploadDocument(rq);
 					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -525,11 +526,6 @@ public class AdminController implements Serializable {
 
 	public String updateGroup() {
 		try {
-			if (verifyGroup(groupBean.getgName())) {
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Create Duplicate Group entries", "Cannot Create Duplicate Group entries");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				return "";
-			}
 			WebClient updateGroupClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/group/modify");
 			GroupMessage groupMessage = new GroupMessage();
 			groupMessage.setAdmUserId(groupBean.getSelAdmUser());
@@ -558,11 +554,6 @@ public class AdminController implements Serializable {
 
 	public String updateFunction() {
 		try {
-			if (verifyFunction(functionBean.getFuncName())) {
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Create Duplicate Function entries", "Cannot Create Duplicate Function entries");
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				return "";
-			}
 			WebClient updateFunctionClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/as/func/modify");
 			FunctionMessage functionMessage = new FunctionMessage();
 			functionMessage.setFuncId(functionBean.getFuncId());
@@ -597,7 +588,7 @@ public class AdminController implements Serializable {
 			DocumentService service = new DocumentService();
 			UploadDocumentRq rq = new UploadDocumentRq();
 			rq.setDocument(document);
-			UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+			UploadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).uploadDocument(rq);
 			if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
 				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);

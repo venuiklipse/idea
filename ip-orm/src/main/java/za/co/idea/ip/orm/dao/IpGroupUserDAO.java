@@ -162,7 +162,7 @@ public class IpGroupUserDAO extends BaseHibernateDAO {
 		log.debug("Deleting Group Users By Id : " + id);
 		Session session = getSession();
 		try {
-			Query query = session.getNamedQuery("deleteByGUGroupId");
+			Query query = session.getNamedQuery("deleteGUByGroupId");
 			query.setLong("id", id);
 			query.executeUpdate();
 		} catch (RuntimeException re) {

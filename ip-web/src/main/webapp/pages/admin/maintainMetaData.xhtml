@@ -38,7 +38,7 @@
 						<p:outputLabel id="lblModId" value="Id : " />
 					</p:column>
 					<p:column>
-						<p:inputText autocomplete="false" id="txtModId" value="#{metaDataBean.bean.id}" disabled="true" />
+						<p:inputText autocomplete="false" id="txtModId" value="#{metaDataBean.selId}" disabled="true" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -46,7 +46,7 @@
 						<p:outputLabel id="lblModDesc" value="Description : " />
 					</p:column>
 					<p:column>
-						<p:inputText autocomplete="false" id="txtModDesc" value="#{metaDataBean.bean.desc}" />
+						<p:inputText autocomplete="false" id="txtModDesc" value="#{metaDataBean.selVal}" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -62,7 +62,7 @@
 						<p:outputLabel id="lblAddId" value="Id : " />
 					</p:column>
 					<p:column>
-						<p:inputText autocomplete="false" id="txtAddId" value="#{metaDataBean.bean.id}" />
+						<p:inputText autocomplete="false" id="txtAddId" value="#{metaDataBean.selId}" disabled="true" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -70,7 +70,7 @@
 						<p:outputLabel id="lblAddDesc" value="Description : " />
 					</p:column>
 					<p:column>
-						<p:inputText autocomplete="false" id="txtAddDesc" value="#{metaDataBean.bean.desc}" />
+						<p:inputText autocomplete="false" id="txtAddDesc" value="#{metaDataBean.selVal}" />
 					</p:column>
 				</p:row>
 				<p:row>

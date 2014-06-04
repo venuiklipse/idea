@@ -10,6 +10,7 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
+import javax.xml.ws.soap.MTOMFeature;
 
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
@@ -112,7 +113,7 @@ public class IdeaController implements Serializable {
 				DownloadDocumentRq rq = new DownloadDocumentRq();
 				rq.setEntityId(ideaBean.getIdeaId().toString());
 				rq.setEntityTableName("ip_challenge");
-				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
+				DownloadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).downloadDocument(rq);
 				if (Integer.parseInt(rs.getResponse().getRespCode()) == 0) {
 					fileAvail = true;
 					ideaBean.setFileName(rs.getFileName());
@@ -275,7 +276,7 @@ public class IdeaController implements Serializable {
 					DocumentService service = new DocumentService();
 					UploadDocumentRq rq = new UploadDocumentRq();
 					rq.setDocument(document);
-					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					UploadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).uploadDocument(rq);
 					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -325,7 +326,7 @@ public class IdeaController implements Serializable {
 					DocumentService service = new DocumentService();
 					UploadDocumentRq rq = new UploadDocumentRq();
 					rq.setDocument(document);
-					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					UploadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).uploadDocument(rq);
 					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);

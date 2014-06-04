@@ -5,6 +5,12 @@
 
 package za.co.idea.ip.jaxws.document;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.ResourceBundle;
+import java.util.UUID;
+
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.dao.IpBlobDAO;
 import za.co.idea.ip.orm.dao.IpNativeSQLDAO;
@@ -20,6 +26,7 @@ public class DocumentPortImpl implements DocumentPort {
 
 	private IpBlobDAO ipBlobDAO;
 	private IpNativeSQLDAO ipNativeSQLDAO;
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("ip-jaxws");
 
 	/*
 	 * (non-Javadoc)
@@ -32,16 +39,24 @@ public class DocumentPortImpl implements DocumentPort {
 		za.co.idea.ip.jaxws.document.UploadDocumentRs _return = new za.co.idea.ip.jaxws.document.UploadDocumentRs();
 		za.co.idea.ip.jaxws.document.Response _returnResponse = new za.co.idea.ip.jaxws.document.Response();
 		try {
+			File file = new File(BUNDLE.getString("base.dir") + File.separator + UUID.randomUUID().toString());
+			if (file.exists())
+				file.delete();
+			file.createNewFile();
+			FileOutputStream data = new FileOutputStream(file);
+			data.write(param.getDocument().getFileContent());
+			data.flush();
+			data.close();
 			Long id = ipBlobDAO.getBlobIdByEntity(Long.parseLong(param.getDocument().getEntityId()), param.getDocument().getEntityTableName());
 			IpBlob blob = new IpBlob();
-			blob.setBlobContent(new String(param.getDocument().getFileContent()));
+			blob.setBlobContent(file.getAbsolutePath());
 			blob.setBlobContentType(param.getDocument().getContentType());
 			blob.setBlobEntityId(Long.valueOf(param.getDocument().getEntityId()));
 			blob.setBlobEntityTblNm(param.getDocument().getEntityTableName());
 			blob.setBlobName(param.getDocument().getFileName());
 			if (id != -999) {
 				blob.setBlobId(id);
-				ipBlobDAO.merge(blob);
+				ipBlobDAO.attachDirty(blob);
 			} else {
 				blob.setBlobId(ipNativeSQLDAO.getNextId(IpBlob.class));
 				ipBlobDAO.save(blob);
@@ -67,7 +82,12 @@ public class DocumentPortImpl implements DocumentPort {
 			if (ipBlob != null && ipBlob.getBlobContent() != null) {
 				_return.setContentType(ipBlob.getBlobContentType());
 				_return.setFileName(ipBlob.getBlobName());
-				_return.setFileContent(ipBlob.getBlobContent().getBytes());
+				File file = new File(ipBlob.getBlobContent());
+				FileInputStream reader = new FileInputStream(file);
+				byte[] b = new byte[(int) file.length()];
+				reader.read(b);
+				reader.close();
+				_return.setFileContent(b);
 				_returnResponse.setRespCode("0");
 				_returnResponse.setRespDesc("Success");
 				_return.setResponse(_returnResponse);
@@ -97,8 +117,6 @@ public class DocumentPortImpl implements DocumentPort {
 			_returnDocumentsDocumentVal1.setEntityTableName("EntityTableName2109915234");
 			_returnDocumentsDocumentVal1.setFileName("FileName1310529823");
 			_returnDocumentsDocumentVal1.setContentType("ContentType930624867");
-			byte[] _returnDocumentsDocumentVal1FileContent = new byte[] {};
-			_returnDocumentsDocumentVal1.setFileContent(_returnDocumentsDocumentVal1FileContent);
 			_returnDocumentsDocument.add(_returnDocumentsDocumentVal1);
 			_returnDocuments.getDocument().addAll(_returnDocumentsDocument);
 			_return.setDocuments(_returnDocuments);

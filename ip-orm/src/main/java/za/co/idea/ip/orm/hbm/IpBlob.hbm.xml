@@ -15,7 +15,7 @@
 			<column name="blob_content_type" length="999" />
 		</property>
 		<property name="blobContent" type="java.lang.String">
-			<column name="blob_content" />
+			<column name="blob_content" length="999" />
 		</property>
 		<property name="blobEntityId" type="java.lang.Long">
 			<column name="blob_entity_id" />

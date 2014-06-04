@@ -17,8 +17,8 @@ public class HibernateSessionFactory {
 	 * the default package. Use #setConfigFile() to update the location of the
 	 * configuration file for the current session.
 	 */
-	private final ThreadLocal<Session> threadLocal = new ThreadLocal<Session>();
 	private org.hibernate.SessionFactory sessionFactory;
+	private Session session;
 
 	/**
 	 * Returns the ThreadLocal Session instance. Lazy initialize the
@@ -28,28 +28,10 @@ public class HibernateSessionFactory {
 	 * @throws HibernateException
 	 */
 	public Session getSession() throws HibernateException {
-		Session session = (Session) threadLocal.get();
-
 		if (session == null || !session.isOpen()) {
 			session = (sessionFactory != null) ? sessionFactory.openSession() : null;
-			threadLocal.set(session);
 		}
-
 		return session;
-	}
-
-	/**
-	 * Close the single hibernate session instance.
-	 * 
-	 * @throws HibernateException
-	 */
-	public void closeSession() throws HibernateException {
-		Session session = (Session) threadLocal.get();
-		threadLocal.set(null);
-
-		if (session != null) {
-			session.close();
-		}
 	}
 
 	/**
@@ -62,6 +44,10 @@ public class HibernateSessionFactory {
 
 	public void setSessionFactory(org.hibernate.SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
+	}
+
+	public void setSession(Session session) {
+		this.session = session;
 	}
 
 }

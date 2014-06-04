@@ -6,7 +6,7 @@
 		<property name="cache" value="true" />
 		<property name="proxyInterface" value="javax.sql.DataSource" />
 	</bean>
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean" scope="singleton">
 		<property name="dataSource">
 			<ref bean="dataSource" />
 		</property>
@@ -17,6 +17,7 @@
 				</prop>
 				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.current_session_context_class">thread</prop>
+				<prop key="hibernate.connection.SetBigStringTryClob">true</prop>
 			</props>
 		</property>
 		<property name="mappingResources">

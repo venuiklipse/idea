@@ -10,6 +10,7 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
+import javax.xml.ws.soap.MTOMFeature;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -121,7 +122,7 @@ public class RewardsController implements Serializable {
 				DownloadDocumentRq rq = new DownloadDocumentRq();
 				rq.setEntityId(rewardsBean.getRwId().toString());
 				rq.setEntityTableName("ip_rewards");
-				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
+				DownloadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).downloadDocument(rq);
 				if (Integer.parseInt(rs.getResponse().getRespCode()) == 0) {
 					fileAvail = true;
 					rewardsBean.setRwFileName(rs.getFileName());
@@ -181,7 +182,7 @@ public class RewardsController implements Serializable {
 					DocumentService service = new DocumentService();
 					UploadDocumentRq rq = new UploadDocumentRq();
 					rq.setDocument(document);
-					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					UploadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).uploadDocument(rq);
 					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -234,7 +235,7 @@ public class RewardsController implements Serializable {
 					DocumentService service = new DocumentService();
 					UploadDocumentRq rq = new UploadDocumentRq();
 					rq.setDocument(document);
-					UploadDocumentRs rs = service.getDocumentSOAP().uploadDocument(rq);
+					UploadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).uploadDocument(rq);
 					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
 						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
@@ -325,7 +326,7 @@ public class RewardsController implements Serializable {
 				DownloadDocumentRq rq = new DownloadDocumentRq();
 				rq.setEntityId(message.getRwId().toString());
 				rq.setEntityTableName("ip_rewards");
-				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
+				DownloadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).downloadDocument(rq);
 				if (Integer.parseInt(rs.getResponse().getRespCode()) == 0) {
 					bean.setRwFileName(rs.getFileName());
 					bean.setRwFileType(rs.getContentType());
@@ -365,7 +366,7 @@ public class RewardsController implements Serializable {
 				DownloadDocumentRq rq = new DownloadDocumentRq();
 				rq.setEntityId(message.getRwId().toString());
 				rq.setEntityTableName("ip_rewards");
-				DownloadDocumentRs rs = service.getDocumentSOAP().downloadDocument(rq);
+				DownloadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).downloadDocument(rq);
 				if (Integer.parseInt(rs.getResponse().getRespCode()) == 0) {
 					bean.setRwFileName(rs.getFileName());
 					bean.setRwFileType(rs.getContentType());

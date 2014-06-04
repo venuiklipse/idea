@@ -28,6 +28,8 @@ public class MetaDataController {
 	private List<MetaDataBean> beans;
 	private MetaDataBean bean;
 	private String table;
+	private String selId;
+	private String selVal;
 	private static final IdNumberGen COUNTER = new IdNumberGen();
 
 	private WebClient createCustomClient(String url) {
@@ -49,15 +51,19 @@ public class MetaDataController {
 	public String showMetaData() {
 		this.showAddPanel = false;
 		this.showModPanel = true;
+		selId = bean.getId().toString();
+		selVal = bean.getDesc();
 		return "mdata";
 	}
 
 	public String showMetaDataAdd() {
 		bean = new MetaDataBean();
-		bean.setId(COUNTER.getNextId(table).intValue());
+		selId = String.valueOf((COUNTER.getNextId(table).intValue()));
+		selVal = "";
 		this.showAddBtn = false;
 		this.showAddPanel = true;
 		this.showModPanel = false;
+
 		return "mdata";
 	}
 
@@ -65,7 +71,7 @@ public class MetaDataController {
 		this.showAddPanel = false;
 		this.showModPanel = false;
 		this.showAddBtn = true;
-		if (verifyMetadata(bean.getDesc())) {
+		if (verifyMetadata(selVal)) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Create duplicate values", "Cannot Create duplicate values");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			this.showAddPanel = false;
@@ -74,8 +80,8 @@ public class MetaDataController {
 		}
 		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/modify");
 		MetaDataMessage message = new MetaDataMessage();
-		message.setDesc(bean.getDesc());
-		message.setId(bean.getId());
+		message.setDesc(selVal);
+		message.setId(Integer.valueOf(selId));
 		message.setTable(table);
 		ResponseMessage response = mDataClient.accept(MediaType.APPLICATION_JSON).put(message, ResponseMessage.class);
 		mDataClient.close();
@@ -93,7 +99,7 @@ public class MetaDataController {
 		this.showAddPanel = false;
 		this.showModPanel = false;
 		this.showAddBtn = true;
-		if (verifyMetadata(bean.getDesc())) {
+		if (verifyMetadata(selVal)) {
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Create duplicate values", "Cannot Create duplicate values");
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 			this.showAddPanel = true;
@@ -102,8 +108,8 @@ public class MetaDataController {
 		}
 		WebClient mDataClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ms/add");
 		MetaDataMessage message = new MetaDataMessage();
-		message.setDesc(bean.getDesc());
-		message.setId(bean.getId());
+		message.setDesc(selVal);
+		message.setId(Integer.valueOf(selId));
 		message.setTable(table);
 		ResponseMessage response = mDataClient.accept(MediaType.APPLICATION_JSON).post(message, ResponseMessage.class);
 		mDataClient.close();
@@ -159,7 +165,7 @@ public class MetaDataController {
 
 	private boolean verifyMetadata(String desc) {
 		boolean ret = false;
-		for (MetaDataBean bean : beans) {
+		for (MetaDataBean bean : fetchAllMetadata()) {
 			if (bean.getDesc().equalsIgnoreCase(desc)) {
 				ret = true;
 				break;
@@ -222,6 +228,22 @@ public class MetaDataController {
 
 	public void setTable(String table) {
 		this.table = table;
+	}
+
+	public String getSelId() {
+		return selId;
+	}
+
+	public String getSelVal() {
+		return selVal;
+	}
+
+	public void setSelId(String selId) {
+		this.selId = selId;
+	}
+
+	public void setSelVal(String selVal) {
+		this.selVal = selVal;
 	}
 
 }
