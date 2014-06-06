@@ -5,11 +5,14 @@
 
 package za.co.idea.ip.jaxws.document;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ResourceBundle;
 import java.util.UUID;
+
+import org.mozilla.universalchardet.UniversalDetector;
 
 import za.co.idea.ip.orm.bean.IpBlob;
 import za.co.idea.ip.orm.dao.IpBlobDAO;
@@ -44,6 +47,21 @@ public class DocumentPortImpl implements DocumentPort {
 				file.delete();
 			file.createNewFile();
 			FileOutputStream data = new FileOutputStream(file);
+			int nread;
+			UniversalDetector detector = new UniversalDetector(null);
+			byte[] buf = new byte[4096];
+			ByteArrayInputStream bais = new ByteArrayInputStream(param.getDocument().getFileContent());
+			while ((nread = bais.read(buf)) > 0 && !detector.isDone()) {
+				detector.handleData(buf, 0, nread);
+			}
+			detector.dataEnd();
+			String encoding = detector.getDetectedCharset();
+			if (encoding != null) {
+				System.out.println("Detected encoding = " + encoding);
+			} else {
+				System.out.println("No encoding detected.");
+			}
+			detector.reset();
 			data.write(param.getDocument().getFileContent());
 			data.flush();
 			data.close();

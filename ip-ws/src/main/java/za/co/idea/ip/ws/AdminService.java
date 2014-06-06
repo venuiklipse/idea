@@ -148,7 +148,7 @@ public class AdminService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -176,7 +176,7 @@ public class AdminService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -199,7 +199,7 @@ public class AdminService {
 			function.setGroupIdList(gList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return function;
 	}
@@ -230,7 +230,7 @@ public class AdminService {
 			group.setUserIdList(uList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return group;
 	}
@@ -259,6 +259,7 @@ public class AdminService {
 				ipUser.setUserMName(user.getmName());
 			if (user.getTwHandle() != null && user.getTwHandle().length() > 0)
 				ipUser.setUserTwHandle(user.getTwHandle());
+			ipUser.setUserIdNum(user.getIdNum());
 			ipUserDAO.save(ipUser);
 			IpLogin ipLogin = new IpLogin();
 			ipLogin.setIpUser(ipUser);
@@ -434,7 +435,7 @@ public class AdminService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -465,7 +466,7 @@ public class AdminService {
 				user.setTwHandle(ipUser.getUserTwHandle());
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return user;
 	}
@@ -530,7 +531,7 @@ public class AdminService {
 			return ret;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 	}
 
@@ -543,7 +544,7 @@ public class AdminService {
 			ret = ipNativeSQLDAO.getNextId(Class.forName("za.co.idea.ip.orm.bean." + clazz));
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -582,7 +583,7 @@ public class AdminService {
 				ipLoginDAO.merge(ipLogin);
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new RuntimeException(e);
+				return null;
 			}
 			return user;
 		}
@@ -616,7 +617,7 @@ public class AdminService {
 				ipLoginDAO.merge(ipLogin);
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new RuntimeException(e);
+				return null;
 			}
 			return user;
 		}

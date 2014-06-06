@@ -229,7 +229,7 @@ public class MetaDataService {
 			return ret;
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 	}
 

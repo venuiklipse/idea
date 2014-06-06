@@ -14,8 +14,8 @@
 		<property name="blobContentType" type="java.lang.String">
 			<column name="blob_content_type" length="999" />
 		</property>
-		<property name="blobContent" type="java.lang.String">
-			<column name="blob_content" length="999" />
+		<property name="blobContent" type="java.sql.Blob">
+			<column name="blob_content" />
 		</property>
 		<property name="blobEntityId" type="java.lang.Long">
 			<column name="blob_entity_id" />

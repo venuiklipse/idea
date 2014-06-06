@@ -103,7 +103,7 @@ public class ClaimService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -123,7 +123,7 @@ public class ClaimService {
 			message.setUserId(claim.getIpUser().getUserId());
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return message;
 	}
@@ -148,7 +148,7 @@ public class ClaimService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -173,7 +173,7 @@ public class ClaimService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -194,7 +194,7 @@ public class ClaimService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -215,7 +215,7 @@ public class ClaimService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -231,7 +231,7 @@ public class ClaimService {
 			message.setDesc(status.getCsDesc());
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return message;
 	}

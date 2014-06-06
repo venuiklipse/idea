@@ -18,7 +18,7 @@
 			<column name="user_m_name" length="45" />
 		</property>
 		<property name="userIdNum" type="java.lang.Long">
-			<column name="user_id_num" not-null="true" />
+			<column name="user_id_num" />
 		</property>
 		<property name="userScreenName" type="java.lang.String">
 			<column name="user_screen_name" length="50" not-null="true" unique="true" />

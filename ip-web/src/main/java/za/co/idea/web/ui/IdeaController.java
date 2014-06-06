@@ -1,19 +1,22 @@
 package za.co.idea.web.ui;
 
-import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
-import javax.xml.ws.soap.MTOMFeature;
+import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.apache.cxf.jaxrs.ext.multipart.Attachment;
+import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -22,12 +25,7 @@ import org.primefaces.model.tagcloud.DefaultTagCloudItem;
 import org.primefaces.model.tagcloud.DefaultTagCloudModel;
 import org.primefaces.model.tagcloud.TagCloudModel;
 
-import za.co.idea.ip.jaxws.document.Document;
-import za.co.idea.ip.jaxws.document.DocumentService;
-import za.co.idea.ip.jaxws.document.DownloadDocumentRq;
-import za.co.idea.ip.jaxws.document.DownloadDocumentRs;
-import za.co.idea.ip.jaxws.document.UploadDocumentRq;
-import za.co.idea.ip.jaxws.document.UploadDocumentRs;
+import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.IdeaMessage;
 import za.co.idea.ip.ws.bean.MetaDataMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
@@ -52,6 +50,7 @@ public class IdeaController implements Serializable {
 	private List<TagBean> comments;
 	private List<TagBean> buildOns;
 	private StreamedContent fileContent;
+	private StreamedContent uploadContent;
 	private String commentText;
 	private String buildOnText;
 	private boolean fileAvail;
@@ -109,16 +108,21 @@ public class IdeaController implements Serializable {
 			admUsers = fetchAllUsers();
 			ideaStatuses = fetchNextIdeaStatuses();
 			try {
-				DocumentService service = new DocumentService();
-				DownloadDocumentRq rq = new DownloadDocumentRq();
-				rq.setEntityId(ideaBean.getIdeaId().toString());
-				rq.setEntityTableName("ip_challenge");
-				DownloadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).downloadDocument(rq);
-				if (Integer.parseInt(rs.getResponse().getRespCode()) == 0) {
-					fileAvail = true;
-					ideaBean.setFileName(rs.getFileName());
-					ideaBean.setContentType(rs.getContentType());
-					fileContent = new DefaultStreamedContent(new ByteArrayInputStream(rs.getFileContent()));
+				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + ideaBean.getIdeaId() + "/ip-idea");
+				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+				if (blobId != -999l) {
+					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/doc/download/" + blobId, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", "application/json");
+					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					if (attachment != null) {
+						fileAvail = true;
+						ideaBean.setFileName(attachment.getContentDisposition().toString().replace("attachment;filename=", ""));
+						fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+					} else {
+						fileAvail = false;
+						fileContent = null;
+					}
 				} else {
 					fileAvail = false;
 					fileContent = null;
@@ -266,24 +270,26 @@ public class IdeaController implements Serializable {
 			ResponseMessage response = addIdeaClient.accept(MediaType.APPLICATION_JSON).post(ideaMessage, ResponseMessage.class);
 			addIdeaClient.close();
 			if (response.getStatusCode() == 0) {
-				try {
-					Document document = new Document();
-					document.setContentType(ideaBean.getContentType());
-					document.setEntityId(ideaMessage.getIdeaId().toString());
-					document.setEntityTableName("ip_idea");
-					document.setFileContent(ideaBean.getFileUpload().getBytes());
-					document.setFileName(ideaBean.getFileName());
-					DocumentService service = new DocumentService();
-					UploadDocumentRq rq = new UploadDocumentRq();
-					rq.setDocument(document);
-					UploadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).uploadDocument(rq);
-					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+				Long userId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId");
+				WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+				AttachmentMessage message = new AttachmentMessage();
+				message.setBlobContentType(ideaBean.getContentType());
+				message.setBlobEntityId(userId);
+				message.setBlobEntityTblNm("ip_user");
+				message.setBlobName(ideaBean.getFileName());
+				message.setBlobId(COUNTER.getNextId("IpBlob"));
+				Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+				if (crtRes.getStatus() == 200) {
+					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+					client.header("Accept", "application/json");
+					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + ideaBean.getFileName())));
+					if (docRes.getStatus() != 200) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
+				} else {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
 					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 				}
 				return showViewIdeas();
@@ -316,25 +322,53 @@ public class IdeaController implements Serializable {
 			ResponseMessage response = updateIdeaClient.accept(MediaType.APPLICATION_JSON).put(ideaMessage, ResponseMessage.class);
 			updateIdeaClient.close();
 			if (response.getStatusCode() == 0) {
-				try {
-					Document document = new Document();
-					document.setContentType(ideaBean.getContentType());
-					document.setEntityId(ideaMessage.getIdeaId().toString());
-					document.setEntityTableName("ip_idea");
-					document.setFileContent(ideaBean.getFileUpload().getBytes());
-					document.setFileName(ideaBean.getFileName());
-					DocumentService service = new DocumentService();
-					UploadDocumentRq rq = new UploadDocumentRq();
-					rq.setDocument(document);
-					UploadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).uploadDocument(rq);
-					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+				Long userId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId");
+				WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + userId + "/ip_user");
+				Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+				if (blobId == -999) {
+					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					AttachmentMessage message = new AttachmentMessage();
+					message.setBlobContentType(ideaBean.getContentType());
+					message.setBlobEntityId(userId);
+					message.setBlobEntityTblNm("ip_user");
+					message.setBlobName(ideaBean.getFileName());
+					message.setBlobId(COUNTER.getNextId("IpBlob"));
+					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+					if (crtRes.getStatus() == 200) {
+						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + message.getBlobId(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+						client.header("Accept", "application/json");
+						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + ideaBean.getFileName())));
+						if (docRes.getStatus() != 200) {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+					} else {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", response.getStatusDesc());
-					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				} else {
+					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+					client.header("Accept", "application/json");
+					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadContent.getStream(), new ContentDisposition("attachment;filename=" + ideaBean.getFileName())));
+					if (docRes.getStatus() != 200) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					} else {
+						WebClient docClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						docClient.header("Content-Type", "application/json");
+						docClient.header("Accept", MediaType.MULTIPART_FORM_DATA);
+						Attachment attachment = docClient.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+						if (attachment != null) {
+							this.fileContent = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+						} else {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Load Profile image", "Cannot Load Profile image");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+						docClient.close();
+					}
+					client.close();
 				}
 				return showViewIdeas();
 			} else {
@@ -672,4 +706,11 @@ public class IdeaController implements Serializable {
 		this.buildOnCnt = buildOnCnt;
 	}
 
+	public StreamedContent getUploadContent() {
+		return uploadContent;
+	}
+
+	public void setUploadContent(StreamedContent uploadContent) {
+		this.uploadContent = uploadContent;
+	}
 }

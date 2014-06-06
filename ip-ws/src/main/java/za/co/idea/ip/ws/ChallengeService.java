@@ -119,7 +119,7 @@ public class ChallengeService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -149,7 +149,7 @@ public class ChallengeService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -179,7 +179,7 @@ public class ChallengeService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -200,7 +200,7 @@ public class ChallengeService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -221,7 +221,7 @@ public class ChallengeService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -242,7 +242,7 @@ public class ChallengeService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -258,7 +258,7 @@ public class ChallengeService {
 			message.setDesc(cat.getCcDesc());
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return message;
 	}
@@ -274,7 +274,7 @@ public class ChallengeService {
 			message.setDesc(status.getCsDesc());
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return message;
 	}
@@ -299,7 +299,7 @@ public class ChallengeService {
 			challenge.setTitle(ipChallenge.getChalTitle());
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return challenge;
 	}

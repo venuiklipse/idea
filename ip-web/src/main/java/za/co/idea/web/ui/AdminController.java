@@ -1,6 +1,5 @@
 package za.co.idea.web.ui;
 
-import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,12 +10,13 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.ws.rs.core.MediaType;
-import javax.xml.ws.soap.MTOMFeature;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.apache.cxf.jaxrs.ext.multipart.Attachment;
+import org.apache.cxf.jaxrs.ext.multipart.ContentDisposition;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -24,12 +24,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
-import za.co.idea.ip.jaxws.document.Document;
-import za.co.idea.ip.jaxws.document.DocumentService;
-import za.co.idea.ip.jaxws.document.DownloadDocumentRq;
-import za.co.idea.ip.jaxws.document.DownloadDocumentRs;
-import za.co.idea.ip.jaxws.document.UploadDocumentRq;
-import za.co.idea.ip.jaxws.document.UploadDocumentRs;
+import za.co.idea.ip.ws.bean.AttachmentMessage;
 import za.co.idea.ip.ws.bean.FunctionMessage;
 import za.co.idea.ip.ws.bean.GroupMessage;
 import za.co.idea.ip.ws.bean.ResponseMessage;
@@ -57,6 +52,9 @@ public class AdminController implements Serializable {
 	private StreamedContent image;
 	private String fileName;
 	private String contentType;
+	private StreamedContent uploadImage;
+	private String uploadFileName;
+	private String uploadContentType;
 	private String uploadSrc;
 	private boolean show;
 	private boolean showDef;
@@ -101,16 +99,31 @@ public class AdminController implements Serializable {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("user", bean);
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("userId", bean.getuId());
 			try {
-				DownloadDocumentRq rq = new DownloadDocumentRq();
-				rq.setEntityId(userMessage.getuId().toString());
-				rq.setEntityTableName("ip_user");
-				DocumentService service = new DocumentService();
-				DownloadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).downloadDocument(rq);
-				if (rs.getFileContent() == null || rs.getFileContent().length == 0)
-					throw new Exception("Profile Image Not Avavilable");
-				this.image = new DefaultStreamedContent(new ByteArrayInputStream(rs.getFileContent()));
-				show = true;
-				showDef = false;
+				WebClient docIdClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + userMessage.getuId() + "/ip_user");
+				Long blobId = docIdClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+				if (blobId != -999l) {
+					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", "application/json");
+					client.header("Accept", MediaType.MULTIPART_FORM_DATA);
+					Attachment attachment = client.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					if (attachment != null) {
+						this.image = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+						show = true;
+						showDef = false;
+					} else {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Load Profile image", "Cannot Load Profile image");
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						show = false;
+						showDef = true;
+					}
+					client.close();
+				} else {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Load Profile image", "Cannot Load Profile image");
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					show = false;
+					showDef = true;
+				}
+				docIdClient.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Load Profile image", e.getMessage());
@@ -376,20 +389,30 @@ public class AdminController implements Serializable {
 			addUserClient.close();
 			if (response.getStatusCode() == 0) {
 				try {
-					Document document = new Document();
-					document.setContentType(contentType);
-					document.setEntityId(bean.getuId().toString());
-					document.setEntityTableName("ip_user");
-					document.setFileContent(IOUtils.toByteArray(image.getStream()));
-					document.setFileName(fileName);
-					DocumentService service = new DocumentService();
-					UploadDocumentRq rq = new UploadDocumentRq();
-					rq.setDocument(document);
-					UploadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).uploadDocument(rq);
-					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
+					WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+					AttachmentMessage message = new AttachmentMessage();
+					message.setBlobContentType(contentType);
+					message.setBlobEntityId(bean.getuId());
+					message.setBlobEntityTblNm("ip_user");
+					message.setBlobName(fileName);
+					message.setBlobId(COUNTER.getNextId("IpBlob"));
+					Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+					if (crtRes.getStatus() == 200) {
+						WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/", Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+						client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+						client.header("Accept", "application/json");
+						Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(message.getBlobId().toString(), image.getStream(), new ContentDisposition("attachment;;filename=sample.png")));
+						if (docRes.getStatus() != 0) {
+							FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
+							FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						}
+						client.close();
+						return showViewUsers();
+					} else {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
 						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
 					}
+					createBlobClient.close();
 				} catch (Exception e) {
 					e.printStackTrace();
 					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", e.getMessage());
@@ -432,27 +455,12 @@ public class AdminController implements Serializable {
 			ResponseMessage response = updateUserClient.accept(MediaType.APPLICATION_JSON).put(bean, ResponseMessage.class);
 			updateUserClient.close();
 			if (response.getStatusCode() == 0)
-				try {
-					Document document = new Document();
-					document.setContentType(contentType);
-					document.setEntityId(bean.getuId().toString());
-					document.setEntityTableName("ip_user");
-					document.setFileContent(IOUtils.toByteArray(image.getStream()));
-					document.setFileName(fileName);
-					DocumentService service = new DocumentService();
-					UploadDocumentRq rq = new UploadDocumentRq();
-					rq.setDocument(document);
-					UploadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).uploadDocument(rq);
-					if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
-						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
-						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", e.getMessage());
-					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
-				}
-			return showViewUsers();
+				return showViewUsers();
+			else {
+				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to update User", "Unable to update User");
+				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				return "";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage());
@@ -579,26 +587,68 @@ public class AdminController implements Serializable {
 
 	public String updateImage() {
 		try {
-			Document document = new Document();
-			document.setContentType(contentType);
-			document.setEntityId(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId").toString());
-			document.setEntityTableName("ip_user");
-			document.setFileContent(IOUtils.toByteArray(image.getStream()));
-			document.setFileName(fileName);
-			DocumentService service = new DocumentService();
-			UploadDocumentRq rq = new UploadDocumentRq();
-			rq.setDocument(document);
-			UploadDocumentRs rs = service.getDocumentSOAP(new MTOMFeature()).uploadDocument(rq);
-			if (Integer.valueOf(rs.getResponse().getRespCode()) != 0) {
-				FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", rs.getResponse().getRespDesc());
-				FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			Long userId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId");
+			WebClient getBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/getId/" + userId + "/ip_user");
+			Long blobId = getBlobClient.accept(MediaType.APPLICATION_JSON).get(Long.class);
+			if (blobId == -999) {
+				WebClient createBlobClient = createCustomClient("http://127.0.0.1:8080/ip-ws/ip/ds/doc/create");
+				AttachmentMessage message = new AttachmentMessage();
+				message.setBlobContentType(contentType);
+				message.setBlobEntityId(userId);
+				message.setBlobEntityTblNm("ip_user");
+				message.setBlobName(fileName);
+				message.setBlobId(COUNTER.getNextId("IpBlob"));
+				blobId = message.getBlobId();
+				Response crtRes = createBlobClient.accept(MediaType.APPLICATION_JSON).post(message);
+				if (crtRes.getStatus() == 200) {
+					WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+					client.header("Accept", "application/json");
+					Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), image.getStream(), new ContentDisposition("attachment;filename=" + fileName)));
+					if (docRes.getStatus() != 200) {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					}
+					return "";
+				} else {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+					return "";
+				}
+			} else {
+				WebClient client = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/upload/" + blobId.toString(), Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+				client.header("Content-Type", MediaType.MULTIPART_FORM_DATA);
+				client.header("Accept", "application/json");
+				Response docRes = client.accept(MediaType.APPLICATION_JSON).post(new Attachment(blobId.toString(), uploadImage.getStream(), new ContentDisposition("attachment;filename=" + uploadFileName)));
+				if (docRes.getStatus() != 200) {
+					FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Profile Image Not Uploaded", "Profile Image Not Uploaded");
+					FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+				} else {
+					WebClient docClient = WebClient.create("http://127.0.0.1:8080/ip-ws/ip/ds/doc/download/" + blobId, Collections.singletonList(new JacksonJsonProvider(new CustomObjectMapper())));
+					docClient.header("Content-Type", "application/json");
+					docClient.header("Accept", MediaType.MULTIPART_FORM_DATA);
+					Attachment attachment = docClient.accept(MediaType.MULTIPART_FORM_DATA).get(Attachment.class);
+					if (attachment != null) {
+						this.image = new DefaultStreamedContent(attachment.getDataHandler().getInputStream());
+						show = true;
+						showDef = false;
+					} else {
+						FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cannot Load Profile image", "Cannot Load Profile image");
+						FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+						show = false;
+						showDef = true;
+					}
+					docClient.close();
+				}
+				client.close();
+				return "";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesMessage exceptionMessage = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Unable to upload attachment. Please update later", e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(null, exceptionMessage);
+			return "";
 		}
-		return "";
 	}
 
 	private Long[] toIdArray(List<Long> ids) {
@@ -730,9 +780,9 @@ public class AdminController implements Serializable {
 	public void fileImageUploadHandle(FileUploadEvent fue) {
 		try {
 			UploadedFile file = fue.getFile();
-			this.image = new DefaultStreamedContent(file.getInputstream());
-			this.fileName = file.getFileName();
-			this.contentType = file.getContentType();
+			this.uploadImage = new DefaultStreamedContent(file.getInputstream());
+			this.uploadFileName = file.getFileName();
+			this.uploadContentType = file.getContentType();
 			enableUpload = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -924,6 +974,30 @@ public class AdminController implements Serializable {
 
 	public void setLoggedScrName(String loggedScrName) {
 		this.loggedScrName = loggedScrName;
+	}
+
+	public StreamedContent getUploadImage() {
+		return uploadImage;
+	}
+
+	public String getUploadFileName() {
+		return uploadFileName;
+	}
+
+	public String getUploadContentType() {
+		return uploadContentType;
+	}
+
+	public void setUploadImage(StreamedContent uploadImage) {
+		this.uploadImage = uploadImage;
+	}
+
+	public void setUploadFileName(String uploadFileName) {
+		this.uploadFileName = uploadFileName;
+	}
+
+	public void setUploadContentType(String uploadContentType) {
+		this.uploadContentType = uploadContentType;
 	}
 
 }

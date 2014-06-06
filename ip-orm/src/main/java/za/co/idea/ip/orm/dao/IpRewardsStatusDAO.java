@@ -35,10 +35,12 @@ public class IpRewardsStatusDAO extends BaseHibernateDAO {
 		try {
 			session.save(transientInstance);
 			transaction.commit();
+			session.close();
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);
 			transaction.rollback();
+			session.close();
 			throw re;
 		}
 	}
@@ -50,10 +52,12 @@ public class IpRewardsStatusDAO extends BaseHibernateDAO {
 		try {
 			session.delete(persistentInstance);
 			transaction.commit();
+			session.close();
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
 			transaction.rollback();
+			session.close();
 			throw re;
 		}
 	}
@@ -65,10 +69,12 @@ public class IpRewardsStatusDAO extends BaseHibernateDAO {
 		try {
 			IpRewardsStatus instance = (IpRewardsStatus) session.get("za.co.idea.ip.orm.bean.IpRewardsStatus", id);
 			transaction.commit();
+			session.close();
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			transaction.rollback();
+			session.close();
 			throw re;
 		}
 	}
@@ -81,10 +87,12 @@ public class IpRewardsStatusDAO extends BaseHibernateDAO {
 			List results = session.createCriteria("za.co.idea.ip.orm.bean.IpRewardsStatus").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			transaction.commit();
+			session.close();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			transaction.rollback();
+			session.close();
 			throw re;
 		}
 	}
@@ -99,10 +107,12 @@ public class IpRewardsStatusDAO extends BaseHibernateDAO {
 			queryObject.setParameter(0, value);
 			List results = queryObject.list();
 			transaction.commit();
+			session.close();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			transaction.rollback();
+			session.close();
 			throw re;
 		}
 	}
@@ -120,10 +130,12 @@ public class IpRewardsStatusDAO extends BaseHibernateDAO {
 			Query queryObject = session.createQuery(queryString);
 			List results = queryObject.list();
 			transaction.commit();
+			session.close();
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			transaction.rollback();
+			session.close();
 			throw re;
 		}
 	}
@@ -135,11 +147,13 @@ public class IpRewardsStatusDAO extends BaseHibernateDAO {
 		try {
 			IpRewardsStatus result = (IpRewardsStatus) session.merge(detachedInstance);
 			transaction.commit();
+			session.close();
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
 			log.error("merge failed", re);
 			transaction.rollback();
+			session.close();
 			throw re;
 		}
 	}
@@ -151,10 +165,12 @@ public class IpRewardsStatusDAO extends BaseHibernateDAO {
 		try {
 			session.saveOrUpdate(instance);
 			transaction.commit();
+			session.close();
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
 			transaction.rollback();
+			session.close();
 			throw re;
 		}
 	}
@@ -168,10 +184,12 @@ public class IpRewardsStatusDAO extends BaseHibernateDAO {
 			query.setLong("curr", curr);
 			List ret = query.list();
 			transaction.commit();
+			session.close();
 			return ret;
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
 			transaction.rollback();
+			session.close();
 			throw re;
 		}
 	}

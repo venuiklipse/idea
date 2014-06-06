@@ -41,9 +41,7 @@
 						<p:outputLabel id="lblIdNum" value="Id Number : " />
 					</p:column>
 					<p:column>
-						<p:inputText autocomplete="false" id="txtIdNum" value="#{adminBean.userBean.idNum}">
-							<f:validateLongRange minimum="1111111111111" maximum="9999999999999" />
-						</p:inputText>
+						<p:inputText autocomplete="false" id="txtIdNum" value="#{adminBean.userBean.idNum}"/>
 					</p:column>
 				</p:row>
 				<p:row>
@@ -51,9 +49,7 @@
 						<p:outputLabel id="lblEMail" value="EMail : " />
 					</p:column>
 					<p:column>
-						<p:inputText autocomplete="false" id="txtEMail" value="#{adminBean.userBean.eMail}">
-							<!-- <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" /> -->
-						</p:inputText>
+						<p:inputText autocomplete="false" id="txtEMail" value="#{adminBean.userBean.eMail}"/>
 					</p:column>
 					<p:column>
 						<p:outputLabel id="lblContact" value="Contact : " />

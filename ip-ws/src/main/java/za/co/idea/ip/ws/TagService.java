@@ -55,7 +55,7 @@ public class TagService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -82,7 +82,7 @@ public class TagService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}

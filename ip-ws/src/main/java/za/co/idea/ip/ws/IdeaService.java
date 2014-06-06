@@ -46,7 +46,7 @@ public class IdeaService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -67,7 +67,7 @@ public class IdeaService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -88,7 +88,7 @@ public class IdeaService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -104,7 +104,7 @@ public class IdeaService {
 			message.setDesc(cat.getIcDesc());
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return message;
 	}
@@ -120,7 +120,7 @@ public class IdeaService {
 			message.setDesc(status.getIsDesc());
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return message;
 	}
@@ -217,7 +217,7 @@ public class IdeaService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -248,7 +248,7 @@ public class IdeaService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return ret;
 	}
@@ -275,7 +275,7 @@ public class IdeaService {
 				idea.setCrtdById(ipIdea.getIpUser().getUserId());
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			return null;
 		}
 		return idea;
 	}

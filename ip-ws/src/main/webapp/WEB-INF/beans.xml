@@ -24,6 +24,7 @@
 			<ref bean="claimService" />
 			<ref bean="rewardsService" />
 			<ref bean="metaDataService" />
+			<ref bean="documentUploadService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">

@@ -49,7 +49,7 @@
 					<p:outputLabel id="lblRLaunchDt" value="Launch Date : " />
 				</p:column>
 				<p:column>
-					<p:calendar id="txtRLaunchDt" value="#{rewardsBean.rewardsBean.rwLaunchDt}" pattern="MM/dd/yyyy HH:mm">
+					<p:calendar mode="popup" showOn="button" id="txtRLaunchDt" value="#{rewardsBean.rewardsBean.rwLaunchDt}" pattern="MM/dd/yyyy HH:mm">
 						<p:ajax event="blur" update="txtRExpiryDt" />
 					</p:calendar>
 				</p:column>
@@ -57,7 +57,7 @@
 					<p:outputLabel id="lblRExpiryDt" value="Expiry Date : " />
 				</p:column>
 				<p:column>
-					<p:calendar id="txtRExpiryDt" value="#{rewardsBean.rewardsBean.rwExpiryDt}" pattern="MM/dd/yyyy HH:mm" mindate="#{rewardsBean.rewardsBean.rwLaunchDt}" />
+					<p:calendar mode="popup" showOn="button" id="txtRExpiryDt" value="#{rewardsBean.rewardsBean.rwExpiryDt}" pattern="MM/dd/yyyy HH:mm" mindate="#{rewardsBean.rewardsBean.rwLaunchDt}" />
 				</p:column>
 				<p:column>
 					<p:outputLabel id="lblRTag" value="Tags : " />

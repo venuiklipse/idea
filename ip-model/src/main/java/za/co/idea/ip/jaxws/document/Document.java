@@ -4,6 +4,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * <p>
@@ -41,7 +43,8 @@ public class Document {
 	protected String entityTableName;
 	protected String fileName;
 	protected String contentType;
-	@XmlElement(required = true)
+	@XmlElement(required = true, type = String.class)
+	@XmlJavaTypeAdapter(HexBinaryAdapter.class)
 	protected byte[] fileContent;
 
 	/**
